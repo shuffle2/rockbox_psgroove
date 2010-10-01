@@ -122,6 +122,7 @@ enum {
 #ifdef USB_ENABLE_HID
     USB_DRIVER_HID,
 #endif
+	USB_DRIVER_PSGROOVE,
     USB_NUM_DRIVERS
 };
 

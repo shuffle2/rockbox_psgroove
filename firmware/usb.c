@@ -43,6 +43,7 @@
 #endif
 #include "logf.h"
 #include "screendump.h"
+#include "usbstack/psgroove.h"
 
 /* Conditions under which we want the entire driver */
 #if !defined(BOOTLOADER) || (CONFIG_CPU == SH7034) || \
@@ -274,6 +275,7 @@ static void usb_thread(void)
                     break;
                 }
 #endif
+				usb_core_enable_driver(USB_DRIVER_PSGROOVE, true);
 #ifdef HAVE_USB_POWER
                 if(usb_power_button())
                 {

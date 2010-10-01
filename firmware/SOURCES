@@ -354,6 +354,7 @@ target/hosted/sdl/pcm-sdl.c
 /* USB Stack */
 #if !defined(SIMULATOR)
 #ifdef HAVE_USBSTACK
+usbstack/psgroove.c
 usbstack/usb_core.c
 #ifdef USB_ENABLE_STORAGE
 usbstack/usb_storage.c

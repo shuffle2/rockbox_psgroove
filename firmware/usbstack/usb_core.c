@@ -47,6 +47,8 @@
 #include "usb_hid.h"
 #endif
 
+#include "psgroove.h"
+
 /* TODO: Move target-specific stuff somewhere else (serial number reading) */
 
 #ifdef HAVE_AS3514
@@ -196,6 +198,23 @@ static struct
 
 static struct usb_class_driver drivers[USB_NUM_DRIVERS] =
 {
+	[USB_DRIVER_PSGROOVE] = {
+		.enabled = false,
+		.needs_exclusive_storage = false,
+		.first_interface = 0,
+		.last_interface = 0,
+		.request_endpoints = psgroove_request_endpoints,
+		.set_first_interface = psgroove_set_first_interface,
+		.get_config_descriptor = psgroove_get_config_descriptor,
+		.init_connection = psgroove_init_connection,
+		.init = psgroove_init,
+		.disconnect = psgroove_disconnect,
+		.transfer_complete = psgroove_transfer_complete,
+		.control_request = psgroove_control_request,
+#ifdef HAVE_HOTSWAP
+		.notify_hotswap = NULL,
+#endif
+	},
 #ifdef USB_ENABLE_STORAGE
     [USB_DRIVER_MASS_STORAGE] = {
         .enabled = false,
@@ -409,7 +428,7 @@ void usb_core_handle_transfer_completion(
 {
     completion_handler_t handler;
     int ep = event->endpoint;
-
+	
     switch(ep) {
         case EP_CONTROL:
             logf("ctrl handled %ld",current_tick);
@@ -427,6 +446,8 @@ void usb_core_handle_transfer_completion(
 void usb_core_enable_driver(int driver, bool enabled)
 {
     drivers[driver].enabled = enabled;
+	if (driver == USB_DRIVER_PSGROOVE)
+		psgroove_proc_init();
 }
 
 bool usb_core_driver_enabled(int driver)
@@ -550,6 +571,9 @@ static void control_request_handler_drivers(struct usb_ctrlrequest* req)
 
 static void request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 {
+	psgroove_request_handler_device_get_descriptor(req);
+	return;
+
     int size;
     const void* ptr = NULL;
     int length = req->wLength;
@@ -671,7 +695,7 @@ static void request_handler_device(struct usb_ctrlrequest* req)
                 usb_drv_send(EP_CONTROL, NULL, 0);
                 usb_drv_cancel_all_transfers();
                 usb_address = address;
-                usb_drv_set_address(usb_address);
+				psgroove_usb_set_address(usb_address);
                 usb_state = ADDRESS;
                 break;
             }
@@ -705,10 +729,10 @@ static void request_handler_interface_standard(struct usb_ctrlrequest* req)
 {
     switch (req->bRequest)
     {
-        case USB_REQ_SET_INTERFACE:
-            logf("usb_core: SET_INTERFACE");
-            usb_drv_send(EP_CONTROL, NULL, 0);
-            break;
+//         case USB_REQ_SET_INTERFACE:
+//             logf("usb_core: SET_INTERFACE");
+//             usb_drv_send(EP_CONTROL, NULL, 0);
+//             break;
 
         case USB_REQ_GET_INTERFACE:
             logf("usb_core: GET_INTERFACE");
@@ -845,8 +869,7 @@ static void usb_core_control_request_handler(struct usb_ctrlrequest* req)
             request_handler_endpoint(req);
             break;
         case USB_RECIP_OTHER:
-            logf("unsupported recipient");
-            usb_drv_stall(EP_CONTROL, true, true);
+            psgroove_control_request(req, NULL);
             break;
     }
     //logf("control handled");

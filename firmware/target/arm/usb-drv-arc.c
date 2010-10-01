@@ -435,11 +435,11 @@ static void _usb_drv_init(bool attach)
 
     REG_USBMODE = USBMODE_CTRL_MODE_DEVICE;
 
-#ifdef USB_NO_HIGH_SPEED
+//#ifdef USB_NO_HIGH_SPEED
     /* Force device to full speed */
     /* See 32.9.5.9.2 */
     REG_PORTSC1 |= PORTSCX_PORT_FORCE_FULL_SPEED;
-#endif
+//#endif
 
     init_control_queue_heads();
     memset(td_array, 0, sizeof td_array);
@@ -622,6 +622,11 @@ int usb_drv_recv(int endpoint, void* ptr, int length)
 {
     //logf("usbrecv(%x, %d)", ptr, length);
     return prime_transfer(EP_NUM(endpoint), ptr, length, false, false);
+}
+
+int usb_drv_recv_blocking(int endpoint, void* ptr, int length)
+{
+	return prime_transfer(EP_NUM(endpoint), ptr, length, false, true);
 }
 
 int usb_drv_port_speed(void)
@@ -987,9 +992,9 @@ static void init_control_queue_heads(void)
     memset(qh_array, 0, sizeof qh_array);
 
     /*** control ***/
-    qh_array[EP_CONTROL].max_pkt_length = 64 << QH_MAX_PKT_LEN_POS | QH_IOS;
+    qh_array[EP_CONTROL].max_pkt_length = 8 << QH_MAX_PKT_LEN_POS | QH_IOS;
     qh_array[EP_CONTROL].dtd.next_td_ptr = QH_NEXT_TERMINATE;
-    qh_array[EP_CONTROL+1].max_pkt_length = 64 << QH_MAX_PKT_LEN_POS;
+    qh_array[EP_CONTROL+1].max_pkt_length = 8 << QH_MAX_PKT_LEN_POS;
     qh_array[EP_CONTROL+1].dtd.next_td_ptr = QH_NEXT_TERMINATE;
 }
 /* manual: 32.14.4.1 Queue Head Initialization */

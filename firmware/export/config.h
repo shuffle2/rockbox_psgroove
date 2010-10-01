@@ -947,7 +947,7 @@ Lyre prototype 1 */
      defined(CPU_TCC77X) || defined(CPU_TCC780X))) || \
      (CONFIG_USBOTG == USBOTG_JZ4740) || defined(IPOD_NANO2G) || \
      CONFIG_USBOTG == USBOTG_AS3525
-#define USB_ENABLE_STORAGE
+//#define USB_ENABLE_STORAGE
 #endif
 
 #else /* BOOTLOADER */
@@ -956,12 +956,12 @@ Lyre prototype 1 */
 #ifdef USB_HAS_BULK
 //#define USB_ENABLE_SERIAL
 #ifdef USE_ROCKBOX_USB
-#define USB_ENABLE_STORAGE
+//#define USB_ENABLE_STORAGE
 #endif /* USE_ROCKBOX_USB */
 #endif /* USB_HAS_BULK */
 
 #ifdef USB_HAS_INTERRUPT
-#define USB_ENABLE_HID
+//#define USB_ENABLE_HID
 #else
 #define USB_ENABLE_CHARGING_ONLY
 #endif
