@@ -555,23 +555,23 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	case USB_DT_DEVICE:
 		switch (port_cur) {
 		case 0:
-			Address = (void*)HUB_Device_Descriptor;
+			Address = (void*)&HUB_Device_Descriptor;
 			Size    = sizeof(HUB_Device_Descriptor);
 			break;
 		case 1:
-			Address = (void*)port1_device_descriptor;
+			Address = (void*)&port1_device_descriptor;
 			Size    = sizeof(port1_device_descriptor);
 			break;
 		case 2:
-			Address = (void*)port2_device_descriptor;
+			Address = (void*)&port2_device_descriptor;
 			Size    = sizeof(port2_device_descriptor);
 			break;
 		case 3:
-			Address = (void*)port3_device_descriptor;
+			Address = (void*)&port3_device_descriptor;
 			Size    = sizeof(port3_device_descriptor);
 			break;
 		case 4:
-			Address = (void*)port4_device_descriptor;
+			Address = (void*)&port4_device_descriptor;
 			Size    = sizeof(port4_device_descriptor);
 			break;
 		case 5:
@@ -587,12 +587,8 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	case USB_DT_CONFIG:
 		switch (port_cur) {
 		case 0:
-			Address = (void*)HUB_Config_Descriptor;
-			struct usb_endpoint_descriptor *hub_ep_desc = 
-				(struct usb_endpoint_descriptor *)(Address
-				+ sizeof(struct usb_config_descriptor)
-				+ sizeof(struct usb_interface_descriptor));
-			hub_ep_desc->bEndpointAddress = ep_in;
+			HUB_Config_Descriptor.endpoint.bEndpointAddress = ep_in;
+			Address = (void*)&HUB_Config_Descriptor;
 			Size    = sizeof(HUB_Config_Descriptor);
 			break;
 		case 1:
@@ -615,7 +611,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			break;
 		case 2:
 			// only 1 config
-			Address = (void*)port2_config_descriptor;
+			Address = (void*)&port2_config_descriptor;
 			Size    = sizeof(port2_config_descriptor);
 			state = p2_ready;
 			expire = 15;
@@ -632,14 +628,14 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 		case 4:
 			// 3 configurations
 			if (DescriptorNumber == 0) {
-				Address = (void*)port4_config_descriptor_1;
+				Address = (void*)&port4_config_descriptor_1;
 				Size    = sizeof(port4_config_descriptor_1);
 			} else if (DescriptorNumber == 1) {
 				if (wLength == 8) {
 					Address = (void*)port4_short_config_descriptor_2;
 					Size    = sizeof(port4_short_config_descriptor_2);
 				} else {
-					Address = (void*)port4_config_descriptor_2;
+					Address = (void*)&port4_config_descriptor_2;
 					Size    = sizeof(port4_config_descriptor_2);
 				}
 			} else if (DescriptorNumber == 2) {
