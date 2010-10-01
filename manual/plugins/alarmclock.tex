@@ -1,0 +1,28 @@
+\subsection{Alarm Clock}
+
+This plugin is an alarm clock, which resumes a paused song at a given time.
+
+\subsubsection{Key configuration}
+\begin{btnmap}
+    \PluginLeft{} / \PluginRight
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCLeft{} / \PluginRCRight}
+    & Switch between hours/minutes selection \\
+
+    \opt{scrollwheel}{\PluginScrollBack{} / \PluginScrollFwd{} or}
+    \PluginUp{} / \PluginDown 
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCUp{} / \PluginRCDown}
+    & Increase/Decrease hours/minutes \\
+
+    \PluginSelect
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCSelect}
+    & Set the alarm \\
+
+    \PluginCancel
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCCancel}
+    & Exit \\
+\end{btnmap}
+
+\subsubsection{Setting an alarm}
+First select a track and play it, then pause the track and launch the 
+``alarmclock'' plugin. Enter a 24h-time (e.g. 13:58) and set the alarm. 
+Music playback will resume when the set time is reached.

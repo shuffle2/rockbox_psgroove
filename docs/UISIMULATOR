@@ -1,0 +1,59 @@
+               __________               __   ___.
+     Open      \______   \ ____   ____ |  | _\_ |__   _______  ___
+     Source     |       _//  _ \_/ ___\|  |/ /| __ \ /  _ \  \/  /
+     Jukebox    |    |   (  <_> )  \___|    < | \_\ (  <_> > <  <
+     Firmware   |____|_  /\____/ \___  >__|_ \|___  /\____/__/\_ \
+                       \/            \/     \/    \/            \/
+ 
+                               How to build the UISimulators
+
+1. Get Sources
+
+  Get the very latest sources off the SVN server (or possibly get a recent
+  source code tarball).
+
+  All SVN details can be found here:
+  http://www.rockbox.org/twiki/bin/view/Main/UsingSVN
+
+2. Build Uisimulator
+
+    Create a new directory and run the 'tools/configure' script in
+    there. Select target to simulate and select simulation. The script will
+    then generate a Makefile for you:
+ 
+        $ mkdir build-dir
+        $ cd build-dir
+        $ ../tools/configure
+
+        [ answer to questions ]
+
+        [ Makefile created, simdisk subdirectory created ]
+
+        $ make
+        $ make install
+        $ ./rockboxui
+
+    Note that the simulator uses a local subdirectory named 'simdisk' as "root
+    directory" for the simulated box. Copy a bunch of mp3 files into that
+    directory, create subdirectories and do all sorts of things you want to be
+    able to browse when you fire up the simulator.
+
+3. Run Uisimulator
+
+  To create a simulated disk drive for the simulator to see, create a
+  subdirectory named 'simdisk' and populate it with a bunch of test
+  files/directories.
+
+  Run 'rockboxui'.
+
+4. Target Keypad Equivalents
+
+  The keyboard's numerical keypad is used to simulate the target keypad. See
+  the output rockboxui displays on start for details.
+
+5. Mouse Input
+
+  Clicking on the button images on the background will simulate pressing the
+  appropriate buttons.  On scroll wheel targts the mouse wheel will simulate
+  scroll wheel motion.
+  

@@ -1,0 +1,197 @@
+/***************************************************************************
+ *             __________               __   ___.
+ *   Open      \______   \ ____   ____ |  | _\_ |__   _______  ___
+ *   Source     |       _//  _ \_/ ___\|  |/ /| __ \ /  _ \  \/  /
+ *   Jukebox    |    |   (  <_> )  \___|    < | \_\ (  <_> > <  <
+ *   Firmware   |____|_  /\____/ \___  >__|_ \|___  /\____/__/\_ \
+ *                     \/            \/     \/    \/            \/
+ * $Id$
+ *
+ * Copyright (C) 2007 Jonathan Gordon
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+ * KIND, either express or implied.
+ *
+ ****************************************************************************/
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <limits.h>
+#include "config.h"
+#include "sound.h"
+#include "lang.h"
+#include "action.h"
+#include "settings.h"
+#include "menu.h"
+#include "sound_menu.h"
+#include "eq_menu.h"
+#include "exported_menus.h"
+#include "menu_common.h"
+#include "splash.h"
+#include "kernel.h"
+#include "dsp.h"
+
+/***********************************/
+/*    SOUND MENU                   */
+MENUITEM_SETTING(volume, &global_settings.volume, NULL);
+#ifdef AUDIOHW_HAVE_BASS
+MENUITEM_SETTING(bass, &global_settings.bass,
+#ifdef HAVE_SW_TONE_CONTROLS
+    lowlatency_callback
+#else
+    NULL
+#endif
+);
+
+#ifdef AUDIOHW_HAVE_BASS_CUTOFF
+MENUITEM_SETTING(bass_cutoff, &global_settings.bass_cutoff, NULL);
+#endif
+#endif /* AUDIOHW_HAVE_BASS */
+
+
+#ifdef AUDIOHW_HAVE_TREBLE
+MENUITEM_SETTING(treble, &global_settings.treble,
+#ifdef HAVE_SW_TONE_CONTROLS
+    lowlatency_callback
+#else
+    NULL
+#endif
+);
+
+#ifdef AUDIOHW_HAVE_TREBLE_CUTOFF
+MENUITEM_SETTING(treble_cutoff, &global_settings.treble_cutoff, NULL);
+#endif
+#endif /* AUDIOHW_HAVE_TREBLE */
+
+
+MENUITEM_SETTING(balance, &global_settings.balance, NULL);
+MENUITEM_SETTING(channel_config, &global_settings.channel_config,
+#if CONFIG_CODEC == SWCODEC
+    lowlatency_callback
+#else
+    NULL
+#endif
+);
+MENUITEM_SETTING(stereo_width, &global_settings.stereo_width,
+#if CONFIG_CODEC == SWCODEC
+    lowlatency_callback
+#else
+    NULL
+#endif
+);
+
+#ifdef AUDIOHW_HAVE_DEPTH_3D
+MENUITEM_SETTING(depth_3d, &global_settings.depth_3d, NULL);
+#endif
+
+#if CONFIG_CODEC == SWCODEC
+    /* Crossfeed Submenu */
+    MENUITEM_SETTING(crossfeed, &global_settings.crossfeed, lowlatency_callback);
+    MENUITEM_SETTING(crossfeed_direct_gain,
+                     &global_settings.crossfeed_direct_gain, lowlatency_callback);
+    MENUITEM_SETTING(crossfeed_cross_gain,
+                     &global_settings.crossfeed_cross_gain, lowlatency_callback);
+    MENUITEM_SETTING(crossfeed_hf_attenuation,
+                     &global_settings.crossfeed_hf_attenuation, lowlatency_callback);
+    MENUITEM_SETTING(crossfeed_hf_cutoff,
+                     &global_settings.crossfeed_hf_cutoff, lowlatency_callback);
+    MAKE_MENU(crossfeed_menu,ID2P(LANG_CROSSFEED), NULL, Icon_NOICON,
+              &crossfeed, &crossfeed_direct_gain, &crossfeed_cross_gain,
+              &crossfeed_hf_attenuation, &crossfeed_hf_cutoff);
+
+#ifdef HAVE_PITCHSCREEN
+static int timestretch_callback(int action,const struct menu_item_ex *this_item)
+{
+    switch (action)
+    {
+        case ACTION_EXIT_MENUITEM: /* on exit */
+            if (global_settings.timestretch_enabled && !dsp_timestretch_available())
+                splash(HZ*2, ID2P(LANG_PLEASE_REBOOT));
+            break;
+    }
+    lowlatency_callback(action, this_item);
+    return action;
+}
+    MENUITEM_SETTING(timestretch_enabled,
+                     &global_settings.timestretch_enabled, timestretch_callback);
+#endif
+
+    MENUITEM_SETTING(dithering_enabled,
+                     &global_settings.dithering_enabled, lowlatency_callback);
+
+    /* compressor submenu */
+    MENUITEM_SETTING(compressor_threshold,
+                     &global_settings.compressor_threshold, lowlatency_callback);
+    MENUITEM_SETTING(compressor_gain,
+                     &global_settings.compressor_makeup_gain, lowlatency_callback);
+    MENUITEM_SETTING(compressor_ratio,
+                     &global_settings.compressor_ratio, lowlatency_callback);
+    MENUITEM_SETTING(compressor_knee,
+                     &global_settings.compressor_knee, lowlatency_callback);
+    MENUITEM_SETTING(compressor_release,
+                     &global_settings.compressor_release_time, lowlatency_callback);
+    MAKE_MENU(compressor_menu,ID2P(LANG_COMPRESSOR), NULL, Icon_NOICON,
+              &compressor_threshold, &compressor_gain, &compressor_ratio,
+              &compressor_knee, &compressor_release);
+#endif
+
+#if (CONFIG_CODEC == MAS3587F) || (CONFIG_CODEC == MAS3539F)
+    MENUITEM_SETTING(loudness, &global_settings.loudness, NULL);
+    MENUITEM_SETTING(avc, &global_settings.avc, NULL);
+    MENUITEM_SETTING(superbass, &global_settings.superbass, NULL);
+    MENUITEM_SETTING(mdb_enable, &global_settings.mdb_enable, NULL);
+    MENUITEM_SETTING(mdb_strength, &global_settings.mdb_strength, NULL);
+    MENUITEM_SETTING(mdb_harmonics, &global_settings.mdb_harmonics, NULL);
+    MENUITEM_SETTING(mdb_center, &global_settings.mdb_center, NULL);
+    MENUITEM_SETTING(mdb_shape, &global_settings.mdb_shape, NULL);
+#endif
+
+#ifdef HAVE_SPEAKER
+    MENUITEM_SETTING(speaker_enabled, &global_settings.speaker_enabled, NULL);
+#endif
+
+#ifdef AUDIOHW_HAVE_EQ
+#endif /* AUDIOHW_HAVE_EQ */
+
+MAKE_MENU(sound_settings, ID2P(LANG_SOUND_SETTINGS), NULL, Icon_Audio,
+          &volume
+#ifdef AUDIOHW_HAVE_BASS
+          ,&bass
+#endif
+#ifdef AUDIOHW_HAVE_BASS_CUTOFF
+          ,&bass_cutoff
+#endif
+#ifdef AUDIOHW_HAVE_TREBLE
+          ,&treble
+#endif
+#ifdef AUDIOHW_HAVE_TREBLE_CUTOFF
+          ,&treble_cutoff
+#endif
+#ifdef AUDIOHW_HAVE_EQ
+          ,&audiohw_eq_tone_controls
+#endif
+          ,&balance,&channel_config,&stereo_width
+#ifdef AUDIOHW_HAVE_DEPTH_3D
+          ,&depth_3d
+#endif
+#if CONFIG_CODEC == SWCODEC
+          ,&crossfeed_menu, &equalizer_menu, &dithering_enabled
+#ifdef HAVE_PITCHSCREEN
+          ,&timestretch_enabled
+#endif
+          ,&compressor_menu
+#endif
+#if (CONFIG_CODEC == MAS3587F) || (CONFIG_CODEC == MAS3539F)
+         ,&loudness,&avc,&superbass,&mdb_enable,&mdb_strength
+         ,&mdb_harmonics,&mdb_center,&mdb_shape
+#endif
+#ifdef HAVE_SPEAKER
+         ,&speaker_enabled
+#endif
+         );
+

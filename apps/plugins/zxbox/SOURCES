@@ -1,0 +1,37 @@
+compr.c
+helpers.c
+interf.c
+keynames.c
+loadim.c
+zxmisc.c
+rom_imag.c
+snapshot.c
+spconf.c
+spect.c
+spkey.c
+spmain.c
+spperif.c
+spscr.c
+spsound.c
+sptape.c
+sptiming.c
+tapefile.c
+z80.c
+z80_op1.c
+z80_op2.c
+z80_op3.c
+z80_op4.c
+z80_op5.c
+z80_op6.c
+z80_step.c
+z80optab.c
+zxbox.c
+zxbox_keyb.c
+#ifdef HAVE_LCD_COLOR
+zxvid_16bpp.c
+#else
+#if LCD_DEPTH == 2
+zxvid_2bpp.c
+#endif
+zxvid_grey.c
+#endif

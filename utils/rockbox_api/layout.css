@@ -1,0 +1,107 @@
+.plugincontent
+{
+    font-family: Verdana;
+}
+
+.plugincontent li
+{
+    font-size: 10px;
+}
+
+.plugincontent code
+{
+    color: #00A;
+}
+
+.plugincontent .see, .plugincontent .see a
+{
+    color: #559;
+}
+
+.plugincontent .group
+{
+    font-size: 12px;
+}
+
+.plugincontent .group h3
+{
+    font-size: 14px;
+}
+
+.plugincontent h2
+{
+    color: #D11;
+}
+
+.plugincontent a
+{
+    color: blue;
+}
+
+.plugincontent a:hover
+{
+    color: red;
+}
+
+.plugincontent .top
+{
+    font-size: 10px;
+    color: green;
+}
+
+.plugincontent .extra
+{
+    font-weight: bold;
+    color: #992;
+}
+
+.plugincontent dl
+{
+    border-left: 1px solid #CCC;
+    padding-left: 10px;
+}
+
+.plugincontent dt, .plugincontent dd
+{
+    font-style: normal;
+}
+
+.plugincontent dd
+{
+    margin-left: 12em;
+}
+
+.plugincontent dt
+{
+    clear: left;
+    display: block;
+    float: left;
+    font-weight: bold;
+    width: 12em;
+}
+
+.plugincontent hr
+{
+    border: 1px solid #CCCCCC;
+    margin: 1em 0;
+}
+
+.plugincontent #content
+{
+    margin-left: 14em;
+    margin-right: 1em;
+    padding: 0;
+}
+
+.plugincontent #menu
+{
+    position: absolute;
+    left: 120px; /* I hate IE */
+    width: 14em;
+    padding: 0;
+}
+
+.plugincontent #menu ul
+{
+    padding-left: 1em;
+}

@@ -1,0 +1,61 @@
+\subsection{VU meter}
+\screenshot{plugins/images/ss-vumeter}{VU-Meter}{}
+
+This is a VU meter, which displays the volume of the left and right
+audio channels. There are 3 types of meter selectable.  The analogue
+meter is a classic needle style.  The digital meter is modelled after
+LED volume displays, and the mini{}-meter option allows for the display
+of small meters in addition to the main display (as above).  From the
+settings menu the decay time for the meter (its memory), the meter type
+and the meter scale can be changed.
+
+\begin{btnmap}
+\opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu}
+\opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD,SANSA_C200_PAD,GIGABEAT_PAD%
+     ,MROBE100_PAD,COWON_D2_PAD}{\ButtonPower}
+\opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+\opt{GIGABEAT_S_PAD}{\ButtonBack}
+\opt{PBELL_VIBE500_PAD}{\ButtonRec}
+  \opt{HAVEREMOTEKEYMAP}{&
+          \opt{IRIVER_RC_H100_PAD}{\ButtonRCStop}
+  }
+    & Save settings and quit\\
+\opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}
+\opt{ONDIO_PAD}{\ButtonMenu}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD,IRIVER_H10_PAD,PBELL_VIBE500_PAD}%
+    {\ButtonPlay}
+\opt{SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonRec}
+\opt{SANSA_FUZE_PAD}{Long \ButtonSelect}
+\opt{GIGABEAT_PAD}{\ButtonA}
+\opt{MROBE100_PAD}{\ButtonDisplay}
+\opt{GIGABEAT_S_PAD}{\ButtonNext}
+\opt{COWON_D2_PAD}{\TouchCenter}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Help\\
+\opt{RECORDER_PAD}{\ButtonFOne}
+\opt{ONDIO_PAD}{Long \ButtonMenu}
+\opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD%
+     ,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{\ButtonSelect}
+\opt{IRIVER_H10_PAD}{\ButtonRew}
+\opt{GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,COWON_D2_PAD,PBELL_VIBE500_PAD}%
+    {\ButtonMenu}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Settings\\
+\opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD%
+     ,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonUp}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonScrollFwd}
+\opt{SANSA_C200_PAD}{\ButtonVolUp}
+\opt{IRIVER_H10_PAD}{\ButtonScrollUp}
+\opt{COWON_D2_PAD}{\TouchTopMiddle}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Raise Volume\\
+\opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD%
+     ,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonDown}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonScrollBack}
+\opt{SANSA_C200_PAD}{\ButtonVolDown}
+\opt{IRIVER_H10_PAD}{\ButtonScrollDown}
+\opt{COWON_D2_PAD}{\TouchBottomMiddle}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Lower Volume\\
+\end{btnmap}

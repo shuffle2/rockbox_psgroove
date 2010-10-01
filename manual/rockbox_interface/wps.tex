@@ -1,0 +1,433 @@
+% $Id$ %
+\section{\label{ref:WPS}While Playing Screen}
+The While Playing Screen (WPS) displays various pieces of information about the
+currently playing audio file.
+%
+\opt{lcd_bitmap}{%
+  The appearance of the WPS can be configured using WPS configuration files.
+  The items shown depend on your configuration -- all items can be turned on
+  or off independently. Refer to \reference{ref:wps_tags} for details on how
+  to change the display of the WPS.
+  \begin{itemize}
+    \nopt{ondio}{
+    \item Status bar: The Status bar shows Battery level, charger status, 
+      volume, play mode, repeat mode, shuffle mode\opt{rtc}{ and clock}.
+      In contrast to all other items, the status bar is always at the top of
+      the screen.
+    }
+    \opt{ondio}{
+    \item Status bar: The Status bar shows Battery level, USB power mode, key
+      lock status, memory access indicator. In contrast to all other items, the
+      status bar is always at the top of the screen.
+    }
+  \item (Scrolling) path and filename of the current song.
+  \item The ID3 track name.
+  \item The ID3 album name.
+  \item The ID3 artist name.
+  \item Bit rate. VBR files display average bitrate and ``(avg)''
+  \item Elapsed and total time.
+  \item A slidebar progress meter representing where in the song you are.
+  \item Peak meter.
+  \end{itemize}
+}
+\opt{recorder,recorderv2fm,ondio}{
+  \note{
+  \begin{itemize}
+  \item The number of lines shown depends on the size of the font used.
+  \item The peak meter is only visible if you turn off the status bar or if
+    using a small font that gives 8 or more display lines.
+  \end{itemize}
+  }
+}
+%
+\opt{player}{
+  \note{
+  \begin{itemize}
+  \item Playlist index/Playlist size: Artist {}- Title.
+  \item Current{}-time Progress{}-indicator Left.
+  \end{itemize}
+  }
+}
+
+See \reference{ref:ConfiguringtheWPS} for details of customising
+your WPS (While Playing Screen).
+
+
+\subsection{\label{ref:WPS_Key_Controls}WPS Key Controls}
+
+  \begin{btnmap}
+      \ActionWpsVolUp{} / \ActionWpsVolDown
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsVolUp{} / \ActionRCWpsVolDown}
+      & Volume up/down.\\
+      %
+      \ActionWpsSkipPrev
+       \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsSkipPrev}
+      & Go to beginning of track, or if pressed while in the
+        first seconds of a track, go to the previous track.\\
+      %
+      \ActionWpsSeekBack
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsSeekBack}
+      & Rewind in track.\\
+      %
+      \ActionWpsSkipNext
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsSkipNext}
+      & Go to the next track.\\
+      %
+      \ActionWpsSeekFwd
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsSeekFwd}
+      & Fast forward in track.\\
+      %
+      \ActionWpsPlay
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsPlay}
+      & Toggle play/pause.\\
+      %
+      \ActionWpsStop 
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsStop}
+      & Stop playback.\\
+      %
+      \ActionWpsBrowse
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsBrowse}
+      & Return to the \setting{File Browser} / \setting{Database}.\\
+      %
+      \ActionWpsContext
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsContext}
+      & Enter \setting{WPS Context Menu}.\\
+      %
+      \opt{ONDIO_PAD}{\ActionWpsContext{} twice}%
+      \nopt{ONDIO_PAD}{\ActionWpsMenu}%
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsMenu}
+      & Enter \setting{Main Menu}%
+      \opt{ONDIO_PAD}{ via the \setting{WPS Context Menu}}.\\%
+      %
+      \opt{quickscreen}{%
+        \ActionWpsQuickScreen
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsQuickScreen}
+          & Switch to the \setting{Quick Screen}
+          (see \reference{ref:QuickScreen}). \\}%
+      %
+      % software hold targets
+      \nopt{hold_button}{%
+          \opt{RECORDER_PAD}{\ButtonFOne+\ButtonDown}
+          \opt{PLAYER_PAD}{\ButtonMenu+\ButtonStop}
+          \opt{ONDIO_PAD}{\ButtonMenu+\ButtonDown}
+          \opt{SANSA_CLIP_PAD}{\ButtonHome+\ButtonSelect}
+          & Key lock on/off.\\
+      }%
+      %These actions need definitions for the other targets
+      \opt{RECORDER_PAD}{%
+        \ButtonFThree & Toggles Display quick screen.\\%
+        \ButtonFOne+\ButtonPlay & Mute on/off.\\%
+      }%
+      \opt{PLAYER_PAD}{%
+        \ButtonMenu+\ButtonPlay & Mute on/off.\\%
+      }%
+      % We explicitly list all the appropriate targets here and do no condition
+      % on the 'pitchscreen' feature since some players have the feature but do
+      % not have the button to go from the WPS to the pitch screen.
+      \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IRIVER_H10_PAD,MROBE100_PAD%
+	           ,GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{%
+        \ActionWpsPitchScreen
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsPitchScreen}
+         & Show \setting{Pitch Screen} (see \reference{sec:pitchscreen}).\\%
+      }%
+      \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_CLIP_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}{%
+        \ActionWpsPlaylist 
+          & Show current \setting{Playlist}.\\%
+      }%
+      \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IRIVER_H10_PAD%
+          ,SANSA_E200_PAD,SANSA_C200_PAD}{%
+        \ActionWpsIdThreeScreen 
+          \opt{HAVEREMOTEKEYMAP}{& \ActionRCWpsIdThreeScreen}
+          & Enter \setting{ID3 Viewer}.\\%
+      }%
+      \opt{hotkey}{%
+        \ActionWpsHotkey \opt{HAVEREMOTEKEYMAP}{& }
+        & Activate the \setting{Hotkey} function (see \reference{ref:Hotkeys}).\\
+      }
+      \opt{ab_repeat_buttons}{%
+         \ActionWpsAbSetBNextDir{} or }%
+         % not all targets have the above action defined but the one below works on all
+      Short \ActionWpsSkipNext{} + Long \ActionWpsSkipNext
+      \opt{HAVEREMOTEKEYMAP}{
+        &
+          \opt{IRIVER_RC_H100_PAD}{\ActionRCWpsAbSetBNextDir{} or}
+        Short \ActionRCWpsSkipNext{} + Long \ActionRCWpsSkipNext}
+      & Skip to the next directory.\\
+      %
+      \opt{ab_repeat_buttons}{%
+         \ActionWpsAbSetAPrevDir{} or }%
+      Short \ActionWpsSkipPrev{} + Long \ActionWpsSkipPrev
+      \opt{HAVEREMOTEKEYMAP}{
+        &
+          \opt{IRIVER_RC_H100_PAD}{\ActionRCWpsAbSetAPrevDir{} or}
+        Short \ActionRCWpsSkipPrev{} + Long \ActionRCWpsSkipPrev}
+      & Skip to the previous directory.\\
+      %
+      \opt{SANSA_E200_PAD,SANSA_C200_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{
+        \ActionStdRec
+          \opt{HAVEREMOTEKEYMAP}{&} 
+          & Switch to the \setting{Recording Screen}.\\
+      }%
+  \end{btnmap}
+
+
+\opt{lcd_bitmap}{
+  \subsection{\label{ref:peak_meter}Peak Meter}
+  The peak meter can be displayed on the While Playing Screen and consists of
+  several indicators. 
+  \opt{recording}{
+    For a picture of the peak meter, please see the While
+    Recording Screen in \reference{ref:while_recording_screen}.
+  }
+  
+  \begin{description}
+  \item [The bar:]
+    This is the wide horizontal bar. It represents the current volume value.
+  \item [The peak indicator:]
+    This is a little vertical line at the right end of the bar. It indicates 
+    the peak volume value that occurred recently.
+  \item [The clip indicator:]
+    This is a little black block that is displayed at the very right of the
+    scale when an overflow occurs. It usually does not show up during normal
+    playback unless you play an audio file that is distorted heavily.
+    \opt{recording}{
+      If you encounter clipping while recording, your recording will sound distorted.
+      You should lower the gain.
+    }
+    \note{Note that the clip detection is not very precise.
+     Clipping might occur without being indicated.}
+  \item [The scale:]
+    Between the indicators of the right and left channel there are little dots.
+    These dots represent important volume values. In linear mode each dot is a
+    10\% mark. In dBFS mode the dots represent the following values (from right
+    to left): 0~dB, {}-3~dB, {}-6~dB, {}-9~dB, {}-12~dB, {}-18~dB, {}-24~dB, {}-30~dB,
+    {}-40~dB, {}-50~dB, {}-60~dB.
+  \end{description}
+}
+\subsection{\label{sec:contextmenu}The WPS Context Menu}
+Like the context menu for the \setting{File Browser}, the \setting{WPS Context Menu} 
+allows you quick access to some often used functions.
+
+\subsubsection{Playlist}
+The \setting{Playlist} submenu allows you to view, save, search and
+reshuffle the current playlist. To change settings for the
+\setting{Playlist Viewer} press \ActionStdContext{} while viewing the current
+playlist to bring up the \setting{Playlist Viewer Menu}. In this menu, you
+can find the \setting{Playlist Viewer Settings}.
+
+\subsubsection{Playlist Viewer Settings}
+  \begin{description}
+    \item[Show Icons.] This toggles display of the icon for the currently 
+    selected playlist entry and the icon for moving a playlist entry
+    \item[Show Indicies.] This toggles display of the line numbering for
+       the playlist
+    \item[Track Display.] This toggles between filename only and full path
+       for playlist entries
+    \item[Save Current Playlist.] Allows the current playlist to be saved as
+       a \fname{.m3u8} playlist file
+  \end{description}
+
+    
+\subsubsection{Playlist catalog}
+  \begin{description}
+    \item [View catalog.] This lists all playlists that are part of the
+    Playlist catalog. You can load a new playlist directly from this list.
+    \item [Add to playlist.] Adds the currently playing file to a playlist.
+    Select the playlist you want the file to be added to and it will get
+    appended to that playlist.
+    \item [Add to new playlist.] Similar to the previous entry this will
+    add the currently playing track to a playlist. You need to enter a name
+    for the new playlist first.
+  \end{description}
+
+\subsubsection{Sound Settings}
+This is a shortcut to the \setting{Sound Settings Menu}, where you can configure volume,
+bass, treble, and other settings affecting the sound of your music.  
+See \reference{ref:configure_rockbox_sound} for more information.
+
+\subsubsection{Playback Settings}
+This is a shortcut to the \setting{Playback Settings Menu}, where you can configure shuffle,
+repeat, party mode, skip length and other settings affecting the playback of your music.  
+
+\subsubsection{Rating}
+The menu entry is only shown if \setting{Gather Runtime Information} is
+enabled. It allows the asignment of a personal rating value (0 -- 10)
+to a track which can be displayed in the WPS and used in the Database
+browser. The value wraps at 10.
+
+\subsubsection{Bookmarks}
+This allows you to create a bookmark in the currently-playing track.
+
+\subsubsection{\label{ref:trackinfoviewer}Show Track Info}
+\screenshot{rockbox_interface/images/ss-id3-viewer}{The track info viewer}{}
+This screen is accessible from the WPS screen, and provides a detailed view of
+all the identity information about the current track. This info is known as
+meta data and is stored in audio file formats to keep information on artist,
+album etc. To access this screen, %
+\opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IRIVER_H10_PAD,%
+      SANSA_C200_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD}{
+  press \ActionWpsIdThreeScreen. }%
+\opt{PLAYER_PAD,ONDIO_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD,IAUDIO_M3_PAD,%
+      GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_CLIP_PAD,PBELL_VIBE500_PAD}{press
+  \ActionWpsContext{} to access the \setting{WPS Context Menu} and select
+  \setting{Show Track Info}. }%
+\opt{RECORDER_PAD,PLAYER_PAD,ONDIO_PAD}{Use \ButtonLeft\ and \ButtonRight\
+  to move through the information.}%
+
+\subsubsection{Open With...}
+This \setting{Open With} function is the same as the \setting{Open With} 
+function in the file browser's \setting{Context Menu}.
+
+\subsubsection{Delete}
+Delete the currently playing file. The file will be deleted but the playback
+of the file will not stop immediately. Instead, the part of the file that
+has already been buffered (i.e. read into the \daps\ memory) will be played.
+This may even be the whole track.
+
+\opt{pitchscreen}{
+  \subsubsection{\label{sec:pitchscreen}Pitch}
+  
+  The \setting{Pitch Screen} allows you to change the rate of playback
+  (i.e. the playback speed and at the same time the pitch) of your
+  \dap.  The rate value can be adjusted
+  between 50\% and 200\%. 50\% means half the normal playback speed and a
+  pitch that is an octave lower than the normal pitch. 200\% means double
+  playback speed and a pitch that is an octave higher than the normal pitch.
+
+  The rate can be changed in two modes: procentual and semitone.
+  Initially, procentual mode is active.
+  
+  \opt{swcodec}{
+    If you've enabled the \setting{Timestretch} option in
+    \setting{Sound Settings} and have since rebooted, you can also use
+    timestretch mode. This allows you to change the playback speed
+    without affecting the pitch, and vice versa.
+    
+    In timestretch mode there are separate displays for pitch and
+    speed, and each can be altered independently.  Due to the
+    limitations of the algorithm, speed is limited to be between 35\%
+    and 250\% of the current pitch value.  Pitch must maintain the
+    same ratio as well as remain between 50\% and 200\%.
+  }
+  
+  The value of the \opt{swcodec}{rate, pitch and speed}\nopt{swcodec}{rate}
+  is not persistent, i.e. after the \dap\ is turned on it will
+  always be set to 100\%.  \opt{swcodec}{ However, the rate, pitch and speed
+  information will be stored in any bookmarks you may create
+  (see \reference{ref:Bookmarkconfigactual}) and will be restored upon
+  playing back those bookmarks.}
+
+  \nopt{swcodec}{
+      \begin{btnmap}
+        \ActionPsToggleMode
+        & Toggle pitch changing mode. \\
+        %
+        \ActionPsIncSmall{} / \ActionPsDecSmall
+        & Increase~/ Decrease pitch by 0.1\% (in procentual mode) or by 0.1
+          semitone (in semitone mode).\\
+        %
+        \ActionPsIncBig{} / \ActionPsDecBig
+        & Increase~/ Decrease pitch by 1\% (in procentual mode) or a semitone
+          (in semitone mode).\\
+        %
+        \ActionPsNudgeLeft{} / \ActionPsNudgeRight
+        & Temporarily change pitch by 2\% (beatmatch). \\
+        %
+        \ActionPsReset
+        & Reset rate to 100\%. \\
+        %
+        \ActionPsExit
+        & Leave the \setting{Pitch Screen}. \\
+        %
+      \end{btnmap}
+
+    \warn{Changing the pitch can cause audible `Artifacts' or `Dropouts'.}
+  }
+
+  \opt{swcodec}{
+      \begin{btnmap}
+        \ActionPsToggleMode
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsToggleMode}
+        & Toggle pitch changing mode (cycle through all available modes).\\
+        %
+        \ActionPsIncSmall{} / \ActionPsDecSmall
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsIncSmall{} / \ActionRCPsDecSmall}
+        & Increase~/ Decrease pitch by 0.1\% (in procentual mode) or 0.1
+          semitone (in semitone mode).\\
+        %
+        \nopt{PBELL_VIBE500_PAD}{ % ther is no long scroll up or down because of slide
+        \ActionPsIncBig{} / \ActionPsDecBig
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsIncBig{} / \ActionRCPsDecBig}
+        & Increase~/ Decrease pitch by 1\% (in procentual mode) or a semitone
+          (in semitone mode).\\
+        }
+        %
+        \ActionPsNudgeLeft{} / \ActionPsNudgeRight
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsNudgeLeft{} / \ActionRCPsNudgeRight}
+        & Temporarily change pitch by 2\% (beatmatch), or modify speed (in timestretch mode).\\
+        %
+        \ActionPsReset
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsReset}
+        & Reset pitch and speed to 100\%. \\
+        %
+        \ActionPsExit
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCPsExit}
+        & Leave the \setting{Pitch Screen}. \\
+        %
+      \end{btnmap}
+  }
+
+}
+
+%********************QUICKSCREENS***********************************************
+\opt{RECORDER_PAD}{
+  \section{\label{ref:QuickScreens}Quick Screens}
+  \screenshot{rockbox_interface/images/ss-quick-screen-112x64x1.png}{The F2 quick screen}{}
+  \screenshot{rockbox_interface/images/ss-quick-screen2-112x64x1.png}{The F3 quick screen}{}
+  Rockbox handles function buttons in a different way to the Archos software.
+  \ButtonFOne\ is always bound to the menu function, while \ButtonFTwo\ and
+  \ButtonFThree\ enable two quick screens.
+  
+  \ButtonFTwo\ displays some browse and play settings which are likely to be
+  changed frequently. This settings are Shuffle mode, Repeat mode and the Show
+  files options
+  
+  Shuffle mode plays each track in the currently playing list in a random order
+  rather than in the order shown in the browser.
+
+  Repeat mode repeats either a single track (One) or the entire playlist (All).
+
+  Show files determines what type files can be seen in the browser.  This can be
+  just MP3 files and directories (Music), Playlists, MP3 files and directories
+  (Playlists), any files that Rockbox supports (Supported) or all files on the
+  disk (All).
+
+  See \reference{ref:PlaybackOptions} for more information about these
+  settings.
+
+  \begin{btnmap}
+      \ButtonLeft & Control Shuffle mode setting. \\
+      \ButtonRight & Control Repeat mode setting. \\
+      \ButtonDown & Control Show file setting. \\
+  \end{btnmap}
+  
+  \ButtonFThree\ controls frequently used display options.
+  
+  Scroll bar turns the display of the Scroll bar on the left of the screen on
+  or off.
+  
+  Status bar turns the status display at the top of the screen on or off. 
+  Upside down inverts the screen so that the top of the display appears nearest
+  to the buttons. This is sometimes useful when storing the \dap\ in a pocket.
+  Key assignments swap over with the display orientation where it is logical 
+  for them to do so.
+
+  See \reference{ref:Displayoptions} for more information about these
+  settings.
+  
+  \begin{btnmap}
+      \ButtonLeft & Control scroll bar display. \\
+      \ButtonRight & Control status bar display. \\
+      \ButtonDown & Control upside down screen setting. \\
+  \end{btnmap}
+}

@@ -1,0 +1,17 @@
+% $Id$ %
+\subsection{Robotfindskitten}
+\screenshot{plugins/images/ss-robotfindskitten}{Robotfindskitten}{img:robotfindskitten}
+In this game, you are robot (\#). Your job is to find kitten. This task
+is complicated by the existence of various things which are not kitten.
+Robot must touch items to determine if they are kitten or not. The game
+ends when robotfindskitten.
+
+\begin{btnmap}
+    \PluginUp, \PluginDown, \PluginLeft, \PluginRight
+      \opt{HAVEREMOTEKEYMAP}{& \PluginRCUp, \PluginRCDown, \PluginRCLeft, \PluginRCRight}
+    & Move robot\\
+
+    \PluginCancel
+      \opt{HAVEREMOTEKEYMAP}{& \PluginRCCancel}
+    & Quit\\
+\end{btnmap}

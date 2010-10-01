@@ -1,0 +1,92 @@
+% $Id$ %
+\subsection{Pacbox}
+\screenshot{plugins/images/ss-pacbox}{Pacbox}{img:pacbox}
+Pacbox is an emulator of the Pacman arcade machine hardware. It is a port of
+\emph{PIE -- Pacman Instructional Emulator}
+(\url{http://www.ascotti.org/programming/pie/pie.htm}).
+
+
+\subsubsection{ROMs}
+To use the emulator to play Pacman, you need a copy of ROMs for 
+``Midway Pacman''.
+\begin{table}
+  \begin{rbtabular}{0.8\textwidth}{lX}{\textbf{Filename} & \textbf{MD5 checksum}}{}{}
+    pacman.5e & 2791455babaf26e0b396c78d2b45f8f6\\
+    pacman.5f & 9240f35d1d2beee0ff17195653b5e405\\
+    pacman.6e & 290aa5eae9e2f63587b5dd5a7da932da\\
+    pacman.6f & 19a886fcd8b5e88b0ed1b97f9d8659c0\\
+    pacman.6h & d7cce8bffd9563b133ec17ebbb6373d4\\
+    pacman.6j & 33c0e197be4c787142af6c3be0d8f6b0\\
+  \end{rbtabular}
+\end{table}
+
+These need to be stored in the \fname{/.rockbox/pacman/} directory on your 
+\dap. In the MAME ROMs collection the necessary files can be found in 
+\fname{pacman.zip} and \fname{puckman.zip}. The MAME project itself can be 
+found at \url{http://www.mame.net}.
+
+\subsubsection{Keys}
+\begin{btnmap}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,IPOD_4G_PAD,%
+        IPOD_3G_PAD,h10,MROBE100_PAD,SANSA_FUZE_PAD}{\ButtonRight}
+    \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD,PBELL_VIBE500_PAD}{\ButtonUp}
+    \opt{h10_5gb}{\ButtonScrollUp}
+    \opt{COWON_D2_PAD}{\TouchTopMiddle}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Move Up\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,IPOD_4G_PAD,%
+    IPOD_3G_PAD,h10,MROBE100_PAD,SANSA_FUZE_PAD}{\ButtonLeft}
+    \opt{h10_5gb}{\ButtonScrollDown}
+    \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD,PBELL_VIBE500_PAD}{\ButtonDown}
+    \opt{COWON_D2_PAD}{\TouchBottomMiddle}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Move Down\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,MROBE100_PAD,SANSA_FUZE_PAD}{\ButtonUp}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu}
+    \opt{h10}{\ButtonScrollUp}
+    \opt{h10_5gb,GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD,PBELL_VIBE500_PAD}{\ButtonLeft}
+    \opt{COWON_D2_PAD}{\TouchMidLeft}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Move Left\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,MROBE100_PAD,SANSA_FUZE_PAD}{\ButtonDown}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonPlay}
+    \opt{h10}{\ButtonScrollDown}
+    \opt{h10_5gb,GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD,PBELL_VIBE500_PAD}{\ButtonRight}
+    \opt{COWON_D2_PAD}{\TouchMidRight}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Move Right\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD}{\ButtonRec}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonFF}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonSelect+\ButtonDown}
+    \opt{GIGABEAT_PAD}{\ButtonA}
+    \opt{MROBE100_PAD}{\ButtonDisplay}
+    \opt{GIGABEAT_S_PAD}{\ButtonPlay}
+    \opt{COWON_D2_PAD}{\TouchCenter}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Insert Coin\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,IPOD_4G_PAD,IPOD_3G_PAD%
+        ,SANSA_E200_PAD,SANSA_FUZE_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonRew}
+    \opt{COWON_D2_PAD}{\TouchBottomLeft}
+    \opt{PBELL_VIBE500_PAD}{\ButtonPlay}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & 1-Player Start\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{n/a}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonPower}
+    \opt{SANSA_E200_PAD,PBELL_VIBE500_PAD}{\ButtonRec}
+    \opt{MROBE100_PAD}{\ButtonMenu}
+    \opt{COWON_D2_PAD}{\TouchBottomRight}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & 2-Player Start\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonMenu}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,MROBE100_PAD}{\ButtonPlay}
+    \opt{SANSA_E200_PAD}{\ButtonPower}
+    \opt{SANSA_FUZE_PAD}{\ButtonHome}
+    \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,COWON_D2_PAD,PBELL_VIBE500_PAD}{\ButtonMenu}
+      \opt{HAVEREMOTEKEYMAP}{& }
+    & Menu\\
+\end{btnmap}

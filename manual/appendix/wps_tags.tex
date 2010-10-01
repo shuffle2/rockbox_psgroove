@@ -1,0 +1,681 @@
+% $Id$ %
+\chapter{\label{ref:wps_tags}Theme Tags}
+Themeing is discussed in detail in section \reference{ref:ConfiguringtheWPS},
+what follows is a list of the available tags.
+
+\note{The ``bar-type tags'' (such as \%pb, \%pv, \%bl etc.) can be further
+  themed -- see \reference{ref:bar_tags}.}
+
+\section{Status Bar}
+\begin{tagmap}
+  \config{\%we} & Display Status Bar\\
+  \config{\%wd} & Hide Status Bar\\
+  \config{\%wi} & Display the inbuilt Status Bar in the current viewport\\
+\end{tagmap}
+These tags override the player setting for the display of the status bar.
+They must be noted on their own line (which will not be shown in the WPS).
+
+\section{Information from the track tags}
+  \begin{tagmap}
+    \config{\%ia} & Artist\\
+    \config{\%ic} & Composer\\
+    \config{\%iA} & Album Artist\\
+    \config{\%id} & Album Name\\
+    \config{\%iG} & Grouping\\
+    \config{\%ig} & Genre Name\\
+    \config{\%in} & Track Number\\
+    \config{\%it} & Track Title\\
+    \config{\%iC} & Comment\\
+    \config{\%iv} & ID3 version (1.0, 1.1, 2.2, 2.3, 2.4, or empty if not an ID3 tag)\\
+    \config{\%iy} & Year\\
+    \config{\%ik} & Disc Number\\
+  \end{tagmap}
+Remember that this information is not always available, so use the 
+conditionals to show alternate information in preference to assuming.
+
+These tags, when written with a capital ``I'' (e.g. \config{\%Ia} or \config{\%Ic}),
+show the information for the next song to be played.
+
+\nopt{lcd_charcell}{
+  \section{Viewports}
+    \begin{tagmap}
+      \nopt{lcd_non-mono}{%
+        \config{\%V(x,y,[width],\tabnlindent[height],[font])}
+        & See section \ref{ref:Viewports}\\}
+
+      \nopt{lcd_color}{\opt{lcd_non-mono}{%
+        \config{\%V(x,y,[width],\tabnlindent[height],[font])}\newline
+        \config{\%Vf([fgshade])}\newline
+        \config{\%Vb([bgshade])}
+        & See section \ref{ref:Viewports}\\}}
+
+      \opt{lcd_color}{%
+        \config{\%V(x,y,[width],\tabnlindent[height],[font])}\newline
+        \config{\%Vf([fgcolour])}\newline
+        \config{\%Vb([bgcolour])}
+        & See section \ref{ref:Viewports}\\}
+        
+      \config{\%Vl('identifier',\newline\dots)} & Preloads a viewport for later
+      display. `identifier' is a single lowercase letter (a-z) and the `\dots'
+      parameters use the same logic as the \%V tag explained above.\\
+
+      \config{\%Vd('identifier')} & Display the `identifier' viewport. E.g.
+      \config{\%?C<\%Vd(a)|\%Vd(b)>}
+      will show viewport `a' if album art is found, and `b' if it isn't.\\
+
+      \config{\%Vi('label',\dots)} &
+      Declare a Custom UI Viewport. The `\dots' parameters use the same logic as
+      the \config{\%V} tag explained above. See section \ref{ref:Viewports}.\\ 
+
+      \config{\%VI('label')} & Set the Info Viewport to use the viewport called
+      label, as declared with the previous tag.\\
+    \end{tagmap}
+
+  \section{Additional Fonts}
+    \begin{tagmap}
+      \config{\%Fl('id',filename)} & See section \ref{ref:multifont}.\\
+    \end{tagmap}
+
+}
+
+\section{Power Related Information}
+  \begin{tagmap}
+    \config{\%bl} & Numeric battery level in percents.
+                    Can also be used in a conditional: 
+                    \config{\%?bl<-1|0|1|2|\ldots|N>},
+                    where the value $-1$ is used when the battery level isn't
+                    known (it usually is). The value $N$ is only used when the
+                    battery level is exactly 100 percent.
+                    An image can also be used, the proportion of the image
+                    shown corresponds to the battery level:
+                    \config{\%bl(x,y,[width],[height],image.bmp)}\\
+    \config{\%bv} & The battery level in volts\\
+    \config{\%bt} & Estimated battery time left\\
+    \config{\%bp} & ``p'' if the charger is connected (only on targets
+                    that can charge batteries)\\
+    \config{\%bc} & ``c'' if the unit is currently charging the battery (only on
+                    targets that have software charge control or monitoring)\\
+    \config{\%bs} & Remaining time of the sleep timer (if it is set)\\
+  \end{tagmap}
+
+\section{Information about the file}
+  \begin{tagmap}
+    \config{\%fb} & File Bitrate (in kbps)\\
+    \config{\%fc} & File Codec (e.g. ``MP3'' or ``FLAC'').
+           This tag can also be used in a conditional tag:
+           \config{\%?fc<mp1|mp2|mp3|aiff|wav|ogg|\newline
+           flac|mpc|a52|wavpack|alac|aac|shn|sid|adx|nsf|\newline
+           speex|spc|ape|wma|mod|sap|unknown>}.
+                  The codec order is as follows: MP1, MP2, MP3, AIFF, WAV,
+           Ogg Vorbis (OGG), FLAC, MPC, AC3, WavPack (WV), ALAC, AAC,
+           Shorten (SHN), SID, ADX, NSF, Speex, SPC, APE, WMA, MOD, SAP.\\
+    \config{\%ff} & File Frequency (in Hz)\\
+    \config{\%fk} & File Frequency (in kHz)\\
+    \config{\%fm} & File Name\\
+    \config{\%fn} & File Name (without extension)\\
+    \config{\%fp} & File Path\\
+    \config{\%fs} & File Size (in Kilobytes)\\
+    \config{\%fv} & ``(avg)'' if variable bit rate or empty string if constant bit rate\\
+    \config{\%d(N)} & N-th segment from the end of the file's directory
+                       (N can be 1, 2, 3, \dots)\\
+  \end{tagmap}
+Example for the \config{\%d(N)} commands: If the file is
+``/Rock/Kent/Isola/11 - 747.mp3'', \config{\%d(1)} is ``Isola'', 
+\config{\%d(2)} is ``Kent'' and \config{\%d(3)} is ``Rock''.
+
+These tags, when written with the first letter capitalized (e.g. \config{\%Fn}
+or \config{\%D(2)}), produce the information for the next file to be played.
+
+\section{Playlist/Song Info}
+  \begin{tagmap}
+    \config{\%pb} & Progress Bar.
+    \opt{player}{
+            This will display a one character ``cup''
+            that empties as the time progresses.}
+    \opt{lcd_bitmap}{
+           This will replace the entire line with a progress bar.
+           You can set the position, width and height of the progressbar
+           (in pixels) and load a custom image for it:
+           \config{\%pb(x,y,[width],[height],image.bmp)}} \\
+    \opt{player}{%
+    \config{\%pf} & Full-line progress bar \& time display\\
+    }%
+    \config{\%px} & Percentage played in song\\
+    \config{\%pc} & Current time in song\\
+    \config{\%pe} & Total number of playlist entries\\
+    \nopt{player}{%
+    \config{\%pm} & Peak Meter. The entire line is used as %
+                    volume peak meter.\\%
+    }%
+    \config{\%pn} & Playlist name (without path or extension)\\
+    \config{\%pp} & Playlist position\\
+    \config{\%pr} & Remaining time in song\\
+    \config{\%ps} & ``s'' if shuffle mode is enabled\\
+    \config{\%pt} & Total track time\\
+    \config{\%pv} & Current volume (in dB). Can also be used in a conditional:
+           \config{\%?pv<0|1|2|\ldots|N>}\newline
+           0 is used for mute, the last option is used for values greater than zero.
+         \opt{lcd_bitmap}{This can also be used like \%pb to provide a continuous scale:
+         \config{\%pv(x,y,[width],[height],image.bmp)}} \\
+    \config{\%pS} & Track is starting. An optional number gives how many seconds
+         the tag remains true for after the start of the track. The default is
+         10 seconds if no number is specified.
+         \config{\%?pS(7)<in the first 7 seconds of track|in
+           the rest of the track>}\\
+    \config{\%pE} & Track is ending. An optional number gives how many seconds
+         before the end of the track the tag becomes true. The default is
+         10 seconds if no number is specified.
+         \config{\%?pE(7)<in the last 7 seconds of track|in
+           the rest of the track>}\\
+    \config{\%Sp} & Current playback pitch\\
+  \end{tagmap}
+  
+\section{Playlist Viewer}
+  \begin{tagmap}
+    \config{\%Vp(start,code to render)} & Display the playlist viewer in
+            the current viewport.\\
+  \end{tagmap}
+
+  \begin{itemize}
+    \item `start' is the offset relative to the currently playing track for the
+    playlist to display from (0 the current track, 1 is the next track, etc.).
+    \item `code to render' is a line of skin code which will be displayed for
+    each line in the viewer. All text tags are supporte (including conditionals
+    and sublines)
+  \end{itemize}
+
+  The entire viewport will be used, so don't expect other tags in the same
+  viewport to work well.  Supported tags are \%pp, all tags starting with \%i,
+  most tags starting with \%f, \%pt and \%s.\\
+
+  Example: \config{\%Vp(1,\%pp - \%it,\%pp - \%fn)} -- Display the playlist
+  position, then either the track title (from the tags) or
+  the filename. The viewer will display as many tracks as will fit in the
+  viewport.
+
+\section{Runtime Database}
+  \begin{tagmap}
+    \config{\%rp} & Song playcount\\
+    \config{\%rr} & Song rating (0-10). This tag can also be used in a conditional tag: %
+           \config{\%?rr<0|1|2|3|4|5|6|7|8|9|10>}\\
+    \config{\%ra} & Autoscore for the song\\
+  \end{tagmap}
+
+\opt{swcodec}{
+\section{Sound (DSP) settings}
+  \begin{tagmap}
+    \config{\%Sp} & Current playback pitch \\
+  \opt{swcodec}{
+    \config{\%xf} & Crossfade setting, in the order: Off, Auto Skip, Man Skip,
+           Shuffle, Shuffle and Man Skip, Always\\
+    \config{\%rg} & ReplayGain value in use (x.y~dB). If used as a conditional,
+           Replaygain type in use: \config{\%?rg<Off|Track%
+           |Album|TrackShuffle|AlbumShuffle%
+           |No tag>}\\
+  }
+  \end{tagmap}
+}
+
+\section{Hold}
+    \begin{tagmap}
+        \config{\%mh} & ``h'' if the main unit keys are locked\\
+        \opt{remote_button_hold}{%
+            \config{\%mr} & ``r'' if the remote keys are locked\\
+        }
+    \end{tagmap}
+
+\section{Virtual LED}
+  \begin{tagmap}
+    \config{\%lh} & ``h'' if the \disk\ is accessed\\
+  \end{tagmap}
+
+\section{Repeat Mode}
+  \begin{tagmap}
+    \config{\%mm} & Repeat mode, 0-4, in the order: Off, All, One, Shuffle, A-B\\
+  \end{tagmap}
+Example: \config{\%?mm<Off|All|One|Shuffle|A-B>}
+
+\section{Playback Mode}
+  \begin{tagmap}
+    \config{\%mp} & Play status, 0-4, in the order: Stop, Play, Pause, 
+           Fast Forward, Rewind, Recording, Recording paused, FM Radio playing,
+           FM Radio muted\\
+  \end{tagmap}
+Example: \config{\%?mp<Stop|Play|Pause|Ffwd|Rew|Rec|Rec pause|FM|FM pause>}
+
+\section{Current Screen}
+  \begin{tagmap}
+    \config{\%cs} & The current screen, 1-5, in the order:
+                Menus, WPS, Recording screen, FM Radio screen, Current Playlist screen\\
+  \end{tagmap}
+The tag can also be used as the switch in a conditional tag. For players without
+some capabilities (e.g. having no FM radio) some values will be never yielded.
+
+Example: \config{You are in the \%?cs<Main menu|WPS|Recording screen|FM Radio screen>}
+
+\section{List Title (\fname{.sbs} only)}
+  \begin{tagmap}
+    \config{\%Lt} & Title text. Should be used in a conditional so that non-list
+      screens don't show a title when they shouldn't\\
+    \config{\%Li} & Title icon. This uses the same order as custom icons (see
+      \wikilink{CustomIcons} in the wiki) except that here \config{0} is ``no
+      icon''\\
+  \end{tagmap}
+
+  This tag can be used to give custom formatting to list titles.
+  Define a viewport with the font and formatting desired, and then use
+  \config{\%?Lt<\%Lt>} to display the title within the
+  viewport.  If \config{\%Lt} is present anywhere in the \fname{.sbs}, then the
+  \config{\%Vi} viewport will not show the title.
+
+\section{Changing Volume}
+  \begin{tagmap}
+    \config{\%mv(t)} & ``v'' if the volume is being changed\\
+  \end{tagmap}
+
+The tag produces the letter ``v'' while the volume is being changed and some
+amount of time after that, i.e. after the volume button has been released. The
+optional parameter \config{t} specifies that amount of time, in seconds. If it
+is not specified, 1 second is assumed.
+
+The tag can be used as the switch in a conditional tag to display different things
+depending on whether the volume is being changed. It can produce neat effects
+when used with conditional viewports.
+
+Example: \config{\%?mv(2.5)<Volume changing|\%pv>}
+
+The example above will display the text ``Volume changing'' if the volume is
+being changed and 2.5 seconds after the volume button has been released. After
+that, it will display the volume value.
+
+\section{Settings}
+  \begin{tagmap}
+    \config{\%St(<setting\tabnlindent{}name>)} & The value of the Rockbox
+             setting with the specified name. See \reference{ref:config_file_options}
+             for the list of the available settings.\\
+  \end{tagmap}
+
+Examples:
+\begin{enumerate}
+\item As a simple tag: \config{\%St(skip length)}
+\item As a conditional: \config{\%?St(eq enabled)<Eq is enabled|Eq is disabled>}
+\end{enumerate}
+
+
+\opt{lcd_bitmap}{
+\section{\label{ref:wps_images}Images}
+  \begin{tagmap}
+    \nopt{archos}{%
+    \config{\%X(filename.bmp)}
+        & Load and set a backdrop image for the WPS.
+          This image must be exactly the same size as your LCD.\\
+    }%
+    \config{\%x(n,filename,x,y)}
+        & Load and display an image\newline
+          \config{n}: image ID (a-z and A-Z) for later referencing in \config{\%xd}\newline
+          \config{filename}: file name relative to \fname{/.rockbox/} and including ``.bmp''\newline
+          \config{x}: x coordinate\newline
+          \config{y}: y coordinate.\\
+    \config{\%xl(n,filename,x,y,\tabnlindent[nimages])}
+        & Preload an image for later display (useful for when your images are displayed conditionally).\newline
+          \config{n}: image ID (a-z and A-Z) for later referencing in \config{\%xd}\newline
+          \config{filename}: file name relative to \fname{/.rockbox/} and including ``.bmp''\newline
+            If the filename is ``\_\_list\_icons\_\_'' the list icon bitmap will be used instead\newline
+          \config{x}: x coordinate\newline
+          \config{y}: y coordinate\newline
+          \config{nimages}: (optional) number of sub-images (tiled vertically, of the same height)
+          contained in the bitmap. Default is 1.\\
+    \config{\%xd(n[i] [,tag] [,offset])} & Display a preloaded image.
+          \config{n}: image ID (a-z and A-Z) as it was specified in \config{\%x} or \config{\%xl}\newline
+          \config{i}: (optional) number of the sub-image to display (a-z for 1-26 and A-Z for 27-52). 
+          (ignored when \config{tag} is used)
+          By default the first (i.e. top most) sub-image will be used.\newline
+          \config{tag}: (optional) Another tag to calculate the subimage from e.g \config{\%xd(A, \%mh)} would
+          use the first subimage when \config{\%mh} is on and the second when it is off\newline
+          \config{offset}: (optional) Add this number to the value from the \config{tag} when 
+          chosing the subimage (may be negative)\\
+  \end{tagmap}
+
+Examples:
+\begin{enumerate}
+\item Load and display the image \fname{/.rockbox/bg.bmp} with ID ``a'' at 37, 109:\\
+\config{\%x(a,bg.bmp,37,109)}
+\item Load a bitmap strip containing 5 volume icon images (all the same size)
+with image ID ``M'', and then reference the individual sub-images in a conditional:\\
+\config{\%xl(M,volume.bmp,134,153,5)}\\
+\config{\%?pv<\%xd(Ma)|\%xd(Mb)|\%xd(Mc)|%
+\%xd(Md)|\%xd(Me)>}
+\end{enumerate}
+
+
+\note{
+  \begin{itemize}
+  \item The images must be in BMP format
+  \item The image tag must be on its own line
+  \item The ID is case sensitive, giving 52 different ID's
+  \item The size of the LCD screen for each \dap{} varies. See table below 
+        for appropriate sizes of each device. The x and y coordinates must 
+        respect each of the \daps{} limits.
+  \end{itemize}
+}
+}
+
+\opt{albumart}{
+\section{\label{ref:album_art}Album Art}
+Rockbox allows you to put the album art, or another image related to the music
+on your \dap{} to display it in the PictureFlow plugin\opt{albumart}{ or in the
+theme}. For this feature to work, there are a few requirements.
+
+\subsection{Limitations}
+
+Rockbox does not support album art embedded in your files' tags, and will
+instead look for a picture located on disk. In addition to this, the
+pictures must be in either BMP or JPEG format. Rockbox does not support
+RLE-compressed BMP files, nor does it support progressive and multi-scan
+JPEG files. JPEG files must consist of a single scan with interleaved components, 
+as progessive and multi-scan images require much more memory to decode.
+
+\subsection{Where to put album art}
+
+The pictures can be named a number of different ways, and placed to a number of
+different locations. You can have pictures specific to the file or the album
+or use a generic picture. You can place the picture in the same directory
+as the file, in the parent directory or in a fixed directory named
+\fname{/.rockbox/albumart/}. The order Rockbox uses when looking for a picture
+is as follows (a list in braces means that those file extensions are tried in
+that order):
+
+\begin{enumerate}
+\item  \fname{./filename.\{jpeg,jpg,bmp\}}
+\item  \fname{./albumtitle.\{jpeg,jpg,bmp\}}
+\item  \fname{./cover.\{jpeg,jpg,bmp\}}
+\item  \fname{./folder.jpg}
+\item  \fname{/.rockbox/albumart/albumartist-albumtitle.\{jpeg,jpg,bmp\}}
+\item  \fname{../albumtitle.\{jpeg,jpg,bmp\}}
+\item  \fname{../cover.\{jpeg,jpg,bmp\}}
+\end{enumerate}
+
+The following characters will be replaced with an underscore (\_) when looking
+for albumtitle.bmp or albumartist-albumtitle.bmp: \textbackslash{} / : <
+> ? * |. Doublequotes will be replaced by single quotes.
+If no album artist is set, artist will be used instead. See \wikilink{AlbumArt}
+in the wiki for programs that will help you automate the process of putting
+album art on your \dap{}.
+
+\subsection{How to display the album art}
+
+Once the album art files are present on your \dap, they can be displayed as
+follows.
+
+  \begin{tagmap}
+    \config{\%Cl(x,y,[maxwidth],\tabnlindent[maxheight],\tabnlindent{}hor\_align,\tabnlindent{}vert\_align)}
+        & Define the settings for album art\newline
+          \config{x}: x coordinate\newline
+          \config{y}: y coordinate\newline
+          \config{maxwidth}: Maximum height\newline
+          \config{maxheight}: Maximum width\newline
+          \config{hor\_align}: Horizontal alignment, enter as `l', `c' or `r' for
+          left, centre or right. Centre is default\newline
+          \config{vert\_align}: Vertical alignment, enter as `t', `c' or `b' for
+          top, centre or bottom. Centre is default\\
+    \config{\%Cd}  & Display the album art as configured. \\
+    \config{\%C}  & Use in a conditional to determine if an image is available. \\
+  \end{tagmap}
+
+The picture will be rescaled, preserving aspect ratio to fit the given
+\config{maxwidth} and \config{maxheight}. If the aspect ratio doesn't match the
+configured values, the picture will be placed according to the alignment flags.
+
+Examples:
+\begin{enumerate}
+  \item Load albumart at position 20,40 and display it without resizing:\\
+  \config{\%Cl(20,40,,)}
+  \item Load albumart at position 0,20 and resize it to be at most 100$\times$100
+        pixels. If the image isn't square, align it to the bottom-right
+        corner:\\
+  \config{\%Cl(0,20,100,100,r,b)}
+\end{enumerate}
+}
+
+\opt{radio}{
+\section{FM Radio}
+  \begin{tagmap}
+    \config{\%tp} & Does this target have a radio? If it doesn't, the ``true''
+      branch of this conditional is completly ignored so you don't need to
+      worry about tags which are not recognized on non radio targets.\\
+    \config{\%tt} & Is the tuner tuned?\\
+    \config{\%tm} & Scan or preset mode? Scan is ``true'', preset is ``false''.\\
+    \config{\%ts} & Is the station in stereo?\\
+    \config{\%ta} & Minimum frequency (region specific) in MHz.\\
+    \config{\%tb} & Maximum frequency (region specific) in MHz.\\
+    \config{\%tf} & Current frequency in MHz.\\
+    \config{\%Ti} & Current preset id, i.e. 1-based number of the preset
+      within the presets list (usable in playlist viewer).\\
+    \config{\%Tn} & Current preset name (usable in playlist viewer).\\
+    \config{\%Tf} & Current preset frequency (usable in playlist viewer).\\
+    \config{\%Tc} & Preset count, i.e. the number of stations in the current
+      preset list.\\
+    \config{\%tx} & Is RDS available?\\
+    \config{\%ty} & RDS name.\\
+    \config{\%tz} & RDS text.\\
+  \end{tagmap}
+
+It is also possible to show ``Radio Art'' which can be used to display images
+associated with presets. The tags are exactly the same as for album art,
+described above. Images need to be placed in \fname{/.rockbox/fmpresets/},
+and must have the same name as the preset. They need to be in either
+\fname{.bmp} or \fname{.jpg} format, and the radio must be in preset mode
+and tuned to a preset (and not recording) in order for them to be shown.
+}
+
+\section{Alignment and language direction}
+  \begin{tagmap}
+    \config{\%al} & Align the text left\\
+    \config{\%aL} & Align the text left, or to the right if RTL language is in use\\
+    \config{\%ac} & Centre the text\\
+    \config{\%ar} & Align the text right\\
+    \config{\%aR} & Align the text right, or to the left if RTL language is in use\\
+    \config{\%ax} & The next tag should follow the set language direction. When
+                    prepended to a viewport declaration, the viewport will
+                    be horizontally mirrored if the user language is set to
+                    a RTL language. Currently the \%Cl, \%V and \%Vl tags
+                    support this.\\
+    \config{\%Sr} & Use as a conditional to define options for left to right, or
+                    right to left languages. \%?Sr<RTL|LTR>\\
+  \end{tagmap}
+  
+All alignment tags may be present in one line, but they need to be in the 
+order left -- centre -- right. If the aligned texts overlap, they are merged.
+
+Example: \config{\%ax\%V(\dots)}
+
+\section{Conditional Tags}
+
+\begin{tagmap}
+\config{\%?xx<true|false>}
+    & If / Else: Evaluate for true or false case \\
+\config{\%?xx<alt1|alt2|\tabnlindent{}alt3|\dots|else>}
+    & Enumerations: Evaluate for first / second / third / \dots / last condition \\
+\config{\%if(tag, operator, operand, [option count])}
+    & Allows very simple comparisons with other tags.\newline
+      \config{tag}: the tag to check against.\newline
+      \config{operator}: the comparison to perform - possible options are =, !=,
+        >, >=, <, <=\newline
+      \config{operand}: either a second tag, a number, or text.\newline
+      \config{[option count]}: optional parameter used to select which parameter
+        of a tag to use when the tag has multiple options, e.g. \%?pv<a|b|c|d>\\
+\end{tagmap}
+
+Examples of the \%if tag:\\
+
+\config{\%?if(\%pv, >=, 0)<Clipping possible|Volume OK>} will display ``Clipping
+  possible'' if the volume is higher than or equal to 0 dB, ``Volume OK'' if it
+  is lower.\\
+
+\config{\%?if(\%ia, =, \%Ia)<same artist>} -- this artist and the next artist
+  are the same.\\
+
+\note{When performing a comparison against a string tag such as \%ia, only = and
+  != work, and the comparison is not case sensitive.}
+
+\section{Subline Tags}
+
+\begin{tagmap}
+\config{\%t(time)}
+    & Set the subline display cycle time (\%t(5) or \%t(3.4) formats) \\
+\config{;}
+    & Split items on a line into separate sublines \\
+\end{tagmap}
+
+Allows grouping of several items (sublines) onto one line, with the
+display cycling round the defined sublines. See
+\reference{ref:AlternatingSublines} for details. 
+
+
+\section{Time and Date}
+    \begin{tagmap}
+    \opt{rtc}{
+      \config{\%cd}          & Day of month from 01 to 31\\
+      \config{\%ce}          & Zero padded day of month from 1 to 31\\
+      \config{\%cf}          & A conditional for 12/24 hour format.\newline
+                               \config{\%?cf<24 hour stuff|12 hour stuff>}\\
+      \config{\%cH}          & Zero padded hour from 00 to 23 (24 hour format)\\
+      \config{\%ck}          & Hour from 0 to 23 (24 hour format)\\
+      \config{\%cI}          & Zero padded hour from 01 to 12 (am/pm format)\\
+      \config{\%cl}          & Hour from 1 to 12 (am/pm format)\\
+      \config{\%cm}          & Month from 01 to 12\\
+      \config{\%cM}          & Minutes\\
+      \config{\%cS}          & Seconds\\
+      \config{\%cy}          & 2-digit year\\
+      \config{\%cY}          & 4-digit year\\
+      \config{\%cP}          & Capital AM/PM\\
+      \config{\%cp}          & Lowercase am/pm\\
+      \config{\%ca}          & Weekday name\\
+      \config{\%cb}          & Month name\\
+      \config{\%cu}          & Day of week from 1 to 7, 1 is Monday\\
+      \config{\%cw}          & Day of week from 0 to 6, 0 is Sunday\\
+    }
+      \config{\%cc}          & Check for presence of the clock hardware\\
+    \end{tagmap}
+The \%cc tag returns ``c'' if the necessary hardware is present and can also be
+used as a conditional. This can be very useful for designing a WPS that works on
+multiple targets, some with and some without a clock. By using this tag as a
+conditional it is possible to display current date and time on those targets that
+support this
+\opt{rtc}{ (like the \playertype)},
+or alternate information on those that do not
+\nopt{rtc}{ (like the \playertype)}%
+.
+
+Example:
+\config{\%?cc<\%cH:\%cM|No clock detected>}
+
+\section{Text Translation}
+  \begin{tagmap}
+    \config{\%Sx(English)}
+    & Display the translation of ``English'' in the current language\\
+  \end{tagmap}
+  
+  \begin{itemize}
+    \item ``English'' must be a phrase used in the language file.
+    \item It should match the \config{Source:} line in the language file.
+  \end{itemize}
+
+  \note{checkwps cannot verify that the string is correct, so please check on
+    either the simulator or on target.}
+
+
+\opt{touchscreen}{
+  \section{Touchscreen Areas (WPS only)}
+    \begin{tagmap}
+      \config{\%T(x,y,[width],\tabnlindent[height],action)}
+      & Invoke the action specified when the user presses in the defined
+      touchscreen area.\\
+    \end{tagmap}
+  If the action starts with \& then the area must be held. Possible actions are:
+
+  \begin{description}
+    \item[play] -- Play/pause playback.
+    \item[stop] -- Stop playback and exit the WPS.
+    \item[prev] -- Previous track.
+    \item[next] -- Next track.
+    \item[ffwd] -- Seek forwards in the track.
+    \item[rwd] -- Seek backwards in the track.
+    \item[menu] -- Go to the main menu.
+    \item[browse] -- Go back to the file browser or database.
+    \item[shuffle] -- Toggle shuffle mode.
+    \item[repmode] -- Cycle through the repeat modes.
+    \item[quickscreen] -- Go to the quickscreen.
+    \item[contextmenu] -- Open the context menu.
+    \item[playlist] -- Go to the playlist viewer.
+    \item[progressbar] -- Seek to the appropriate position in the track based on the touch.
+    \item[volume] -- Set the volume to the appropriate level based on the touch.
+    \item[pitch] -- Open the pitchscreen.
+    \item[voldown] -- Decrease the volume by one step.
+    \item[volup] -- Increase the volume by one step.
+  \end{description}
+
+  \section{Last Touchscreen Press (WPS only)}
+    \begin{tagmap}
+      \config{\%Tl} & Indicates that the touchscreen is pressed.\\
+    \end{tagmap}
+  This tag can be used to display text or images or a viewport when the
+  touchscreen is pressed (like an On Screen Display). If you put a number
+  straight after \%Tl it will be used as a timeout in seconds
+  (e.g \%Tl(2.5) will give a 2.5 second timeout) between the touchscreen press
+  being released and the tag going false. If no number is specified it will
+  use a 1 second timeout.  It can also be used as a conditional, and can be
+  used with conditional viewports.
+}
+
+\section{\label{ref:bar_tags}Bar Tags}
+  Some tags can be used to display a bar which draws according to the value of
+  the tag. To use these tags like a bar you need to use the following parameters
+  (\%XX should be replaced with the actual tag).
+
+\begin{tagmap}
+  \config{\%XX(x, y, width, filename, [options])}
+    & Draw the specified tag as a bar\newline
+      \config{x}: x co-ordinate at which to start drawing the bar.\newline
+      \config{y}: y co-ordinate at which to start drawing the bar.\newline
+      \config{width}: width of the bar (- for the full viewport width).\newline
+      \config{height}: height of the bar (- to set to the font height for
+        horizontal bars and to the viewport height for vertical bars).\newline
+      \config{options}: any of the options set out below.\\
+\end{tagmap}
+
+\subsection{Options}
+\begin{description}
+  \item[horizontal] -- force the bar to be drawn horizontally.
+  \item[vertical] -- force the bar to be drawn vertically.
+  \item[invert] -- invert the draw direction (i.e. right to left, or top to
+    bottom).
+  \item[slider] -- draw an preloaded image over the top of the bar. This must be
+    followed by the label of the desired image.
+  \item[nofill] -- don't draw the fill bar, only the empty image (for the
+    desired effect use with the ``slider'' option).
+\end{description}
+
+Example: \config{\%pb(0,0,-,-,-,nofill, slider, slider\_image, invert)} -- draw
+a horizontal progressbar which doesn't fill and draws the image
+``slider\_image'' which moves right to left.
+
+\section{Other Tags}
+\begin{tagmap}
+  \config{\%(}           & The character `('\\
+  \config{\%)}           & The character `)'\\
+  \config{\%,}           & The character `,'\\
+  \config{\%\%}          & The character `\%'\\
+  \config{\%<}           & The character `<'\\
+  \config{\%|}           & The character `|'\\
+  \config{\%>}           & The character `>'\\
+  \config{\%;}           & The character `;'\\
+  \config{\#}            & The character `\#'\\
+  \config{\%s}           & Indicate that the line should scroll. Can occur 
+                           anywhere in a line (given that the text is 
+                           displayed; see conditionals above). You can specify 
+                           up to ten scrolling lines. Scrolling lines can not 
+                           contain dynamic content such as timers, peak meters 
+                           or progress bars.\\
+\end{tagmap}
+

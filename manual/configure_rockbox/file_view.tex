@@ -1,0 +1,93 @@
+% $Id$ %
+\section{File View}
+The File View menu deals with options relating to how the File Browser 
+displays files.
+%
+\begin{description}
+\item[Sort Case Sensitive.]
+  If this option is set to \setting{Yes}, all files that start with upper case 
+  letters will be listed first, followed by all files that begin with lower 
+  case letters.  If this option is set to NO, then case will be ignored when 
+  sorting files.
+\item[Sort Directories.]
+  This option controls how Rockbox sorts directories.  The default is to sort 
+  them alphabetically. \setting{By date} sorts them with the oldest directory first. 
+  \setting{By newest date} sorts them with the newest directory first.
+  
+\item[Sort Files.]
+  This option controls how Rockbox sorts files.  All of the options for 
+  \setting{Sort Directories} are available in this option.  In addition, there 
+  is a \setting{By type} option which sorts files alphabetically by their type 
+  (such as \fname{.mp3}) then alphabetically within each type.
+
+\item[Interpret numbers when sorting.]
+  \setting{As whole numbers} enables a sorting algorithm which is similar to
+  the default sorting of, for example, Windows Explorer, Mac OS X's Finder
+  or Nautilus, with regards to numbers at the beginning or within filenames.
+  It combines consecutive digits to a number used for sorting, taking leading
+  zeros into account.
+  \newline\setting{As digits} disables this algorithm, and causes every digit to
+  be compared separately. The following table demonstrates the two sortings.
+  \begin{table}
+    \begin{rbtabular}{.8\textwidth}{XX}%
+      {\textbf{As whole numbers} & \textbf{As digits}}{}{}
+      03 Jackson.mp3 & 03 Jackson.mp3\\
+      1 Ring Of Fire.mp3 & 1 Ring Of Fire.mp3\\
+      2 I Walk The Line.mp3 & 10 A Thing Called Love.mp3\\
+      10 A Thing Called Love.mp3 & 2 I Walk The Line.mp3\\
+      Episode 1.ogg & Episode 1.ogg\\
+      Episode 57.ogg & Episode 233.ogg\\
+      Episode 233.ogg & Episode 57.ogg\\
+    \end{rbtabular}
+  \end{table}
+
+  
+\item[\label{ref:ShowFiles}Show Files.]
+  This option controls which files are displayed in the File Browser.
+  %
+  \begin{description}
+  \item[All.] The \setting{File Browser} displays all files and directories.
+    Extensions are shown. No files or directories are hidden.
+  \item[Supported.] The \setting{File Browser} displays all directories and
+    files supported by Rockbox (see \reference{ref:Supportedfileformats}).
+    Files and directories starting with \fname{.} (\emph{dot}) or with the 
+    \emph{hidden} flag set are hidden.
+  \item[Music.] The \setting{File Browser} displays only directories, playlists and
+    the supported \emph{audio} file formats. Extensions are stripped. Files and
+    directories starting with \fname{.} or with the ``hidden'' flag set are
+    hidden.
+  \item[Playlists.] The \setting{File Browser} displays only directories and playlists,
+    for simplified navigation.
+  \end{description}
+
+\item[\label{ref:ShowExtensions}Show Filename Extensions.]
+  This option controls how file extensions are shown in the File Browser.
+  %
+  \begin{description}
+  \item[Off.] The file extensions are never shown.
+  \item[On.] The file extensions are always shown.
+  \item[Only unknown types.] Only the extensions of unknown filetypes are shown.
+  \item[Only when viewing all types.] Only show file extensions when
+      \setting{Show Files} is set to \setting{All}.
+  \end{description}
+  
+\item[Follow Playlist.] 
+  This option determines what directory the \setting{File Browser} displays
+  first. If \setting{Follow Playlist} is set to \setting{Yes}, when you enter
+  the \setting{File Browser} from the WPS, you will find yourself in the same
+  directory as the currently playing file. If \setting{Follow Playlist} is set
+  to \setting{No}, when you enter the \setting{File Browser} from the WPS, you
+  will find yourself in the directory you were in when you last left the
+  \setting{File Browser}.
+
+\item[Show Path.]
+  If this setting is set to \setting{Full Path} the full path to the current
+  directory will be displayed on the first line in the \setting{File Browser}.
+  If set to \setting{Current Directory Only} only the name of the current
+  directory will be displayed.
+  
+  This has a similar effect on the Database browser. If set to
+  \setting{Current Directory Only} or \setting{Full Path}, then the title of
+  each menu will be displayed on the first line in the \setting{Database Browser}.
+
+\end{description}

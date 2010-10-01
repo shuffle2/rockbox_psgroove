@@ -1,0 +1,143 @@
+% $Id$ %
+\section{\label{ref:database}Database}
+
+\subsection{Introduction}
+This chapter describes the Rockbox music database system. Using the information
+contained in the tags (ID3v1, ID3v2%
+  \opt{swcodec}{, Vorbis Comments, Apev2, etc.}%
+) in your audio files, Rockbox builds and maintains a database of the music
+files on your player and allows you to browse them by Artist, Album, Genre, 
+Song Name, etc.  The criteria the database uses to sort the songs can be completely
+ customised. More information on how to achieve this can be found on the Rockbox
+ website at \wikilink{DataBase}. 
+
+\subsection{Initializing the Database}
+The first time you use the database, Rockbox will scan your disk for audio files.
+This can take quite a while depending on the number of files on your \dap{}.
+This scan happens in the background, so you can choose to return to the
+Main Menu and continue to listen to music.
+If you shut down your player, the scan will continue next time you turn it on.
+After the scan is finished you may be prompted to restart your \dap{} before
+you can use the database.
+
+\subsubsection{Ignoring Directories During Database Initialization}
+
+You may have directories on your \dap{} whose contents should not be added
+to the database. Placing a file named \fname{database.ignore} in a directory
+will exclude the files in that directory and all its subdirectories from
+scanning their tags and adding them to the database. This will speed up the
+database initialization.
+
+If a subdirectory of an `ignored' directory should still be scanned, place a
+file named \fname{database.unignore} in it. The files in that directory and
+its subdirectories will be scanned and added to the database.
+
+\subsection{\label{ref:databasemenu}The Database Menu}
+
+\begin{description}
+  \opt{swcodec}{
+  \item[Load To RAM]
+    The database can either be kept on disk (to save memory), or
+    loaded into RAM (for fast browsing). Setting this to \setting{Yes} loads
+    the database to RAM, allowing faster browsing and searching. Setting this
+    option to \setting{No} keeps the database on the disk, meaning slower 
+    browsing but it does not use extra RAM and saves some battery on boot up. 
+    
+    \note{If you browse your music frequently using the database, you should
+      load to RAM, as this will reduce the overall battery consumption because
+      the disk will not need to spin on each search.}
+  }
+  
+\item[Auto Update]
+  If \setting{Auto update} is set to \setting{on}, each time the \dap{}
+  boots, the database will automatically be updated.
+  \opt{swcodec}{
+    \note{The \setting{Auto Update} will only check for deleted files if the
+      \setting{Directory Cache} (\setting{Settings $\rightarrow$ General
+      Settings $\rightarrow$ System $\rightarrow$ Disk $\rightarrow$
+      Directory Cache}) is enabled. \setting{Update now} includes that check
+      whether dircache has been enabled or not.}
+  }%
+
+\item[Initialize Now]
+  You can force Rockbox to rescan your disk for tagged files by
+  using the \setting{Initialize Now} function in the \setting{Database
+    Menu}.
+  \warn{\setting{Initialize Now} removes all database files (removing
+    runtimedb data also) and rebuilds the database from scratch.}
+
+\item[Update Now]
+  \setting{Update now} causes the database to detect new and deleted files
+  \opt{swcodec}{
+    \note{Unlike the \setting{Auto Update} function, \setting{Update Now}
+      will update the database regardless of whether the \setting{Directory Cache}
+      is enabled. Thus, an update using \setting{Update now} may take a long
+      time.
+    }
+  }
+  Unlike \setting{Initialize Now}, the \setting{Update Now} function
+  does not remove runtime database information.
+  
+\item[Gather Runtime Data]
+  When enabled, rockbox will record how often and how long a track is being played, 
+  when it was last played and its rating. This information can be displayed in
+  the WPS and is used in the database browser to, for example, show the most played, 
+  unplayed and most recently played tracks.
+  
+\item[Export Modifications]
+  This allows for the runtime data to be exported to the file \\
+  \fname{/.rockbox/database\_changelog.txt}, which backs up the runtime data in
+  ASCII format. This is needed when database structures change, because new
+  code cannot read old database code. But, all modifications
+  exported to ASCII format should be readable by all database versions.
+  
+\item[Import Modifications.]
+  Allows the \fname{/.rockbox/database\_changelog.txt} backup to be 
+  conveniently loaded into the database. If \setting{Auto Update} is
+  enabled this is performed automatically when the database is initialized.
+  
+\end{description}
+
+\subsection{Using the Database}
+Once the database has been initialized, you can browse your music 
+by Artist, Album, Genre, Song Name, etc.  To use the database, go to the
+ \setting{Main Menu} and select \setting{Database}.\\
+
+\note{You may need to increase the value of the \setting{Max files in dir 
+browser} setting (\setting{Settings $\rightarrow$ General Settings
+$\rightarrow$ System $\rightarrow$ Limits}) in order to view long lists of
+tracks in the ID3 database browser.\\
+
+There is no option to turn off database completely. If you do not want
+to use it just do not do the initial build of the database and do not load it
+to RAM.}%
+
+\begin{table}
+  \begin{rbtabular}{.75\textwidth}{XXX}%
+  {\textbf{Tag}   & \textbf{Type}  & \textbf{Origin}}{}{}
+  filename              & string    & system \\ 
+  album                 & string    & id tag \\
+  albumartist           & string    & id tag \\
+  artist                & string    & id tag \\
+  comment               & string    & id tag \\
+  composer              & string    & id tag \\
+  genre                 & string    & id tag \\
+  grouping              & string    & id tag \\
+  title                 & string    & id tag \\
+  bitrate               & numeric   & id tag \\
+  discnum               & numeric   & id tag \\
+  year                  & numeric   & id tag \\
+  tracknum              & numeric   & id tag/filename \\
+  autoscore             & numeric   & runtime db \\
+  lastplayed            & numeric   & runtime db \\
+  playcount             & numeric   & runtime db \\
+  Pm (play time - min)  & numeric   & runtime db \\
+  Ps (play time - sec)  & numeric   & runtime db \\
+  rating                & numeric   & runtime db \\
+  commitid              & numeric   & system \\
+  entryage              & numeric   & system \\
+  length                & numeric   & system \\
+  Lm (track len - min)  & numeric   & system \\
+  Ls (track len - sec)  & numeric   & system \\
+  \end{rbtabular}
+\end{table}

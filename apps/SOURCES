@@ -1,0 +1,302 @@
+#ifdef ROCKBOX_HAS_LOGF
+logfdisp.c
+#endif
+action.c
+#ifdef HAVE_RTC_ALARM
+alarm_menu.c
+#endif
+abrepeat.c
+bookmark.c
+debug_menu.c
+filetypes.c
+language.c
+main.c
+menu.c
+menus/menu_common.c
+menus/display_menu.c
+menus/theme_menu.c
+#if CONFIG_CODEC == SWCODEC
+#ifdef HAVE_WM8978
+menus/audiohw_eq_menu.c
+#endif
+menus/eq_menu.c
+buffering.c
+voice_thread.c
+replaygain.c
+#else  /* !SWCODEC */
+mpeg.c
+#endif
+menus/main_menu.c
+menus/playback_menu.c
+menus/playlist_menu.c
+#ifdef HAVE_RECORDING
+menus/recording_menu.c
+#endif
+menus/settings_menu.c
+menus/sound_menu.c
+#if CONFIG_RTC
+menus/time_menu.c
+#endif
+misc.c
+mp3data.c
+onplay.c
+playlist.c
+playlist_catalog.c
+playlist_viewer.c
+plugin.c
+root_menu.c
+screens.c
+settings.c
+settings_list.c
+status.c
+cuesheet.c
+talk.c
+tree.c
+#ifdef HAVE_TAGCACHE
+tagtree.c
+#endif
+filetree.c
+scrobbler.c
+#ifdef IPOD_ACCESSORY_PROTOCOL
+iap.c
+#endif
+
+screen_access.c
+#ifdef HAVE_BUTTONBAR
+gui/buttonbar.c
+#endif
+#ifdef HAVE_LCD_BITMAP
+gui/icon.c
+#endif
+gui/list.c
+#ifdef HAVE_LCD_BITMAP
+gui/bitmap/list.c
+#else
+gui/charcell/list.c
+#endif
+gui/option_select.c
+#ifdef HAVE_PITCHSCREEN
+gui/pitchscreen.c
+#endif
+#ifdef HAVE_QUICKSCREEN
+gui/quickscreen.c
+#endif
+
+gui/wps.c
+gui/scrollbar.c
+gui/splash.c
+gui/statusbar.c
+#ifdef HAVE_LCD_BITMAP
+gui/statusbar-skinned.c
+#endif
+gui/yesno.c
+gui/viewport.c
+
+gui/skin_engine/skin_backdrops.c
+gui/skin_engine/skin_display.c
+gui/skin_engine/skin_engine.c
+#ifdef HAVE_LCD_BITMAP
+gui/skin_engine/skin_fonts.c
+#endif
+gui/skin_engine/skin_parser.c
+gui/skin_engine/skin_render.c
+gui/skin_engine/skin_tokens.c
+#ifdef HAVE_TOUCHSCREEN
+gui/skin_engine/skin_touchsupport.c
+#endif
+
+#if (LCD_DEPTH > 1) || (defined(HAVE_REMOTE_LCD) && (LCD_REMOTE_DEPTH > 1))
+gui/backdrop.c
+#endif
+
+#ifdef HAVE_LCD_CHARCELLS
+player/icons.c
+player/keyboard.c
+#endif
+#ifdef HAVE_LCD_BITMAP
+recorder/bmp.c
+recorder/icons.c
+recorder/keyboard.c
+recorder/peakmeter.c
+#if defined(HAVE_ALBUMART) || defined(HAVE_JPEG)
+recorder/resize.c
+#endif
+#ifdef HAVE_JPEG
+recorder/jpeg_load.c
+#ifdef CPU_ARM
+recorder/jpeg_idct_arm.S
+#endif
+#endif
+#ifdef HAVE_ALBUMART
+recorder/albumart.c
+#endif
+#ifdef HAVE_LCD_COLOR
+gui/color_picker.c
+#endif
+#endif
+#ifdef HAVE_RECORDING
+recorder/recording.c
+#endif
+
+#if CONFIG_TUNER
+radio/radio.c
+radio/presets.c
+radio/radio_skin.c
+#ifdef HAVE_ALBUMART
+radio/radioart.c
+#endif
+#endif
+
+#if CONFIG_CODEC == SWCODEC
+#if INPUT_SRC_CAPS != 0
+audio_path.c
+#endif /* INPUT_SRC_CAPS != 0 */
+fixedpoint.c
+pcmbuf.c
+codec_thread.c
+playback.c
+codecs.c
+dsp.c
+#ifdef HAVE_PITCHSCREEN
+tdspeed.c
+#endif
+#ifdef HAVE_RECORDING
+enc_config.c
+recorder/pcm_record.c
+#endif
+eq.c	 	
+#if defined(CPU_COLDFIRE)
+dsp_cf.S
+eq_cf.S	 	
+#elif defined(CPU_ARM)
+dsp_arm.S
+#if ARM_ARCH >= 6
+dsp_arm_v6.S
+#endif
+eq_arm.S
+#endif
+#endif
+#ifdef USB_ENABLE_HID
+usb_keymaps.c
+#endif
+#ifndef USB_NONE
+gui/usb_screen.c
+#endif
+metadata.c
+metadata/id3tags.c
+metadata/mp3.c
+#if CONFIG_CODEC == SWCODEC
+metadata/metadata_common.c
+metadata/aiff.c
+metadata/ape.c
+metadata/asf.c
+metadata/adx.c
+metadata/flac.c
+metadata/monkeys.c
+metadata/mp4.c
+metadata/mpc.c
+metadata/ogg.c
+metadata/sid.c
+metadata/mod.c
+metadata/spc.c
+metadata/vorbis.c
+metadata/wave.c
+metadata/wavpack.c
+metadata/a52.c
+metadata/asap.c
+metadata/rm.c
+metadata/nsf.c
+metadata/oma.c
+metadata/smaf.c
+metadata/au.c
+metadata/vox.c
+metadata/tta.c
+#endif
+#ifdef HAVE_TAGCACHE
+tagcache.c
+#endif
+#ifdef HAVE_TOUCHSCREEN
+keymaps/keymap-touchscreen.c
+#endif
+#if (CONFIG_KEYPAD == IRIVER_H100_PAD) \
+    || (CONFIG_KEYPAD == IRIVER_H300_PAD)
+keymaps/keymap-h1x0_h3x0.c
+#elif ((CONFIG_KEYPAD == IPOD_4G_PAD) \
+    || (CONFIG_KEYPAD == IPOD_3G_PAD) \
+    || (CONFIG_KEYPAD == IPOD_1G2G_PAD))
+keymaps/keymap-ipod.c
+#elif CONFIG_KEYPAD == RECORDER_PAD
+keymaps/keymap-recorder.c
+#elif CONFIG_KEYPAD == ONDIO_PAD
+keymaps/keymap-ondio.c
+#elif CONFIG_KEYPAD == PLAYER_PAD
+keymaps/keymap-player.c
+#elif CONFIG_KEYPAD == IAUDIO_X5M5_PAD
+keymaps/keymap-x5.c
+#elif CONFIG_KEYPAD == IAUDIO_M3_PAD
+keymaps/keymap-m3.c
+#elif CONFIG_KEYPAD == GIGABEAT_PAD
+keymaps/keymap-gigabeat.c
+#elif CONFIG_KEYPAD == GIGABEAT_S_PAD
+keymaps/keymap-gigabeat-s.c
+#elif CONFIG_KEYPAD == IRIVER_H10_PAD
+keymaps/keymap-h10.c
+#elif CONFIG_KEYPAD == IRIVER_IFP7XX_PAD
+keymaps/keymap-ifp7xx.c
+#elif CONFIG_KEYPAD == SANSA_E200_PAD
+keymaps/keymap-e200.c
+#elif CONFIG_KEYPAD == SANSA_C200_PAD
+keymaps/keymap-c200.c
+#elif CONFIG_KEYPAD == SANSA_M200_PAD
+keymaps/keymap-m200.c
+#elif CONFIG_KEYPAD == SANSA_CLIP_PAD
+keymaps/keymap-clip.c
+#elif CONFIG_KEYPAD == ARCHOS_AV300_PAD
+keymaps/keymap-av300.c
+#elif CONFIG_KEYPAD == MROBE500_PAD
+keymaps/keymap-mr500.c
+#elif CONFIG_KEYPAD == MROBE100_PAD
+keymaps/keymap-mr100.c
+#elif CONFIG_KEYPAD == COWON_D2_PAD
+keymaps/keymap-cowond2.c
+#elif CONFIG_KEYPAD == MEIZU_M6SL_PAD
+keymaps/keymap-meizu-m6sl.c
+#elif CONFIG_KEYPAD == MEIZU_M6SP_PAD
+keymaps/keymap-meizu-m6sp.c
+#elif CONFIG_KEYPAD == CREATIVEZVM_PAD
+keymaps/keymap-creativezvm.c
+#elif CONFIG_KEYPAD == CREATIVEZV_PAD
+keymaps/keymap-creativezv.c
+#elif CONFIG_KEYPAD == PHILIPS_SA9200_PAD
+keymaps/keymap-sa9200.c
+#elif CONFIG_KEYPAD == PHILIPS_HDD1630_PAD
+keymaps/keymap-hdd1630.c
+#elif CONFIG_KEYPAD == PHILIPS_HDD6330_PAD
+keymaps/keymap-hdd6330.c
+#elif CONFIG_KEYPAD == IAUDIO67_PAD
+keymaps/keymap-iaudio67.c
+#elif CONFIG_KEYPAD == SANSA_C100_PAD
+keymaps/keymap-c100.c
+#elif CONFIG_KEYPAD == LOGIK_DAX_PAD
+keymaps/keymap-logikdax.c
+#elif CONFIG_KEYPAD == SANSA_FUZE_PAD
+keymaps/keymap-fuze.c
+#elif CONFIG_KEYPAD == ONDAVX747_PAD
+keymaps/keymap-ondavx747.c
+#elif CONFIG_KEYPAD == ONDAVX777_PAD
+keymaps/keymap-ondavx777.c
+#elif CONFIG_KEYPAD == ONDAVX767_PAD
+keymaps/keymap-ondavx767.c
+#elif CONFIG_KEYPAD == SAMSUNG_YH_PAD
+keymaps/keymap-yh8xx_yh9xx.c
+#elif CONFIG_KEYPAD == MINI2440_PAD
+keymaps/keymap-mini2440.c
+#elif CONFIG_KEYPAD == PBELL_VIBE500_PAD
+keymaps/keymap-vibe500.c
+#elif CONFIG_KEYPAD == MPIO_HD200_PAD
+keymaps/keymap-mpio-hd200.c
+#elif CONFIG_KEYPAD == ANDROID_PAD
+keymaps/keymap-android.c
+#elif CONFIG_KEYPAD == SDL_PAD
+keymaps/keymap-sdl.c
+#endif

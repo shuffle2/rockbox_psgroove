@@ -1,0 +1,3 @@
+#if (CONFIG_PLATFORM & PLATFORM_HOSTED) && defined(__APPLE__)
+osx.dummy.bmp
+#endif

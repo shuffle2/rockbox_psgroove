@@ -1,0 +1,153 @@
+\subsection{PictureFlow}
+\screenshot{plugins/images/ss-pictureflow}{PictureFlow}{img:pictureflow}
+PictureFlow provides a visualisation of your albums with their associated cover
+art. \opt{swcodec}{It is possible to start playback of the selected
+album from PictureFlow. Playback will start from the selected track. The 
+PictureFlow plugin will continue to run while your tracks are played.}
+
+\opt{hwcodec}{
+\note{PictureFlow is a visualisation only. It cannot be used to select and
+play music.  Also, using this plugin will cause playback to stop.}
+}
+
+\subsubsection{Requirements}
+PictureFlow uses both the album art (see \reference{ref:album_art}) and 
+database (see \reference{ref:database}) features of Rockbox.
+It is therefore important that these are working correctly before attempting
+to use PictureFlow. In addition, there are some other points of which to be
+aware:
+
+  \begin{itemize}
+    \item PictureFlow will accept album art larger than the dimensions of the
+    screen, but the larger the dimensions, the longer they will take to scale.
+  \end{itemize}
+
+\subsubsection{Keys}
+    \begin{btnmap}
+        \opt{scrollwheel,IRIVER_H10_PAD,PBELL_VIBE500_PAD}{
+            \ActionStdPrev{} / \ActionStdNext
+                &
+            \opt{HAVEREMOTEKEYMAP}{
+                &}
+            Scroll through albums / track list
+                \\
+        }
+        
+        % only scroll wheel and `strip' targets use the same action in album and track list
+        \nopt{scrollwheel,IRIVER_H10_PAD,PBELL_VIBE500_PAD}{%
+            % currently the M3 does not use buttons of the main unit which has no display
+            \nopt{IAUDIO_M3_PAD,touchscreen}{\ButtonLeft{} / \ButtonRight}
+            \opt{touchscreen}{\TouchMidLeft{} / \TouchMidRight}
+                &
+            \opt{HAVEREMOTEKEYMAP}{
+                \opt{IAUDIO_M3_PAD,GIGABEAT_RC_PAD}{\ActionRCStdPrev{} / \ActionRCStdNext}
+                &}
+            Scroll through albums
+                \\
+
+            \nopt{IAUDIO_M3_PAD}{\ActionStdPrev{} / \ActionStdNext}
+                &
+            \opt{HAVEREMOTEKEYMAP}{
+                % even though the M3 uses an Iaudio remote, mapping differs when used with M/X5
+                \opt{IAUDIO_M3_PAD}{\ButtonRCLeft{} / \ButtonRCRight}
+                \opt{GIGABEAT_RC_PAD}{\ButtonRCVolUp{} / \ButtonRCVolDown}
+                &}
+            Scroll through track list
+                \\
+        }
+
+        \nopt{IAUDIO_M3_PAD}{%
+            \nopt{ONDIO_PAD,IRIVER_H10_PAD,RECORDER_PAD,touchscreen,PBELL_VIBE500_PAD}
+                 {\ButtonSelect}
+            \opt{ONDIO_PAD}{\ButtonUp} 
+            \opt{IRIVER_H10_PAD,PBELL_VIBE500_PAD}{\ButtonRight} 
+            \opt{RECORDER_PAD}{\ButtonOn} 
+            \opt{touchscreen}{\TouchCenter}
+        }
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            \opt{IAUDIO_M3_PAD}{\ButtonRCPlay}
+            \opt{GIGABEAT_RC_PAD}{\ButtonRCFF}
+            &}
+        Enter track list
+            \nopt{ONDIO_PAD}{/ Play album from selected track}
+            \\
+            
+        % Ondio uses a different button in album list and track list
+        \opt{ONDIO_PAD}{
+            \ButtonMenu
+                &
+            Play album from selected track in track list
+                \\
+        }
+        
+        \nopt{IAUDIO_M3_PAD,touchscreen}{\ButtonLeft}
+        \opt{touchscreen}{
+            \opt{COWON_D2_PAD}{\ButtonPower{} or}
+            \TouchBottomRight}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            \opt{IAUDIO_M3_PAD,GIGABEAT_RC_PAD}{\ActionRCStdCancel}
+            &}
+        Exit track list
+            \\
+
+        \nopt{IAUDIO_M3_PAD}{\ActionStdMenu}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            \opt{IAUDIO_M3_PAD,GIGABEAT_RC_PAD}{\ActionRCStdMenu}
+            &}
+        Enter menu
+            \\
+
+        \nopt{IAUDIO_M3_PAD}{%
+            \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,RECORDER_PAD,ONDIO_PAD}{\ButtonOff}
+            \opt{IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,SANSA_E200_PAD%
+                ,MROBE100_PAD}{\ButtonPower}
+            \opt{SANSA_C200_PAD,IRIVER_H10_PAD}{Long \ButtonPower}
+            \opt{IPOD_4G_PAD,IPOD_3G_PAD}{Long \ButtonMenu}
+            \opt{SANSA_FUZE_PAD}{Long \ButtonHome} 
+            \opt{PBELL_VIBE500_PAD}{\ButtonRec}
+            \opt{touchscreen}{
+                \opt{COWON_D2_PAD}{Long \ButtonPower{} or}
+                \TouchBottomRight{} (in album view)}
+        }
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            \opt{IAUDIO_M3_PAD}{\ButtonRCRec}
+            \opt{GIGABEAT_RC_PAD}{\ButtonRCRew}
+            &}
+        Exit PictureFlow
+            \\
+            
+    \end{btnmap}
+
+\subsubsection{Main Menu}
+\begin{description}
+  \item[Go to WPS.] Leave PictureFlow and enter the while playing screen.
+  \opt{swcodec}{\item[Playback Control.] Control music playback from within the plugin.}
+  \item[Settings.] Enter the settings menu.
+  \item[Return.] Exit menu.
+  \item[Quit.] Exit PictureFlow plugin.
+\end{description}
+
+\subsubsection{Settings Menu}
+
+\begin{description}
+  \item[Show FPS.] Displays frames per second on screen.
+  \item[Spacing.] The distance between the front edges of the side slides, i.e. changes
+  the degree of overlap of the side slides. A larger number means less overlap. Scales with zoom.
+  \item[Centre margin.] The distance, in screen pixels, with zoom at 100, between
+  the centre and side slides. Scales with zoom.
+  \item[Number of slides.] Sets the number of slides at each side, including the
+  centre slide. Therefore if set to 4, there will be 3 slides on the left,
+  the centre slide, and then 3 slides on the right.
+  \item[Zoom.] Changes the distance at which slides are rendered from the ``camera''.
+  \item[Show album title.] Allows setting the album title to be shown above or
+  below the cover art, or not at all.
+  \item[Resize Covers.] Set whether to automatically resize the covers or to leave
+  them at their original size.
+  \item[Rebuild cache.] Rebuild the PictureFlow cache. This is needed in order
+  for PictureFlow to pick up new albums, and may occasionally be needed if albums
+  are removed.
+\end{description}

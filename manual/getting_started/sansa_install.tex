@@ -1,0 +1,65 @@
+% $Id$ %
+\subsubsection{Bootloader installation from Windows}
+
+\begin{enumerate}
+
+\item Download sansapatcher.exe from 
+\download{bootloader/sandisk-sansa/sansapatcher/win32/sansapatcher.exe} 
+and run it whilst logged in with an administrator account.
+
+\item If all has gone well, you should see some information displayed about
+your \playertype{} and a message asking you if you wish to install the Rockbox
+bootloader. Press i followed by ENTER, and sansapatcher will now
+install the bootloader. After a short time you should see the message
+``[INFO] Bootloader installed successfully.'' Press ENTER again to exit
+sansapatcher.
+\end{enumerate}
+
+\subsubsection{Bootloader installation from Mac OS X}
+
+\begin{enumerate}
+
+\item Attach your \dap{} to your Mac and wait for its icon to appear in 
+Finder.
+
+\item Download and open sansa.dmg from 
+\download{bootloader/sandisk-sansa/sansapatcher/macosx/sansapatcher.dmg} 
+and then double-click on the sansapatcher icon inside. 
+
+\item If all has gone well, you should see some
+information displayed about your \dap{} and a message asking you if you 
+wish to install the Rockbox bootloader. Press i followed by ENTER, and 
+sansapatcher will now unmount your \dap{} and install the bootloader. 
+After a short time you should see the message ``[INFO] Bootloader installed successfully.''
+Press ENTER again to exit sansapatcher and then quit the Terminal application.
+\end{enumerate}
+
+\subsubsection{Bootloader installation from Linux}
+
+\begin{enumerate}
+
+\item Download sansapatcher from
+\download{bootloader/sandisk-sansa/sansapatcher/linux32x86/sansapatcher} (32-bit x86 
+binary) or \download{bootloader/sandisk-sansa/sansapatcher/linux64amd64/sansapatcher} 
+(64-bit amd64 binary). You can save this anywhere you wish, but the next 
+steps will assume you have saved it in your home directory.
+
+\item Attach your \dap{} to your computer.
+
+\item Open up a terminal window and type the following commands:
+
+\begin{code} 
+    cd $HOME
+    chmod +x sansapatcher
+    ./sansapatcher
+\end{code}
+
+\note{You need to be the root user in order for sansapatcher to have
+sufficient permission to perform raw disk access to your \dap{}.}
+
+\item If all has gone well, you should see some information displayed about
+your \playertype{} and a message asking you if you wish to install the Rockbox
+bootloader. Press i followed by ENTER, and sansapatcher will now install the
+bootloader. After a short time you should see the message ``[INFO] Bootloader
+installed successfully.'' Press ENTER again to exit sansapatcher.
+\end{enumerate}

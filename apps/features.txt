@@ -1,0 +1,268 @@
+/* This file controls which strings are included when rockbox is built and
+   when the .lng and .voice files are built. That means that a change in this
+   file will break compatibility with older .lng and .voice files and that those
+   version numbers should be updated. It also means that changing defines in
+   the various config*.h files could also break back compatibility */  
+
+#if defined(HAVE_ACCESSORY_SUPPLY)
+accessory_supply
+#endif
+
+#if defined(HAVE_AGC)
+agc
+#endif
+
+#if defined(HAVE_RTC_ALARM)
+alarm
+#endif
+
+#if defined(HAVE_BACKLIGHT_BRIGHTNESS)
+backlight_brightness
+#endif
+
+#if BATTERY_TYPES_COUNT > 1
+battery_types
+#endif
+
+#if defined(HAVE_BUTTON_LIGHT)
+button_light
+#endif
+
+#if defined(HAVE_BUTTONLIGHT_BRIGHTNESS)
+buttonlight_brightness
+#endif
+
+#if defined(HAVE_CROSSFADE)
+crossfade
+#endif
+
+#if defined(HAVE_DIRCACHE)
+dircache
+#endif
+
+#if defined(HAVE_FLASH_STORAGE)
+flash_storage
+#endif
+
+#if defined(HAVE_HEADPHONE_DETECTION)
+headphone_detection
+#endif
+
+#if defined(HAS_BUTTON_HOLD)
+hold_button
+#endif
+
+#if defined(HAVE_HOTKEY)
+hotkey
+#endif
+
+#if defined(HAVE_LCD_BITMAP)
+lcd_bitmap
+#endif
+
+#if LCD_DEPTH > 1
+lcd_non-mono
+#endif
+
+#if defined(HAVE_LCD_COLOR)
+lcd_color
+#endif
+
+#if defined(HAVE_LCD_INVERT)
+lcd_invert
+#endif
+
+#if defined(HAVE_LCD_SLEEP)
+lcd_sleep
+#endif
+
+#if (CONFIG_CODEC == MAS3587F) || (CONFIG_CODEC == MAS3539F)
+masf
+#endif
+
+#if (CONFIG_CODEC == MAS3507D)
+masd
+#endif
+
+#if defined(HAVE_MORSE_INPUT)
+morse_input
+#endif
+
+#if defined(HAVE_PITCHSCREEN)
+pitchscreen
+#endif
+
+#if defined(HAVE_MULTIVOLUME)
+multivolume
+#endif
+
+#if defined(HAVE_QUICKSCREEN)
+quickscreen
+#endif
+
+#if CONFIG_TUNER != 0
+radio
+#ifdef HAVE_REMOTE_LCD
+radio_remote
+#endif
+#endif
+
+#if (CONFIG_KEYPAD == RECORDER_PAD)
+recorder_pad
+#if defined(CONFIG_TUNER)
+radio_screen_button_bar
+#endif
+#endif
+
+#if defined(HAVE_RECORDING)
+recording
+#if CONFIG_CODEC == SWCODEC
+recording_swcodec
+#else
+recording_hwcodec
+#endif
+#if defined(HAVE_LINE_IN)
+recording_linein
+#endif
+#if defined(HAVE_MIC_IN)
+recording_mic
+#endif
+#endif
+
+#if defined(HAVE_RECORDING_HISTOGRAM)
+recording_histogram
+#endif
+
+#if defined(HAVE_REMOTE_LCD)
+remote
+remote_lcd_invert
+#endif
+
+#if defined(HAVE_REMOTE_LCD_TICKING)
+remote_ticking
+#endif
+
+#if CONFIG_RTC
+rtc
+#endif
+
+#if defined(IPOD_ACCESSORY_PROTOCOL)
+serial_port
+#endif
+
+#if defined(ARCHOS_RECORDER) || defined(ARCHOS_PLAYER)
+soft_shutdown
+#endif
+
+#if defined(HAVE_SPDIF_POWER)
+spdif_power
+#endif
+
+#if defined(HAVE_SPEAKER)
+speaker
+#endif
+
+#if CONFIG_CODEC == SWCODEC
+swcodec
+#else
+hwcodec
+#endif
+
+#if defined(HAVE_TAGCACHE)
+tagcache
+#endif
+
+#if defined(HAVE_TC_RAMCACHE)
+tc_ramcache
+#endif
+
+#if CONFIG_CHARGING
+charging
+#if defined(HAVE_USB_CHARGING_ENABLE)
+usb_charging_enable
+#endif
+#endif
+
+#if defined(HAVE_WHEEL_ACCELERATION)
+wheel_acceleration
+#endif
+
+#if defined(HAVE_LINEOUT_POWEROFF)
+lineout_poweroff
+#endif
+
+#if defined(HAVE_TOUCHSCREEN)
+touchscreen
+#endif
+
+
+
+
+/* These features are only used by the manual so they won't break binary
+ * compatibility
+ */
+
+#if (PLUGIN_BUFFER_SIZE >= 0x80000)
+large_plugin_buffer
+#endif
+
+#if defined(AB_REPEAT_ENABLE) && !defined(ACTION_WPSAB_SINGLE)
+ab_repeat_buttons
+#endif
+
+#if defined(HAVE_ALBUMART)
+albumart
+#endif
+
+#if defined(HAVE_BACKLIGHT_FADING_INT_SETTING)
+backlight_fade_int
+#elif defined(HAVE_BACKLIGHT_FADING_BOOL_SETTING)
+backlight_fade_bool
+#endif
+
+#if defined(HAVE_DISK_STORAGE)
+disk_storage
+#endif
+
+#if defined(HAS_REMOTE_BUTTON_HOLD)
+remote_button_hold
+#endif
+
+#if defined(HAVE_LCD_CHARCELLS)
+lcd_charcell
+#endif
+
+#if defined(HAVE_LCD_FLIP)
+lcd_flip
+#endif
+
+#if defined(HAVE_LCD_CONTRAST)
+lcd_contrast
+#endif
+
+#if defined(HAVE_SCROLLWHEEL)
+scrollwheel
+#endif
+
+#if defined(HAVE_USB_POWER)
+usb_power
+#endif
+
+#if defined(HAVE_USBSTACK) && defined(USE_ROCKBOX_USB)
+usbstack
+#endif
+
+#if defined(USB_ENABLE_HID)
+usb_hid
+#if defined(HAVE_USB_HID_MOUSE)
+usb_hid_mouse
+#endif
+#endif
+
+#if defined(HAVE_SPDIF_IN)
+recording_digital
+#endif
+
+#if MEMORYSIZE <= 2
+lowmem
+#endif

@@ -1,0 +1,22 @@
+% $Id$ %
+\subsection{Fire}
+\screenshot{plugins/images/ss-fire}{Fire}{img:fire}
+Fire is a demo displaying a fire effect.
+\begin{btnmap}
+    \nopt{scrollwheel}{\PluginUp{} / \PluginDown}
+    \opt{scrollwheel}{\PluginScrollFwd{} / \PluginScrollBack}
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCUp{} / \PluginRCDown}
+    & Increase / decrease number of flames\\
+
+    \PluginLeft
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCLeft}
+    & Toggle flame type\\
+
+    \PluginRight
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCRight}
+    & Toggle moving flames\\
+
+    \PluginCancel
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCCancel}
+    & Quit\\
+\end{btnmap}

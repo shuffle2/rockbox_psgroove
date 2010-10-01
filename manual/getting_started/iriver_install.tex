@@ -1,0 +1,29 @@
+% $Id$ %
+
+  Installing the bootloader is the trickiest part of the installation.
+  As explained above, we cannot distribute the bootloader directly, and
+  thus need to patch a compatible version of the Iriver firmware, which
+  can be downloaded as described above.
+
+
+\begin{enumerate}
+  \item Download the firmware patcher \fname{fwpatcher.exe} from 
+  \url{http://download.rockbox.org/bootloader/iriver/} and save it to your desktop.
+    \note{The firmware patcher contains Unicode support, which is not supported by 
+    all versions of Windows. If you have difficulty with the firmware patcher, try 
+    downloading the alternate firmware patcher \fname{fwpatchernu.exe}, which is 
+    built without Unicode support.}
+  %
+  \item Go to your desktop and double-click on the firmware patcher.
+  %
+  \item In the firmware patcher dialog box, click on the \setting{Browse}
+  button and navigate
+  to the \fname{.hex} file that you previously downloaded.
+  %
+  \item Click \setting{Patch}. The firmware patcher will patch the
+    original firmware to include the Rockbox bootloader. The \fname{.hex}
+    file on your desktop is now a modified version of the original
+    \fname{.hex} file.
+  %
+  \item Copy \fname{.hex} to the root folder (the highest level) of your \dap{}
+\end{enumerate}

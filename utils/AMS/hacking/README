@@ -1,0 +1,7 @@
+This directory contains the following tools related to the Sansa V2
+(AMS) firmware files:
+
+1) amsinfo
+
+A tool that dumps information from an AMS firmware file.
+

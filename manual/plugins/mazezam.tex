@@ -1,0 +1,32 @@
+\subsection{MazezaM}
+\screenshot{plugins/images/ss-mazezam}{MazezaM}{fig:mazezam}
+
+The goal of this puzzle game is to escape a dungeon consisting of ten
+``mazezams''.
+These are rooms containing rows of blocks which can be shifted left or
+right.
+You can move the rows only by pushing them and if you move the rows
+carelessly, you will get stuck.
+You can have another go by selecting ``retry level'' from the menu,
+but this will cost you a life.
+You start the game with three lives.
+Luckily, there are checkpoints at levels four and eight.
+
+\begin{btnmap}
+    \opt{IPOD_3G_PAD}{\ButtonScrollBack, \ButtonScrollFwd, \ButtonLeft, \ButtonRight}
+    \nopt{IPOD_3G_PAD}{\PluginUp, \PluginDown, \PluginLeft, \PluginRight}
+        &
+    \opt{HAVEREMOTEKEYMAP}{
+        \PluginRCUp, \PluginRCDown, \PluginRCLeft, \PluginRCRight
+        &}
+    Move Character
+    \\
+
+    \opt{IPOD_3G_PAD}{\ButtonMenu}
+    \nopt{IPOD_3G_PAD}{\PluginCancel}
+        &
+    \opt{HAVEREMOTEKEYMAP}{\PluginRCCancel
+        &}
+    Menu
+    \\
+\end{btnmap}

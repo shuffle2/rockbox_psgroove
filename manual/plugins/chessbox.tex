@@ -1,0 +1,79 @@
+% $Id$ %
+\subsection{Chessbox}
+\screenshot{plugins/images/ss-chessbox}{Chessbox}{img:chessbox}
+Chessbox is a one-person chess game with computer artificial intelligence. 
+The chess engine is a port of GNU Chess 2 by John Stanback.
+
+It also works as a PGN file viewer. Instead of executing the game from the
+plugin menu, look for any file with \fname{.pgn} extension in the file browser
+and execute it. Chessbox will show the list of matches included in the file
+and allow you to select the one you want to watch. After that, you can scroll
+back and forth through the moves of the game. If the menu is invoked while in
+the viewer, the user is allowed to select a new match from the same file or
+quit the game.
+
+``Force play'' while the computer is thinking will cause it to make its move
+immediately.  If done while it's your turn, the computer will move
+for you and flip the board so that you are playing from the other side.  If you
+want, you can force play an entire game and watch the artificial intelligence
+ fight against itself.
+
+When you quit the game the current state will be saved and restored when
+you resume the game. The menu also allows the user to reload the last game
+saved, save the current position and start a new game without having to quit
+the game.
+
+\opt{archosrecorder,archosfmrecorder,ondio}{
+\note{This plugin will stop playback.}
+}
+
+\subsubsection{Keys}
+    \begin{btnmap}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu, \ButtonPlay, \ButtonLeft, \ButtonRight}
+    \nopt{IPOD_4G_PAD,IPOD_3G_PAD}{Direction keys}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Move the cursor\\
+    \opt{RECORDER_PAD}{\ButtonPlay}
+    \opt{ONDIO_PAD}{\ButtonMenu}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD%
+        ,SANSA_E200_PAD,SANSA_C200_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+        ,SANSA_FUZE_PAD}
+        {\ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonRew}
+    \opt{COWON_D2_PAD}{\TouchCenter}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Pick up / Drop piece\\
+    \opt{RECORDER_PAD}{\ButtonFOne}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonOff}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonRight}
+    \opt{IAUDIO_X5_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonRec}
+    \opt{SANSA_FUZE_PAD}{\ButtonSelect+\ButtonLeft}
+    \opt{IRIVER_H10_PAD}{\ButtonFF}
+    \opt{GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonMenu}
+    \opt{MROBE100_PAD}{\ButtonDisplay}
+    \opt{COWON_D2_PAD}{\ButtonPlus}
+    \opt{PBELL_VIBE500_PAD}{\ButtonCancel}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Change level\\
+    \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}
+    \opt{ONDIO_PAD}{Long \ButtonMenu}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonPlay}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,GIGABEAT_S_PAD}{\ButtonPlay}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonSelect+\ButtonRight}
+    \opt{SANSA_C200_PAD}{\ButtonVolUp}
+    \opt{GIGABEAT_PAD}{\ButtonA}
+    \opt{MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonPlay}
+    \opt{COWON_D2_PAD}{Long \TouchCenter}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Force play\\
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonMenu}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonPower}
+    \opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+    \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{\ButtonPower}
+    \opt{COWON_D2_PAD,PBELL_VIBE500_PAD}{\ButtonMenu}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Show the menu\\
+    \end{btnmap}

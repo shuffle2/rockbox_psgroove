@@ -1,0 +1,241 @@
+\subsection{Wormlet}
+\screenshot{plugins/images/ss-wormlet}{Wormlet game}{img:wormlet}
+Wormlet is a \opt{RECORDER_PAD}{multi{}-user }multi{}-worm game on a multi{}-threaded
+multi{}-functional Rockbox console. You navigate a hungry little worm.
+Help your worm to find food and to avoid poisoned argh{}-tiles. The
+goal is to turn your tiny worm into a big worm for as long as possible.
+
+\opt{RECORDER_PAD}{
+For 2{}-player games a remote control is not necessary but recommended.
+If you try to hold the \dap\ in the four hands of two players
+you'll find out why. Games with three players are only
+possible using a remote control.\\}
+
+
+%The following table is only for the recorder version of the game, since the
+%other versions do not support either multi player or different control modes.
+%It is however prepared for the other targets should they ever support these
+%features. Also some other parts of the text is "opted" out for these targets.
+
+{\bfseries
+Game controls:}
+
+\opt{RECORDER_PAD}{
+\renewcommand{\arraystretch}{1.8}
+\begin{rbtabular}{\textwidth}{c X p{3cm} p{3cm} p{3cm}}%
+{\textbf{Players} & \textbf{Modes} & \textbf{Player 1} & \textbf{Player 2}
+                        & \textbf{Player 3}}{}{}
+%
+0 & Out of control & \multicolumn{3}{p{9cm}}{With no player taking part in the
+    game all worms are out of control and steered by artificial stupidity.}\\
+%
+\multirow{2}{*}{1} & 2 key control & on \dap\ \ButtonLeft: turn left
+                        \ButtonRight: turn right & {}- & {}-\\
+                    & 4 key control & on \dap\
+                        \ButtonLeft: turn  left
+                        \ButtonUp: turn up
+                        \ButtonRight: turn right
+                        \ButtonDown: turn down & {}- & {}- \\
+%
+\multirow{2}{*}{2} & Remote control & on \dap\ \ButtonLeft: turn left
+                        \ButtonRight: turn right & on remote control VOL DOWN:
+                        turn left VOL UP: turn right & {}- \\
+                    & No remote control & on \dap\ \ButtonLeft: turn left
+                        \ButtonRight: turn right & on \dap\ \ButtonFTwo: turn
+                        left \ButtonFThree: turn right & {}- \\
+3 & Remote control & on \dap\ \ButtonLeft: turn left \ButtonRight: turn right
+                        & on remote control VOL DOWN: turn left VOL UP: turn
+                        right & on \dap\ \ButtonFTwo: turn left \ButtonFThree:
+                        turn right \\
+\end{rbtabular}
+\renewcommand{\arraystretch}{1.0}
+}
+
+\nopt{RECORDER_PAD}{
+    \begin{btnmap}
+        \nopt{touchscreen}{\ButtonLeft}
+        \opt{touchscreen}{\TouchMidLeft}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Turn left
+        \\
+        
+        \nopt{touchscreen}{\ButtonRight}
+        \opt{touchscreen}{\TouchMidRight}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Turn right
+        \\
+        
+        \nopt{IPOD_3G_PAD,IPOD_4G_PAD,IRIVER_H10_PAD,touchscreen}{\ButtonUp}
+        \opt{IPOD_3G_PAD,IPOD_4G_PAD}{\ButtonMenu}
+        \opt{IRIVER_H10_PAD}{\ButtonScrollUp}
+        \opt{touchscreen}{\TouchTopMiddle}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Turn Up
+        \\
+        
+        \nopt{IPOD_3G_PAD,IPOD_4G_PAD,IRIVER_H10_PAD,touchscreen}{\ButtonDown}
+        \opt{IPOD_3G_PAD,IPOD_4G_PAD}{\ButtonPlay}
+        \opt{IRIVER_H10_PAD}{\ButtonScrollDown}
+        \opt{touchscreen}{\TouchBottomMiddle}
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Turn Down
+        \\
+    \end{btnmap}
+}
+
+\subsubsection{The game}
+Use the control keys of your worm to navigate around obstacles and find
+food. Worms do not stop moving except when dead. Dead worms are no fun.
+Be careful as your worm will try to eat anything that you steer it
+across. It won't distinguish whether it is edible or not.
+
+\begin{description}
+\item[Food.]
+The small square hollow pieces are food. Move the worm over a food tile
+to eat it. After eating the worm grows. Each time a piece of food has
+been eaten a new piece of food will pop up somewhere. Unfortunately for
+each new piece of food that appears two new ``argh'' pieces will
+appear, too.
+\item[Argh.]
+An ``argh'' is a black square poisoned piece {}- slightly bigger than
+food {}- that makes a worm say ``Argh!'' when
+run into.  A worm that eats an ``argh'' is dead. Thus eating an
+``argh'' must be avoided under any circumstances. ``Arghs'' have the
+annoying tendency to accumulate. 
+\item[Worms.]
+Thou shall not eat worms. Neither other worms nor thyself. Eating worms
+is blasphemous cannibalism, not healthy and causes instant
+death. And it doesn't help anyway: the other worm
+isn't hurt by the bite. It will go on creeping happily
+and eat all the food you left on the table. 
+\item[Walls.]
+Don't crash into the walls. Walls are not edible.
+Crashing a worm against a wall causes it a headache it
+doesn't survive. 
+\item[Game over.]
+The game is over when all worms are dead. The longest worm wins the
+game. 
+\item [Pause the game.]
+Press
+\opt{RECORDER_PAD,IAUDIO_X5_PAD,PBELL_VIBE500_PAD}{\ButtonPlay}%
+\opt{ONDIO_PAD}{\ButtonMenu}%
+\opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD,IPOD_3G_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD%
+  ,GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonSelect}
+\opt{COWON_D2_PAD}{\TouchCenter}
+to pause the game. Press it again to resume the game.
+
+\item[Stop the game.]
+There are two ways to stop a running game.
+
+\begin{itemize}
+\item If you want to quit Wormlet entirely simply hit
+\opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}%
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu+\ButtonSelect}%
+\opt{IAUDIO_X5_PAD,SANSA_E200_PAD,GIGABEAT_PAD}{\ButtonPower}%
+\opt{SANSA_FUZE_PAD}{Long \ButtonHome}%
+\opt{PBELL_VIBE500_PAD}{\ButtonRec}%
+\opt{GIGABEAT_S_PAD}{\ButtonBack}.
+The game will stop immediately and you will return to the game menu. 
+\item If you want to stop the game and still see the screen hit 
+\opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}%
+\opt{ONDIO_PAD}{\ButtonOff+\ButtonMenu}%
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonPlay}%
+\opt{IAUDIO_X5_PAD,SANSA_E200_PAD}{\ButtonRec}%
+\opt{SANSA_FUZE_PAD}{\ButtonSelect+\ButtonUp}%
+\opt{GIGABEAT_PAD}{\ButtonA}%
+\opt{PBELL_VIBE500_PAD}{\ButtonCancel}%
+\opt{GIGABEAT_S_PAD}{\ButtonMenu}.
+This freezes the game. If you hit
+\opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}%
+\opt{ONDIO_PAD}{\ButtonOff+\ButtonMenu}%
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonPlay}%
+\opt{IAUDIO_X5_PAD,SANSA_E200_PAD}{\ButtonRec}%
+\opt{SANSA_FUZE_PAD}{\ButtonSelect+\ButtonUp}%
+\opt{GIGABEAT_PAD}{\ButtonA}%
+\opt{PBELL_VIBE500_PAD}{\ButtonCancel}%
+\opt{GIGABEAT_S_PAD}{\ButtonMenu}
+button again a new game starts with the same configuration. To return to the
+games menu you can hit
+\opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}%
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu+\ButtonSelect}%
+\opt{IAUDIO_X5_PAD,SANSA_E200_PAD,GIGABEAT_PAD}{\ButtonPower}%
+\opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+\opt{PBELL_VIBE500_PAD}{\ButtonRec}%
+\opt{GIGABEAT_S_PAD}{\ButtonBack}. A stopped game can not be resumed. 
+\end{itemize}
+\end{description}
+
+\subsubsection{The scoreboard}
+On the right side of the game field is the score board. For each worm it
+displays its status and its length. The top most entry displays the
+state of worm 1, the second worm 2 and the third worm 3. When a worm
+dies its entry on the score board turns black.
+
+\begin{description}
+\item[Len:]
+Here the current length of the worm is displayed. When a worm is eating
+food it grows by one pixel for each step it moves. 
+
+\item[Hungry:]
+That's the normal state of a worm. Worms are always
+hungry and want to eat. It is good to have a hungry
+worm since it means that your worm is alive. But it is
+better to get your worm growing. 
+
+\item[Growing:]
+When a worm has eaten a piece of food it starts growing. For each step
+it moves over food it can grow by one pixel. One piece of food lasts
+for 7 steps. After your worm has moved 7 steps the food is used up. If
+another piece of food is eaten while growing it will increase the size
+of the worm for another 7 steps. 
+
+\item[Crashed:]
+This indicates that a worm has crashed against a wall.
+
+\item[Argh:]
+If the score board entry displays ``Argh!'' it
+means the worm is dead because it tried to eat an ``argh''. Until we
+can make the worm say ``Argh!'' it is your job to say ``Argh!'' aloud.
+
+\item[Wormed:]
+The worm tried to eat another worm or even itself.
+That's why it is dead now.  Making traps for other players with a worm
+is a good way to get them out of the game.
+\end{description}
+
+\subsubsection{Hints}
+
+\begin{itemize}
+
+\item Initially you will be busy with controlling your worm. Try to
+avoid other worms and crawl far away from them. Wait until they curl up
+themselves and collect the food afterwards. Don't worry if the other
+worms grow longer than yours {}- you can catch up after they've died. 
+
+\item When you are more experienced watch the tactics of other worms.
+Those worms controlled by artificial stupidity head straight for the
+nearest piece of food. Let the other worm have its next piece of food
+and head for the food it would probably want next. Try to put yourself
+between the opponent and that food. From now on you can `control' the
+other worm by blocking it. You could trap it by making a 1 pixel wide
+U{}-turn. You also could move from food to food and make sure you keep
+between your opponent and the food. So you can always reach it before
+your opponent. 
+
+\opt{RECORDER_PAD}{
+\item While playing the game the \dap\ can still play music. For
+single player game use any music you like. For berserk games with 2 players use
+hard rock and for 3 player games use heavy metal or X{}-Phobie
+(\url{http://www.x-phobie.de/}).
+Play fair and don't kick your opponent in the toe or
+poke him in the eye. That would be bad manners.
+}
+\end{itemize}

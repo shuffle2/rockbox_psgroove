@@ -1,0 +1,381 @@
+#             __________               __   ___.
+#   Open      \______   \ ____   ____ |  | _\_ |__   _______  ___
+#   Source     |       _//  _ \_/ ___\|  |/ /| __ \ /  _ \  \/  /
+#   Jukebox    |    |   (  <_> )  \___|    < | \_\ (  <_> > <  <
+#   Firmware   |____|_  /\____/ \___  >__|_ \|___  /\____/__/\_ \
+#                     \/            \/     \/    \/            \/
+# $Id$
+#
+# WPSLIST
+#
+# This should list all WPS and RWPS files we have and what their requirements
+# and preferences are.
+#
+# Each <wps> section will also cause a "theme" .cfg to be made, which the
+# <rwps> sections will not cause.
+#
+# A <wps> section can thus mention a "preferred" rwps file to load when that
+# theme is loaded.
+#
+# All sections should list what font and status bar setting they "like".
+
+<wps>
+# Name of the WPS _including_ extension
+Name: ipodVOL.wps
+# default RWPS for the theme (to be loaded with the same theme file)
+RWPS: rockbox_default.rwps
+# Name of the creator of the WPS
+Author: xameius
+# preferred font
+Font: 12-Nimbus.fnt
+# whether the WPS is designed to have the statusbar present or not
+Statusbar: on
+# whether a menu backdrop should be set
+# needs to be declared as empty if there should be none (the default sets one)
+backdrop:
+# reference to the built-in icon set
+iconset:
+# reference to the default viewers icon set
+viewers iconset:
+# preferred selector type
+selector type: bar (inverse)
+</wps>
+
+<wps>
+Name: boxes.wps
+rwps: boxes.rwps
+SBS:
+RSBS:
+Author: Christi Scarborough (after Magnus Westerlund)
+Font: 08-Schumacher-Clean.fnt
+Statusbar: top
+# themes with colour screen versions need to set the colours too
+Foreground Color: 000000
+Background Color: B6C6E5
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<wps>
+Name: engineeer2.wps
+RWPS: engineeer2.rwps
+SBS:
+RSBS:
+Author: Magnus Westerlund
+Font: 08-Nedore.fnt
+Statusbar: top
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<wps>
+Name: iAmp.wps
+RWPS: iAmp.rwps
+SBS:
+RSBS:
+Author: Raymond Hoh
+Font: 12-Nimbus.fnt
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+Statusbar: top
+ui viewport:
+remote ui viewport:
+</wps>
+
+<wps>
+Name: zezayer.wps
+RWPS: zezayer.rwps
+SBS:
+RSBS:
+Author: Jake Owen
+Font: 08-Nedore.fnt
+Statusbar: top
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<rwps>
+Name: zezayer.rwps
+Author: Dominik Riebeling
+Font: 08-Nedore.fnt
+Statusbar: top
+</rwps>
+
+<rwps>
+Name: rockbox_default.rwps
+Author: Rockbox team
+Font: 08-Schumacher-Clean.fnt
+Statusbar: top
+</rwps>
+
+<rwps>
+Name: iAmp.rwps
+Author: Raymond Hoh
+Font: 12-Nimbus.fnt
+Statusbar: top
+</rwps>
+
+<rwps>
+Name: boxes.rwps
+Author: Christi Scarborough
+Font: 08-Schumacher-Clean.fnt
+Statusbar: top
+</rwps>
+
+<rwps>
+Name: engineeer2.rwps
+Author: Magnus Westerlund
+Font: 08-Nedore.fnt
+Statusbar: top
+</rwps>
+
+<wps>
+Name: DancePuffDuo.wps
+RWPS: DancePuffDuo.rwps
+SBS:
+RSBS:
+Author: Chris Oxtoby
+Font: 13-Nimbus.fnt
+Statusbar: top
+Foreground Color: 000000
+Background Color: B6C6E5
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<rwps>
+Name: DancePuffDuo.rwps
+Author: Chris Oxtoby
+Font: 13-Nimbus.fnt
+Statusbar: top
+</rwps>
+
+<wps>
+Name: iCatcher.wps
+RWPS: iCatcher.rwps
+SBS:
+RSBS:
+Author: Ioannis Koutoulakis
+Font.112x64x1: 08-Rockfont.fnt
+Font.128x64x1: 08-Rockfont.fnt
+Font.128x128x16: 09-Nedore.fnt
+Font.132x80x16: 09-Nedore.fnt
+Font.138x110x2: 08-Nedore.fnt
+Font.160x128x2: 09-Nedore.fnt
+Font.160x128x16: 09-Nedore.fnt
+Font.176x132x16: 09-Nedore.fnt
+Font.176x220x16: 12-Nimbus.fnt
+Font.220x176x16: 14-Nimbus.fnt
+Font.240x320x16: 19-Nimbus.fnt
+Font.240x400x16: 19-Nimbus.fnt
+Font.320x240x16: 19-Nimbus.fnt
+Foreground Color: 000000
+Background Color: FFFFFF
+Statusbar: top
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<rwps>
+Name: iCatcher.rwps
+Author: Ioannis Koutoulakis
+Font.160x128x2: 09-Nedore.fnt
+Font.220x176x16: 14-Nimbus.fnt
+Statusbar: top
+</rwps>
+
+<wps>
+Name: UniCatcher.wps
+RWPS: UniCatcher.rwps
+SBS:
+RSBS:
+Author: Ioannis Koutoulakis
+Font: 16-GNU-Unifont.fnt
+Foreground Color: 000000
+Background Color: FFFFFF
+Statusbar: top
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<rwps>
+Name: UniCatcher.rwps
+Author: Ioannis Koutoulakis
+Font: 16-GNU-Unifont.fnt
+Statusbar: top
+</rwps>
+
+<wps>
+Name: Rockboxed.wps
+RWPS: rockbox_default.rwps
+SBS:
+RSBS:
+Author: Roan Horning
+Font.112x64x1: 08-Schumacher-Clean.fnt
+Font.128x64x1: 08-Schumacher-Clean.fnt
+Font.128x128x16: 12-Nimbus.fnt
+Font.132x80x16: 10-Nimbus.fnt
+Font.138x110x2: 12-Nimbus.fnt
+Font.160x128x16: 12-Nimbus.fnt
+Font.160x128x2: 12-Nimbus.fnt
+Font.176x132x16: 12-Nimbus.fnt
+Font.176x220x16: 12-Nimbus.fnt
+Font.220x176x16: 14-Nimbus.fnt
+Font.240x320x16: 19-Nimbus.fnt
+Font.240x400x16: 19-Nimbus.fnt
+Font.320x240x16: 19-Nimbus.fnt
+Foreground Color: 000000
+Background Color: FFC000
+Statusbar: top
+backdrop:
+iconset:
+viewers iconset:
+selector type: bar (inverse)
+ui viewport:
+remote ui viewport:
+</wps>
+
+<wps>
+Name: progressive.wps
+Author: Jens Arnold
+</wps>
+
+<wps>
+Name: cabbiev2.wps
+RWPS: cabbiev2.rwps
+SBS:
+RSBS:
+# Real name of the creator of the WPS
+Author: Johannes Voggenthaler, Apoo Maha, Marc Guay, Alex Vanderpol, Jerry Lange, Keith Perri, Mark Fawcus, and Marianne Arnold with support from Rockbox developers and forums. Based on Cabbie by Yohann Misquitta.
+
+# Preferred font (including .fnt extension - leave blank for player):
+Font.480x800x16: 35-Adobe-Helvetica.fnt
+Font.320x480x16: 27-Adobe-Helvetica.fnt
+Font.320x240x16: 15-Adobe-Helvetica.fnt
+Font.240x400x16: 16-Adobe-Helvetica.fnt
+Font.240x320x16: 15-Adobe-Helvetica.fnt
+Font.220x176x16: 12-Adobe-Helvetica.fnt
+Font.176x220x16: 12-Adobe-Helvetica.fnt
+Font.176x132x16: 12-Adobe-Helvetica.fnt
+Font.160x128x16: 12-Adobe-Helvetica.fnt
+Font.160x128x2: 12-Adobe-Helvetica.fnt
+Font.160x128x1: 12-Adobe-Helvetica.fnt
+Font.138x110x2: 12-Adobe-Helvetica.fnt
+Font.128x128x16: 12-Adobe-Helvetica.fnt
+Font.128x128x2: 12-Adobe-Helvetica.fnt
+Font.132x80x16: 11-Sazanami-Mincho.fnt
+Font.128x64x1: 08-Rockfont.fnt
+Font.112x64x1: 08-Rockfont.fnt
+
+# Remote font for iriver
+Remote Font.128x64x1: 08-Rockfont.fnt
+
+#misc settings that should be ignored on grayscale targets
+foreground color: CCCCCC
+background color: 000000
+line selector start color: fde89e
+line selector end color: b58c00
+line selector text color: 000000
+filetype colours:
+
+#backdrop - remember this is the source file name in your SVN folder, not dest name!
+backdrop.480x800x16: backdrops/cabbiev2.480x800x16.bmp
+backdrop.320x480x16: backdrops/cabbiev2.320x480x16.bmp
+backdrop.320x240x16: backdrops/cabbiev2.320x240x16.bmp
+backdrop.128x128x16: backdrops/cabbiev2.128x128x16.bmp
+backdrop.132x80x16: backdrops/cabbiev2.132x80x16.bmp 
+backdrop.138x110x2: backdrops/cabbiev2.138x110x2.bmp
+backdrop.160x128x16: backdrops/cabbiev2.160x128x16.bmp
+backdrop.160x128x2: backdrops/cabbiev2.160x128x2.bmp
+backdrop.176x132x16: backdrops/cabbiev2.176x132x16.bmp
+backdrop.176x220x16: backdrops/cabbiev2.176x220x16.bmp
+backdrop.220x176x16: backdrops/cabbiev2.220x176x16.bmp
+backdrop.240x320x16: backdrops/cabbiev2.240x320x16.bmp
+backdrop.240x400x16: backdrops/cabbiev2.240x400x16.bmp
+
+#selection bar settings for color targets
+selector type.480x800x16: bar (gradient)
+selector type.320x480x16: bar (gradient)
+selector type.320x240x16: bar (gradient)
+selector type.128x128x16: bar (gradient)
+selector type.132x80x16:  bar (gradient)
+selector type.220x176x16: bar (gradient)
+selector type.160x128x16: bar (gradient)
+selector type.240x400x16: bar (gradient)
+selector type.240x320x16: bar (gradient)
+selector type.176x132x16: bar (gradient)
+selector type.176x220x16: bar (gradient)
+selector type.160x128x2: bar (inverse)
+selector type.138x110x2: bar (inverse)
+
+#icons
+iconset.480x800x16: icons/tango_small.bmp 
+iconset.320x480x16: icons/tango_small.bmp 
+iconset.320x240x16: icons/tango_small.bmp 
+iconset.128x128x16: icons/tango_small.bmp 
+iconset.132x80x16: icons/tango_small.bmp 
+iconset.138x110x2: icons/tango_small_mono.bmp
+iconset.160x128x16: icons/tango_small.bmp 
+iconset.160x128x2: icons/tango_small_mono.bmp
+iconset.176x132x16: icons/tango_small.bmp 
+iconset.176x220x16: icons/tango_small.bmp 
+iconset.220x176x16: icons/tango_small.bmp 
+iconset.240x320x16: icons/tango_small.bmp 
+iconset.240x400x16: icons/tango_small.bmp 
+
+#viewer icons
+viewers iconset.480x800x16: icons/tango_small_viewers.bmp
+viewers iconset.320x480x16: icons/tango_small_viewers.bmp
+viewers iconset.320x240x16: icons/tango_small_viewers.bmp
+viewers iconset.128x128x16: icons/tango_small_viewers.bmp
+viewers iconset.132x80x16: icons/tango_small_viewers.bmp
+viewers iconset.138x110x2: icons/tango_small_viewers_mono.bmp
+viewers iconset.160x128x16: icons/tango_small_viewers.bmp
+viewers iconset.160x128x2: icons/tango_small_viewers_mono.bmp
+viewers iconset.176x132x16: icons/tango_small_viewers.bmp 
+viewers iconset.176x220x16: icons/tango_small_viewers.bmp 
+viewers iconset.220x176x16: icons/tango_small_viewers.bmp
+viewers iconset.240x320x16: icons/tango_small_viewers.bmp 
+viewers iconset.240x400x16: icons/tango_small_viewers.bmp 
+
+# Whether the WPS is designed to have the statusbar on or off
+Statusbar: top
+remote statusbar: top
+
+# list & remote ui viewports
+ui viewport:
+remote ui viewport:
+</wps>
+
+<rwps>
+Name: cabbiev2.rwps
+Author: Johannes Voggenthaler, Apoo Maha, Marc Guay, Alex Vanderpol, Jerry Lange, Keith Perri, Mark Fawcus, and Marianne Arnold with support from Rockbox developers and forums. Based on Cabbie by Yohann Misquitta.
+Font: 12-Adobe-Helvetica.fnt
+Statusbar: top
+</rwps>

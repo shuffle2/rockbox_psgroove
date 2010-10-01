@@ -1,0 +1,19 @@
+% $Id$ %
+\subsection{Demystify}
+\screenshot{plugins/images/ss-demystify}{Demystify}{img:demystify}
+Demystify is a screen saver like demo.\\
+
+\begin{btnmap}
+    \nopt{scrollwheel}{\PluginLeft{} / \PluginRight}
+    \opt{scrollwheel}{\PluginScrollBack{} / \PluginScrollFwd}
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCLeft{} / \PluginRCRight}
+    & Increase / decrease speed\\
+
+    \PluginUp{} / \PluginDown
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCUp{} / \PluginRCDown}
+    & Add / remove polygon\\
+
+    \PluginCancel
+        \opt{HAVEREMOTEKEYMAP}{& \PluginRCCancel}
+    & Quit\\
+\end{btnmap}

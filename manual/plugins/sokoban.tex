@@ -1,0 +1,152 @@
+\subsection{Sokoban}
+\screenshot{plugins/images/ss-sokoban}{Sokoban}{fig:sokoban}
+
+The object of the game is to push boxes into their correct position in a
+crowded warehouse with a minimal number of pushes and moves. The boxes
+can only be pushed, never pulled, and only one can be pushed at a time.
+
+Sokoban may be used as a viewer for viewing saved solutions and playing
+external level sets with the \fname{.sok} extension. Level sets should be in
+the standard Sokoban text format or RLE (Run Length Encoded). For more
+information about the level format, see
+\url{http://sokobano.de/wiki/index.php?title=Level_format}
+
+\begin{btnmap}
+\multicolumn{2}{c}{\textbf{In game}} \\
+\hline
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD%
+    ,IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_E200_PAD%
+    ,SANSA_FUZE_PAD,SANSA_C200_PAD,PBELL_VIBE500_PAD}
+    {\ButtonUp, \ButtonDown, }%
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu, \ButtonPlay, }%
+\opt{IRIVER_H10_PAD}{\ButtonScrollUp, \ButtonScrollDown, }%
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD%
+    ,IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_E200_PAD%
+    ,SANSA_FUZE_PAD,SANSA_C200_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IRIVER_H10_PAD,PBELL_VIBE500_PAD}
+    {\ButtonLeft, \ButtonRight}
+\opt{COWON_D2_PAD}
+    {\TouchTopMiddle, \TouchBottomMiddle, \TouchMidLeft, \TouchMidRight}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Move the ``sokoban'' up, down, left, or right\\
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonMenu}
+\opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,GIGABEAT_PAD,MROBE100_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonPower}
+\opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+\opt{GIGABEAT_S_PAD,COWON_D2_PAD}{\ButtonMenu}
+\opt{PBELL_VIBE500_PAD}{\ButtonRec}
+       \opt{HAVEREMOTEKEYMAP}{&
+          \opt{IRIVER_RC_H100_PAD}{\ButtonRCStop}
+         }
+    & Menu \\
+\nopt{IAUDIO_X5_PAD}{
+    \opt{RECORDER_PAD,ARCHOS_AV300_PAD}{\ButtonFOne}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonLeft}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonDown}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonLeft}
+    \opt{IRIVER_H10_PAD}{\ButtonPlay+\ButtonScrollDown}
+    \opt{GIGABEAT_PAD,SANSA_C200_PAD}{\ButtonVolDown}
+    \opt{MROBE10_PAD}{\ButtonDisplay}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonSelect+\ButtonDown}
+    \opt{GIGABEAT_S_PAD}{\ButtonPrev}
+    \opt{COWON_D2_PAD}{\ButtonMinus}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK+\ButtonLeft}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Back to previous level \\
+}
+\nopt{IPOD_4G_PAD,IPOD_3G_PAD}{
+    \opt{RECORDER_PAD,ARCHOS_AV300_PAD}{\ButtonFTwo}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonUp}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}
+    \opt{IAUDIO_X5_PAD}{\ButtonRec}
+    \opt{IRIVER_H10_PAD}{\ButtonPlay+\ButtonRight}
+    \opt{GIGABEAT_PAD,MROBE100_PAD}{\ButtonMenu}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{\ButtonSelect+\ButtonRight}
+    \opt{GIGABEAT_S_PAD}{\ButtonPlay}
+    \opt{COWON_D2_PAD}{\TouchTopRight}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK+\ButtonCancel}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Restart level \\
+}
+\nopt{IAUDIO_X5_PAD}{
+    \opt{RECORDER_PAD,ARCHOS_AV300_PAD}{\ButtonFThree}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonRight}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonUp}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonRight}
+    \opt{IRIVER_H10_PAD}{\ButtonPlay+\ButtonScrollUp}
+    \opt{GIGABEAT_PAD,SANSA_C200_PAD}{\ButtonVolUp}
+    \opt{GIGABEAT_S_PAD}{\ButtonNext}
+    \opt{MROBE100_PAD}{\ButtonPlay}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonSelect+\ButtonUp}
+    \opt{COWON_D2_PAD}{\ButtonPlus}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK+\ButtonRight}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Go to next level \\
+}
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD}{\ButtonOn}
+\opt{ONDIO_PAD}{\ButtonMenu}
+\opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonRec}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD,GIGABEAT_PAD,MROBE100_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{\ButtonSelect}
+\opt{IRIVER_H10_PAD}{\ButtonRew}
+\opt{GIGABEAT_S_PAD}{\ButtonVolUp}
+\opt{COWON_D2_PAD}{\TouchTopRight}
+\opt{PBELL_VIBE500_PAD}{\ButtonCancel}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Undo last movement \\
+
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,IAUDIO_X5_PAD}{\ButtonPlay}
+\opt{ONDIO_PAD}{\ButtonMenu+\ButtonDown}
+\opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonPlay}
+\opt{IRIVER_H10_PAD}{\ButtonFF}
+\opt{GIGABEAT_PAD}{\ButtonA}
+\opt{GIGABEAT_S_PAD}{\ButtonVolDown}
+\opt{MROBE100_PAD}{\ButtonDisplay}
+\opt{SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonRec}
+\opt{SANSA_FUZE_PAD}{\ButtonSelect+\ButtonLeft}
+\opt{COWON_D2_PAD}{\TouchBottomLeft}
+\opt{PBELL_VIBE500_PAD}{\ButtonOK}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Redo previously undone move \\
+\hline
+\multicolumn{2}{c}{\textbf{Solution playback}} \\
+\hline
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,IAUDIO_X5_PAD,IRIVER_H10_PAD}{\ButtonPlay}
+\opt{ONDIO_PAD}{\ButtonMenu}
+\opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+      ,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{\ButtonSelect}
+\opt{COWON_D2_PAD}{\TouchCenter}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Pause/resume \\
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD%
+    ,IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_E200_PAD%
+    ,SANSA_FUZE_PAD,SANSA_C200_PAD}
+    {\ButtonUp/\ButtonDown}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu/\ButtonPlay}
+\opt{IRIVER_H10_PAD}{\ButtonScrollUp/\ButtonScrollDown}
+\opt{COWON_D2_PAD}{\TouchTopMiddle/\TouchBottomMiddle}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Increase/decrease playback speed \\
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,IAUDIO_X5_PAD,IRIVER_H10_PAD,ONDIO_PAD%
+    ,IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD%
+    ,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}
+    {\ButtonLeft/\ButtonRight}
+\opt{COWON_D2_PAD}{\TouchMidLeft/\TouchMidRight}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Go backward/forward (while paused) \\
+\opt{RECORDER_PAD,ARCHOS_AV300_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+\opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonMenu}
+\opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,GIGABEAT_PAD,MROBE100_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonPower}
+\opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+\opt{GIGABEAT_S_PAD,COWON_D2_PAD}{\ButtonMenu}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Quit \\
+\end{btnmap}
+
+Some places where can you can find level sets:
+\begin{itemize}
+\item \url{http://www.sourcecode.se/sokoban/levels.php}
+\item \url{http://sokobano.de/en/levels.php}
+\end{itemize}
+Note that some level sets may contain levels that are too large for this
+version of Sokoban and are unplayable as a result.

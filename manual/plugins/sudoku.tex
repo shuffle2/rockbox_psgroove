@@ -1,0 +1,111 @@
+\subsection{\label{ref:Sudoku}Sudoku}
+\screenshot{plugins/images/ss-sudoku}{Sudoku}{fig:sudoku}
+Sudoku in Rockbox can act as both a plugin and a viewer.
+When starting Sudoku from the \setting{Browse Plugins} menu, a 
+random game will be generated automatically, and an estimate of its difficulty
+(very easy, easy, medium, hard or fiendish) will be displayed on the screen.
+New games can be generated from the \setting{Generate} menu option.
+When ``playing'' an existing Sudoku game file from Rockbox' file browser
+the plugin is invoked as viewer. The selected Sudoku will get loaded and you
+can start solving it. The sudoku games need to be stored as text
+files with the extension \fname{.ss} as single file per game.
+
+You can create and save your own grids under the \setting{New} menu option.
+Enter the menu (as described in the key table below) when you have finished and
+enter the full path to save to including the \fname{.ss} extension 
+(e.g. \fname{/sudoku/new.ss}).
+
+\subsubsection{The scratchpad}
+When you play Sudoku on paper most people like to mark numbers in cells that 
+are possible candidates for the cells.
+This can be done with the scratchpad, shown as separate column.
+Change the number under the cursor to the number you want to put on the
+scratchpad and press the scratchpad button, the number will then be added.
+If the number was already on the scratchpad it will get removed again.
+The column is stored seperatly for every cell on the board. The stored values
+can be displayed inline as small dots by enabling the \setting{Show Markings}
+settings.
+\note{The scratchpad is \emph{not} saved when saving the game.}
+
+\begin{btnmap}
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD%
+        ,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD,GIGABEAT_PAD%
+        ,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}
+        {\ButtonUp{} / \ButtonDown{} / \ButtonLeft{} / \ButtonRight}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonScrollFwd{} / \ButtonScrollBack}
+    \opt{IRIVER_H10_PAD}{\ButtonScrollUp{} / \ButtonScrollDown{} / \ButtonLeft{} / \ButtonRight}
+    \opt{COWON_D2_PAD}{\TouchTopMiddle{} / \TouchBottomMiddle{} / \TouchMidLeft{} / \TouchMidRight}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Move the cursor\\
+    %
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect & Change cursor move direction\\}
+    %
+    \opt{RECORDER_PAD}{\ButtonPlay}
+    \opt{ONDIO_PAD}{\ButtonMenu}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonSelect{} / \ButtonOn}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonLeft{} / \ButtonRight}
+    \opt{IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{\ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonRew}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonScrollBack{} / \ButtonScrollFwd}
+    \opt{SANSA_C200_PAD}{\ButtonSelect{} / \ButtonVolUp{} / \ButtonVolDown}
+    \opt{COWON_D2_PAD}{\TouchCenter}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Change number under the cursor\\
+    %
+    \opt{RECORDER_PAD}{Long \ButtonPlay}
+    \opt{ONDIO_PAD}{Long \ButtonMenu+\ButtonDown}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{Long \ButtonOn}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{Long \ButtonLeft{} / \ButtonRight}
+    \opt{IAUDIO_X5_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{Long \ButtonSelect}
+    \opt{IRIVER_H10_PAD}{Long \ButtonRew}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{Long \ButtonScrollBack{} / \ButtonScrollFwd}
+    \opt{SANSA_C200_PAD}{Long \ButtonSelect{} / \ButtonVolUp{} / \ButtonVolDown}
+    \opt{COWON_D2_PAD}{Long \TouchCenter}
+    \opt{PBELL_VIBE500_PAD}{Long \ButtonOK}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Constantly changing the number under the cursor\\
+    %
+    \opt{RECORDER_PAD}{\ButtonFOne}
+    \opt{ONDIO_PAD}{Long \ButtonMenu}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+      ,COWON_D2_PAD,PBELL_VIBE500_PAD}{\ButtonMenu}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD}{\ButtonPlay}
+    \opt{SANSA_E200_PAD}{\ButtonSelect}
+    \opt{SANSA_FUZE_PAD}{\ButtonHome}
+    \opt{SANSA_C200_PAD}{\ButtonPower}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Open Menu\\
+    %
+    \opt{RECORDER_PAD}{\ButtonFTwo}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonLeft}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,SANSA_E200_PAD,SANSA_C200_PAD}{\ButtonRec}
+    \opt{SANSA_FUZE_PAD}{\ButtonSelect}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_S_PAD,PBELL_VIBE500_PAD}{\ButtonPlay}
+    \opt{IRIVER_H10_PAD}{\ButtonFF}
+    \opt{GIGABEAT_PAD}{\ButtonA}
+    \opt{MROBE100_PAD}{\ButtonDisplay}
+    \opt{COWON_D2_PAD}{Long \TouchBottomLeft}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Add/Remove number to scratchpad\\
+    %
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD%
+      ,MROBE100_PAD}{\ButtonPower}
+    \opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{Menu $\rightarrow$ Quit}
+    \opt{SANSA_C200_PAD,COWON_D2_PAD}{Long \ButtonPower}
+    \opt{PBELL_VIBE500_PAD}{\ButtonRec}
+  \opt{HAVEREMOTEKEYMAP}{& }
+    & Quit\\
+    %
+\end{btnmap}
+
+Some places where can you can find \fname{.ss} files:
+\begin{itemize}
+\item Simple Sudoku (Advanced Puzzle Packs 1 and 2 located near the bottom of that page):
+\url{http://www.angusj.com/sudoku/}
+\item Kjell's Sudoku generator/solver:
+\url{http://kjell.haxx.se/sudoku/}
+\end{itemize}

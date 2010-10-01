@@ -1,0 +1,157 @@
+\subsection{\label{ref:Chip8emulator}Chip{}-8 Emulator}
+Chip8 is a kind of assembly language for a long-gone architecture.
+This plugin runs games written using the chip8 instructions.
+To start a game open a \fname{.ch8} file in the \setting{File Browser}
+
+There are lots of tiny Chip8 games (usually only about 256 bytes to a
+couple of KB) which were made popular by the HP48
+calculator's emulator for them. The original Chip8 had
+64$\times$32 pixel graphics, and the new superchip emulator supports 128$\times$64
+graphics.
+
+The only problem is that they are based on a 4$\times$4 keyboard, but since most
+games do not use all of the buttons, this can easily be worked around.
+
+To do this, one may put a \fname{.c8k} file with the same name as the
+original program which contains new key mappings (for \fname{BLINKY.ch8}, one
+writes a \fname{BLINKY.c8k} file). That \fname{.c8k} file contains 16
+characters describing the mapping from the Chip8 keyboard to the default key
+mapping (that way, several Chip8 keys can be pressed using only one
+Rockbox key). For example, a file containing the single line:
+\begin{code}
+    0122458469ABCDEF
+\end{code}
+would correspond to the following non-default mappings:
+
+3 $\rightarrow$ 2, 6 $\rightarrow$ 8, 7 $\rightarrow$4, 8 $\rightarrow$ 6.
+
+The default keymappings are:
+\begin{table}
+    \begin{center}
+    \begin{tabularx}{.9\textwidth}{c|ccccccccccccccccc}
+    \toprule 
+    Chip8 & Off & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 
+        & A & B & C & D & E & F\\
+    \midrule
+    \begin{sideways}Key\end{sideways}
+        &
+        % key "off"
+        \begin{sideways}
+        \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+        \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonMenu}
+        \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD,SANSA_C200_PAD%
+            ,GIGABEAT_PAD,MROBE100_PAD,SANSA_FUZE_PAD}
+            {\ButtonPower}
+        \opt{GIGABEAT_S_PAD}{\ButtonBack}
+        \opt{PBELL_VIBE500_PAD}{\ButtonRec}
+        \end{sideways}
+        &
+        % Key "0"
+        &
+        % "Key "1"
+        \begin{sideways}
+        \opt{RECORDER_PAD}{\ButtonFOne}
+        \opt{ONDIO_PAD}{\ButtonUp}
+        \opt{GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{\ButtonMenu}
+        \end{sideways}
+        &
+        % Key "2"
+        \begin{sideways}
+        \opt{RECORDER_PAD,ONDIO_PAD}{\ButtonUp}
+        \opt{IPOD_4G_PAD,IPOD_3G_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD}
+            {\ButtonScrollBack}
+        \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,GIGABEAT_PAD%
+          ,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonUp}
+        \opt{IRIVER_H10_PAD}{\ButtonScrollUp}
+        \opt{SANSA_C200_PAD}{\ButtonVolUp}
+        \end{sideways}
+        &
+        % Key "3"
+        \begin{sideways}
+        \opt{RECORDER_PAD}{\ButtonFThree}
+        \opt{MROBE100_PAD}{\ButtonPlay}
+        \opt{GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonVolDown}
+        \end{sideways}
+        &
+        % Key "4"
+        \begin{sideways}
+        \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD%
+            ,IPOD_3G_PAD,IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD%
+            ,SANSA_C200_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+            ,SANSA_FUZE_PAD,PBELL_VIBE500_PAD}
+            {\ButtonLeft}
+        \end{sideways}
+        &
+        % Key "5"
+        \begin{sideways}
+        \opt{RECORDER_PAD}{\ButtonPlay}
+        \opt{ONDIO_PAD}{\ButtonMenu}
+        \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD,SANSA_E200_PAD%
+            ,SANSA_C200_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+            ,SANSA_FUZE_PAD}
+            {\ButtonSelect}
+        \opt{IPOD_4G_PAD,IPOD_3G_PAD,IRIVER_H10_PAD}{\ButtonPlay}
+        \opt{PBELL_VIBE500_PAD}{\ButtonOK}
+        \end{sideways}
+        &
+        % Key "6"
+        \begin{sideways}
+        \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD%
+            ,IPOD_3G_PAD,IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD%
+            ,SANSA_C200_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD%
+            ,SANSA_FUZE_PAD,PBELL_VIBE500_PAD}
+            {\ButtonRight}
+        \end{sideways}
+        &
+        % Key "7"
+        \begin{sideways}
+        \opt{RECORDER_PAD}{\ButtonFTwo}
+        \opt{MROBE100_PAD}{\ButtonDisplay}
+        \opt{GIGABEAT_PAD,GIGABEAT_S_PAD}{\ButtonVolUp}
+        \end{sideways}
+        &
+        % Key "8"
+        \begin{sideways}
+        \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD%
+            ,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonDown}
+        \opt{IPOD_4G_PAD,IPOD_3G_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD}
+            {\ButtonScrollFwd}
+        \opt{IAUDIO_X5_PAD}{\ButtonDown}
+        \opt{IRIVER_H10_PAD}{\ButtonScrollDown}
+        \opt{SANSA_C200_PAD}{\ButtonVolDown}
+        \end{sideways}
+        &
+        % Key "9"
+        \begin{sideways}
+        \opt{RECORDER_PAD}{\ButtonOn}
+        \opt{GIGABEAT_PAD}{\ButtonA}
+        \opt{GIGABEAT_S_PAD}{\ButtonPlay}
+        \end{sideways}
+        &
+        % Key "A"
+        &
+        % Key "B"
+        &
+        % Key "C"
+        &
+        % Key "D"
+        &
+        % Key "E"
+        &
+        % Key "F"
+    \\\bottomrule
+    \end{tabularx}
+    \end{center}
+\end{table}
+
+Some places where can you can find \fname{.ch8} files:
+\begin{itemize}
+\item The PluginChip8 page on www.rockbox.org has several attached:
+\wikilink{PluginChip8}
+\item Check out the HP48 chip games section:
+\url{http://www.hpcalc.org/hp48/games/chip/}
+\item PC emulator by the guy who wrote the HP48 emulator:
+\url{http://www.pdc.kth.se/~lfo/chip8/CHIP8.htm}
+\item Links to other chip8 emulators: 
+\url{http://www.zophar.net/chip8.html}
+\end{itemize}

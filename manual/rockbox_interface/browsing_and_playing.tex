@@ -1,0 +1,317 @@
+% $Id$ %
+\chapter{Browsing and playing}
+\section{\label{ref:file_browser}File Browser}
+\screenshot{rockbox_interface/images/ss-file-browser}{The file browser}{}
+Rockbox lets you browse your music in either of two ways. The 
+\setting{File Browser} lets you navigate through the files and directories on 
+your \dap, entering directories and executing the default action on each file.
+To help differentiate files, each file format is displayed with an icon. 
+
+The \setting{Database Browser}, on the other hand, allows you to navigate 
+through the music on your player using categories like album, artist, genre,
+etc.
+
+You can select whether to browse using the \setting{File Browser} or the
+\setting{Database Browser} by selecting either \setting{Files} or
+\setting{Database} in the \setting{Main Menu}.
+If you choose the \setting{File Browser}, the \setting{Show Files} setting
+lets you select what types of files you wish to view. See
+\reference{ref:ShowFiles} for more information on the \setting{Show Files}
+setting.
+
+\note{The \setting{File Browser} allows you to manipulate your files in ways
+that are not available within the \setting{Database Browser}. Read more about
+\setting{Database} in \reference{ref:database}. The remainder of this section
+deals with the \setting{File Browser}.}
+
+\opt{ondio}{
+Unlike the Archos Firmware, Rockbox provides multivolume support for the
+MultiMediaCard, this means the \dap{} can access both data volumes (internal
+memory and the MMC), thus being able to for instance, build playlists with
+files from both volumes.
+In the \setting{File Browser} a new directory will appear as soon as the device
+has read the content after inserting the card. This new directory's name is
+generated as \fname{<MMC1>}, and will behave exactly as any other directory
+on the \dap{}.
+}
+
+\opt{h10,h10_5gb}{\note{
+If your \dap{} is a MTP model, the Music directory where all your music is stored
+may be hidden in the \setting{File Browser}. This may be fixed by either
+either changing its properties (on a computer) to not hidden, or by changing
+the \setting{Show Files} setting to all.
+}}
+
+\subsection{\label{ref:controls}File Browser Controls}
+\begin{btnmap}
+      \ActionStdPrev{}/\ActionStdNext{}
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCStdPrev{}/\ActionRCStdNext{}}
+         & Go to previous/next item in list. If you are on the first/last 
+           entry, the cursor will wrap to the last/first entry.\\
+      %
+      \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,RECORDER_PAD}
+        {
+          \ButtonOn+\ButtonUp{}/ \ButtonDown
+          \opt{HAVEREMOTEKEYMAP}{&
+            \opt{IRIVER_RC_H100_PAD}{\ButtonRCSource{}/ \ButtonRCBitrate}
+          }
+          & Move one page up/down in the list.\\
+        }
+      \opt{IRIVER_H10_PAD}
+        {
+          \ButtonRew{}/ \ButtonFF
+          & Move one page up/down in the list.\\
+        }
+      %
+      \ActionTreeParentDirectory
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCTreeParentDirectory}
+      & Go to the parent directory.\\
+      %
+      \ActionTreeEnter
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCTreeEnter}
+      & Execute the default action on the selected file or enter a
+        directory.\\
+      %
+      \ActionTreeWps 
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCTreeWps}
+         & If there is an audio file playing, return to the
+         \setting{While Playing Screen} (WPS) without stopping playback.\\
+      %
+      \nopt{player,SANSA_C200_PAD}%
+        {%
+          \ActionTreeStop 
+          \opt{HAVEREMOTEKEYMAP}{& \ActionRCTreeStop}
+          & Stop audio playback.\\%
+        }%
+      %
+      \ActionStdContext{}
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCStdContext}
+      & Enter the \setting{Context Menu}.\\
+      %
+      \ActionStdMenu{}
+      \opt{HAVEREMOTEKEYMAP}{& \ActionRCStdMenu}
+      & Enter the \setting{Main Menu}.\\
+      %
+      \opt{quickscreen}{
+        \ActionStdQuickScreen
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCStdQuickScreen}
+        & Switch to the \setting{Quick Screen}
+        (see \reference{ref:QuickScreen}). \\
+      }
+      \opt{RECORDER_PAD}{
+        \ButtonFThree & Switch to the \setting{Quick Screen}.\\ 
+        %
+      }
+      %
+      \opt{SANSA_E200_PAD}{
+        \ActionStdRec & Switch to the \setting{Recording Screen}.\\
+      %
+      }
+      \nopt{touchscreen}{\opt{hotkey}{
+        \ActionTreeHotkey
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Activate the \setting{Hotkey} function
+        (see \reference{ref:Hotkeys}).
+            \\
+      }}
+\end{btnmap}
+
+\opt{RECORDER_PAD}{
+  The functions of the F keys are also summarised on the button bar at the
+  bottom of the screen.
+}
+
+\subsection{\label{ref:Contextmenu}\label{ref:PartIISectionFM}Context Menu}
+\screenshot{rockbox_interface/images/ss-context-menu}{The Context Menu}{}
+
+The \setting{Context Menu} allows you to perform certain operations on files or 
+directories.  To access the \setting{Context Menu}, position the selector over a file 
+or directory and access the context menu with \ActionStdContext{}.\\
+
+\note{The \setting{Context Menu} is a context sensitive menu.  If the 
+\setting{Context Menu} is invoked on a file, it will display options available 
+for files.  If the \setting{Context Menu} is invoked on a directory, 
+it will display options for directories.\\}
+
+The \setting{Context Menu} contains the following options (unless otherwise noted, 
+each option pertains both to files and directories):
+
+\begin{description}
+\item [Playlist.]
+  Enters the \setting{Playlist Submenu} (see \reference{ref:playlist_submenu}).
+\item [Playlist Catalog.]
+  Enters the \setting{Playlist Catalog Submenu} (see 
+  \reference{ref:playlist_catalog}).
+\item [Rename.]
+  This function lets the user modify the name of a file or directory.
+\item [Cut.]
+  Copies the name of the currently selected file or directory to the clipboard
+  and marks it to be `cut'.
+\item [Copy.]
+  Copies the name of the currently selected file or directory to the clipboard
+  and marks it to be `copied'.
+\item [Paste.]
+  Only visible if a file or directory name is on the clipboard. When selected
+  it will move or copy the clipboard to the current directory.
+\item [Delete.]
+  Deletes the currently selected file. This option applies only to files, and
+  not to directories. Rockbox will ask for confirmation before deleting a file.
+  Press \ActionYesNoAccept{}
+  to confirm deletion or any other key to cancel.
+\item [Delete Directory.]
+  Deletes the currently selected directory and all of the files and subdirectories
+  it may contain. Deleted directories cannot be recovered. Use this feature with
+  caution!
+\opt{lcd_non-mono}{
+\item [Set As Backdrop.]
+  Set the selected \fname{bmp} file as background image. The bitmaps need to meet the
+  conditions explained in \reference{ref:LoadingBackdrops}.
+}
+\item [Open with.]
+  Runs a viewer plugin on the file. Normally, when a file is selected in Rockbox,
+  Rockbox automatically detects the file type and runs the appropriate plugin.
+  The \setting{Open With} function can be used to override the default action and
+  select a viewer by hand.
+  For example, this function can be used to view a text file
+  even if the file has a non-standard extension (i.e., the file has an extension
+  of something other than \fname{.txt}). See \reference{ref:Viewersplugins}
+  for more details on viewers.
+\item [Create Directory.]
+  Create a new directory in the current directory on the disk.
+\item [Properties.]
+  Shows properties such as size and the time and date of the last modification
+  for the selected file. If used on a directory, the number of files and
+  subdirectories will be shown, as well as the total size.
+\opt{recording}{
+  \item [Set As Recording Directory.]
+    Save recordings in the selected directory.
+}
+\item [Add to Shortcuts.]
+  Adds a link to the selected item in the \fname{shortcuts.link} file.
+  If the file does not already exist it will be created in the root directory.
+  Note that if you create a shortcut to a file, Rockbox will not open it upon
+  selecting, but simply bring you to it's location in the \setting{File Browser}.
+\end{description}
+
+\subsection{\label{sec:virtual_keyboard}Virtual Keyboard}
+\screenshot{rockbox_interface/images/ss-virtual-keyboard}{The virtual keyboard}{}
+This is the virtual keyboard that is used when entering text in Rockbox, for 
+example when renaming a file or creating a new directory.
+\nopt{player}{The virtual keyboard can be easily changed by making a text file
+ with the required layout. More information on how to achieve this can be found
+ on the Rockbox website at \wikilink{LoadableKeyboardLayouts}.}
+
+\opt{morse_input}{
+  Also you can switch to Morse code input mode by changing the
+  \setting{Use Morse Code Input} setting%
+  \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IRIVER_H10_PAD%
+      ,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,SANSA_E200_PAD,PBELL_VIBE500_PAD}%
+    { or by pressing \ActionKbdMorseInput{} in the virtual keyboard}%
+  .}
+
+\nopt{player}{% no "Actions" yet in the Player's virtual keyboard
+
+\note{When the cursor is on the input line, \ActionKbdSelect{} deletes the preceding character}
+
+\begin{btnmap}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,RECORDER_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD%
+        ,MROBE100_PAD,SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{
+        \ActionKbdCursorLeft{} / \ActionKbdCursorRight
+            &
+        \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdCursorLeft{} / \ActionRCKbdCursorRight
+            &}
+        Move the line cursor within the text line.
+            \\
+        %
+        \ActionKbdBackSpace
+            &
+        \opt{HAVEREMOTEKEYMAP}{
+            &}
+        Delete the character before the line cursor.
+            \\
+    }%
+    \ActionKbdLeft{} / \ActionKbdRight
+        &
+    \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdLeft{} / \ActionRCKbdRight
+        &}
+    Move the cursor on the virtual keyboard.
+    If you move out of the picker area, you get the previous/next page of
+    characters (if there is more than one).
+        \\
+    %
+    \ActionKbdUp{} / \ActionKbdDown
+        &
+    \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdUp{} / \ActionRCKbdDown
+        &}
+    Move the cursor on the virtual keyboard.
+    If you move out of the picker area you get to the line edit mode.
+        \\
+    %
+    \nopt{IPOD_3G_PAD,IPOD_4G_PAD,IRIVER_H10_PAD,ONDIO_PAD,PBELL_VIBE500_PAD}{
+        \ActionKbdPageFlip
+            &
+        \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdPageFlip
+            &}
+        Flip to the next page of characters (if there is more than one).
+            \\
+    }
+    %
+    \ActionKbdSelect
+        &
+    \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdSelect
+        &}
+    Insert the selected keyboard letter at the current line cursor position.
+        \\
+    %
+    \ActionKbdDone
+        &
+    \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdDone
+        &}
+    Exit the virtual keyboard and save any changes.
+        \\
+    %
+    \ActionKbdAbort
+        &
+    \opt{HAVEREMOTEKEYMAP}{\ActionRCKbdAbort
+        &}
+    Exit the virtual keyboard without saving any changes.
+        \\
+% to be done - create a separate section for morse imput and update the info
+      \opt{morse_input}{
+        \opt{IRIVER_H100_PAD,IRIVER_H300_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PADD%
+            ,SANSA_E200_PA,IPOD_4G_PAD,IPOD_3G_PAD,IRIVER_H10_PAD,PBELL_VIBE500_PAD}{
+          \ActionKbdMorseInput
+          \opt{HAVEREMOTEKEYMAP}{& \ActionRCKbdMorseInput}
+          & Toggle keyboard input mode and Morse code input mode. \\}
+        %
+        \ActionKbdMorseSelect
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCKbdMorseSelect}
+        & Tap to select a character in Morse code input mode. \\
+      } 
+\end{btnmap}
+}% end of non-Player section
+
+\opt{player}{
+  The current text line to be entered or edited is always listed on the first
+  line of the display. The second line of the display can contain the character
+  selection bar, as in the screenshot above.
+    \begin{btnmap}
+      \ButtonOn & Toggle picker- and line edit mode. \\
+      \ButtonLeft{} / \ButtonRight
+        & Move back and forth in the selected line (picker of input line). \\
+      \ButtonPlay
+        & Pick character in character bar, or act as backspace in the text line. \\
+      Long \ButtonPlay & Accept \\
+      \ButtonStop & Cancel \\
+      \ButtonMenu & Flip picker lines. \\
+    \end{btnmap}
+}
+
+\input{rockbox_interface/tagcache.tex}
+\input{rockbox_interface/wps.tex}
+
+%Include playlist section
+\input{working_with_playlists/main.tex}
+\input{rockbox_interface/hotkeys.tex}

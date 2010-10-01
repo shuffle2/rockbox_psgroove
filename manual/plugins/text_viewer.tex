@@ -1,0 +1,336 @@
+\subsection{Text Viewer}
+\screenshot{plugins/images/ss-text_viewer-main}{Text Viewer}{img:text_viewer-main}
+This is a Viewer for text files with word wrap. Just open a \fname{.txt} or
+\fname{.nfo} file to display it. The text viewer features controls to handle
+various styles of text formatting and has top{}-of{}-file and bottom{}-of{}-file
+buttons. You can view files without a \fname{.txt} or \fname{.nfo} extension
+by using \emph{Open with} from the \emph{Context Menu}
+(see \reference{ref:Contextmenu}). You can also bookmark pages.
+
+\subsubsection{Default keys}
+\begin{btnmap}
+    \opt{PLAYER_PAD}{\ButtonLeft}
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD%
+        ,SANSA_E200_PAD,SANSA_FUZE_PAD,GIGABEAT_PAD,MROBE100_PAD}{\ButtonUp}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonScrollBack}
+    \opt{IRIVER_H10_PAD}{\ButtonScrollUp}
+    \opt{SANSA_C200_PAD,SANSA_CLIP_PAD}{\ButtonVolUp}
+    \opt{GIGABEAT_S_PAD}{\ButtonPrev}
+    \opt{COWON_D2_PAD}{\ButtonMinus{} / }%
+    \opt{touchscreen}{\TouchTopMiddle}
+    \opt{PBELL_VIBE500_PAD}{\ButtonOK}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCUp}
+    }
+        & Scroll{}-up\\
+
+    \opt{PLAYER_PAD}{\ButtonRight}
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,IAUDIO_X5_PAD%
+        ,SANSA_E200_PAD,SANSA_FUZE_PAD,GIGABEAT_PAD,MROBE100_PAD}{\ButtonDown}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonScrollFwd}
+    \opt{IRIVER_H10_PAD}{\ButtonScrollDown}
+    \opt{SANSA_C200_PAD,SANSA_CLIP_PAD}{\ButtonVolDown}
+    \opt{GIGABEAT_S_PAD}{\ButtonNext}
+    \opt{COWON_D2_PAD}{\ButtonPlus{} / }%
+    \opt{touchscreen}{\TouchBottomMiddle}
+    \opt{PBELL_VIBE500_PAD}{\ButtonCancel}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCDown}
+    }
+        & Scroll{}-down\\
+
+    \opt{PLAYER_PAD}{\ButtonMenu+\ButtonLeft}
+    \opt{GIGABEAT_S_PAD}{\ButtonPlay+\ButtonLeft}
+    \opt{touchscreen}{\TouchMidLeft}
+    \nopt{PLAYER_PAD,GIGABEAT_S_PAD,touchscreen,IAUDIO_M3_PAD}{\ButtonLeft}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCLeft}
+    }
+        & Top of file (Narrow mode) /
+        One screen left (Wide mode)\\
+
+    \opt{PLAYER_PAD}{\ButtonMenu+\ButtonRight}
+    \opt{GIGABEAT_S_PAD}{\ButtonPlay+\ButtonRight}
+    \opt{touchscreen}{\TouchMidRight}
+    \nopt{PLAYER_PAD,GIGABEAT_S_PAD,touchscreen,IAUDIO_M3_PAD}{\ButtonRight}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCRight}
+    }
+        & Bottom of file (Narrow mode) /
+        One screen right (Wide mode)\\
+
+    \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,SANSA_E200_PAD%
+        ,SANSA_FUZE_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD,GIGABEAT_S_PAD%
+        ,GIGABEAT_PAD,PBELL_VIBE500_PAD}{%
+        \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonUp}
+        \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonScrollBack}
+        \opt{SANSA_C200_PAD,SANSA_CLIP_PAD,GIGABEAT_S_PAD,PBELL_VIBE500_PAD}{\ButtonUp}
+        \opt{GIGABEAT_PAD}{\ButtonA+\ButtonUp}
+    \opt{HAVEREMOTEKEYMAP}{& }
+        & One line up\\
+    }
+
+    \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,SANSA_E200_PAD%
+        ,SANSA_FUZE_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD,GIGABEAT_S_PAD%
+        ,GIGABEAT_PAD,PBELL_VIBE500_PAD}{%
+        \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonDown}
+        \opt{SANSA_E200_PAD,SANSA_FUZE_PAD}{\ButtonScrollFwd}
+        \opt{SANSA_C200_PAD,SANSA_CLIP_PAD,GIGABEAT_S_PAD,PBELL_VIBE500_PAD}{\ButtonDown}
+        \opt{GIGABEAT_PAD}{\ButtonA+\ButtonDown}
+    \opt{HAVEREMOTEKEYMAP}{& }
+        & One line down\\
+    }
+
+    \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD}{
+        \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonLeft}
+        \opt{GIGABEAT_S_PAD}{\ButtonLeft}
+        \opt{GIGABEAT_PAD}{\ButtonA+\ButtonLeft}
+    \opt{HAVEREMOTEKEYMAP}{& }
+        & One column left\\
+    }
+
+    \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD}{
+        \opt{RECORDER_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonRight}
+        \opt{GIGABEAT_S_PAD}{\ButtonRight}
+        \opt{GIGABEAT_PAD}{\ButtonA+\ButtonRight}
+    \opt{HAVEREMOTEKEYMAP}{& }
+        & One column right\\
+    }
+
+    \opt{RECORDER_PAD,PLAYER_PAD,IPOD_4G_PAD,IPOD_3G_PAD,IAUDIO_X5_PAD%
+        ,IRIVER_H10_PAD,GIGABEAT_S_PAD,PBELL_VIBE500_PAD}{\ButtonPlay}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonSelect}
+    \opt{ONDIO_PAD}{\ButtonMenu}
+    \opt{GIGABEAT_PAD}{\ButtonA}
+    \opt{SANSA_C200_PAD,SANSA_E200_PAD}{\ButtonRec}
+    \opt{SANSA_CLIP_PAD}{\ButtonHome}
+    \opt{SANSA_FUZE_PAD}{\ButtonDown+\ButtonSelect}
+    \opt{MROBE100_PAD}{\ButtonDisplay}
+    \opt{touchscreen}{\TouchCenter}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCMode}
+    }
+        & Toggle autoscroll\\
+
+    \opt{PLAYER_PAD}{\ButtonOn}
+    \opt{RECORDER_PAD}{\ButtonFTwo}
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonOff}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonSelect}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{\ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonFF}
+    \opt{IAUDIO_X5_PAD}{\ButtonRec}
+    \opt{SANSA_E200_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD}{\ButtonDown+\ButtonSelect}
+    \opt{COWON_D2_PAD}{\ButtonMenu+\ButtonPlus}
+    \opt{SANSA_FUZE_PAD}{\ButtonUp+\ButtonSelect}
+    \opt{PBELL_VIBE500_PAD}{\ButtonPower}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCPlay+\ButtonRCMode}
+    }
+        & Set/Reset bookmarks\\
+
+    \opt{RECORDER_PAD}{\ButtonFOne}
+    \opt{ONDIO_PAD}{Long \ButtonMenu}
+    \opt{PLAYER_PAD,IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD%
+        ,MROBE100_PAD,PBELL_VIBE500_PAD}{\ButtonMenu}
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+    \opt{IAUDIO_X5_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD,SANSA_E200_PAD}{\ButtonSelect}
+    \opt{SANSA_FUZE_PAD}{Long \ButtonSelect}
+    \opt{IRIVER_H10_PAD}{\ButtonRew}
+    \opt{COWON_D2_PAD}{\ButtonMenu{} / }%
+    \opt{touchscreen}{\TouchTopRight}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCPlay}
+    }
+        & Enter menu\\
+
+    \opt{PLAYER_PAD}{\ButtonStop}
+    \opt{RECORDER_PAD,ONDIO_PAD,IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOff}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD}{\ButtonSelect+\ButtonMenu}
+    \opt{IAUDIO_X5_PAD,IRIVER_H10_PAD,SANSA_E200_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD%
+        ,GIGABEAT_PAD,MROBE100_PAD}{\ButtonPower}
+    \opt{SANSA_FUZE_PAD}{Long \ButtonHome}
+    \opt{GIGABEAT_S_PAD}{\ButtonBack}
+    \opt{COWON_D2_PAD}{\ButtonPower{} / }%
+    \opt{touchscreen}{\TouchTopLeft}
+    \opt{IAUDIO_M3_PAD,PBELL_VIBE500_PAD}{\ButtonRec}
+    \opt{HAVEREMOTEKEYMAP}{&
+        \opt{IAUDIO_M3_PAD}{\ButtonRCRec}
+        \opt{IRIVER_RC_H100_PAD}{\ButtonRCStop}
+    }
+        & Exit text viewer\\
+
+\end{btnmap}
+
+\subsubsection{Menu}
+
+\begin{description}
+\item[Return] Return to the file being viewed.
+\item[Viewer Options] Change settings for the current file.
+    \begin{description}
+    \item[Encoding] Set the codepage in the text viewer.
+% ToDo: wrap some of the following settings into a \opt{lcd_bitmap} to exlude
+% ones that don't work on charcell - as soon as the plugin itself does
+    Available settings:
+    \setting{ISO-8859-1} (Latin 1).
+    \setting{ISO-8859-7} (Greek),
+    \opt{lcd_bitmap}{
+        \setting{ISO-8859-8} (Hebrew),
+    }
+    \setting{CP1251} (Cyrillic),
+    \opt{lcd_bitmap}{
+        \setting{ISO-8859-11} (Thai),
+        \setting{CP1256} (Arabic),
+    }
+    \setting{ISO-8859-9} (Turkish),
+    \setting{ISO-8859-2} (Latin Extended),
+    \setting{CP1250} (Central European),
+    \opt{lcd_bitmap}{
+        \setting{SJIS} (Japanese),
+        \setting{GB-2312} (Simple Chinese),
+        \setting{KSX-1001} (Korean),
+        \setting{BIG5} (Traditional Chinese),
+    }
+    \setting{UTF-8} (Unicode),
+    This setting only applies to the plugin and is independent from the
+    \setting{Default Codepage} setting (see \reference{ref:Defaultcodepage}).
+    \item[Word Wrap] Toggle word wrap mode.
+        \begin{description}
+            \item[On] Break lines at the maximum column limit.
+            \item[Off (Chop Words)] Break lines at white space or hyphen.
+        \end{description}
+    \item[Line Mode] Change how lines are displayed.
+        \begin{description}
+            \item[Normal] Break lines at newline characters.
+            \item[Join] Join lines together.
+            \item[Expand] Add a blank line at newlines. Useful for making paragraphs
+            clearer in some book style text files.
+            \opt{lcd_bitmap}{
+            \item[Reflow Lines] Justify the text.
+            }
+        \end{description}
+    \item[Screens Per Page] Set the number of screens per page. Available
+      options are \setting{1} to \setting{5} screens per page.
+    \item[Alignment] Set the text alignment.
+        \begin{description}
+            \item[Right] Set the text alignment to the right.
+            (Useful for displaying right-to-left languages, such as Arabic or Hebrew)
+            \item[Left] Set the text alignment to the left.
+        \end{description}
+    \opt{lcd_bitmap}{
+    \item[Show Header] Select whether to show the header. The header displays the file path. 
+        \begin{description}
+            \item[No] Do not display the header.
+            \item[Yes] Display the header.
+        \end{description}
+    \item[Show Footer] Select whether to show the footer. The footer dispays the page number.
+        \begin{description}
+            \item[No] Do not display the footer.
+            \item[Yes] Display the footer.
+        \end{description}
+
+    \item[Font] Select the font to be used by the Text Viewer.
+    \item[Show Statusbar] Select whether to show the status bar. If you select
+         a theme settings that the status bar does not display (see
+         \reference{ref:configure_rockbox_themes}), the status bar is not
+         displayed even if you select \setting{Yes}.
+        \begin{description}
+            \item[No] Do not display the status bar.
+            \item[Yes] Display the status bar.
+        \end{description}
+    }
+    \item[Scroll Settings] The scrolling settings submenu.
+        \begin{description}
+            \item[Horizontal] Submenu for horizontal scrolling settings.
+                \begin{description}
+                    \item[Scrollbar] Toggle the horizontal scrollbar for the
+                    current mode. If the file fits on one screen, there is no
+                    scrollbar and this setting has no effect.
+                        \begin{description}
+                            \item[No] Do not display the horizontal scroll bar.
+                            \item[Yes] Display the horizontal scroll bar.
+                        \end{description}
+                    \item[Scroll Mode] Change the function of the ``Left'' and
+    ``Right'' buttons.
+                        \begin{description}
+                            \item[Scroll by Screen] Move to the previous/next
+                            screen.
+                            \item[Scroll by Column] Move to the previous/next
+                            column.
+                        \end{description}
+                \end{description}
+            \item[Vertical] Submenu for vertical scrolling settings.
+                \begin{description}
+                    \item[Scrollbar] Toggle the vertical scrollbar for the
+                    current mode. If the file fits on one screen, there is no
+                    scrollbar and this setting has no effect.
+                        \begin{description}
+                            \item[No] Do not display the vertical scroll bar.
+                            \item[Yes] Display the vertical scroll bar.
+                        \end{description}
+                    \item[Scroll Mode] Change the function of the ``Scroll-up''
+                    and ``Scroll-down'' buttons.
+                        \begin{description}
+                            \item[Scroll by Page] Scroll up or down one full screen.
+                            \item[Scroll by Line] Scroll up or down one line.
+                        \end{description}
+                    \opt{lcd_bitmap}{
+                    \item[Overlap Pages] Set whether the last line from the
+                    previous screen is retained when scrolling pages.
+                        \begin{description}
+                           \item[No] Do not retain previous line.
+                           \item[Yes] Retain previous line.
+                        \end{description}
+                    }
+                    \item[Auto-scroll Speed] Control the speed of auto-scrolling
+                    in number of lines per second.  Available options are
+                    \setting{1} to \setting{10} lines per second. As an example,
+                    \setting{4} will scroll the text at four lines per second.
+                    \item[Left/Right Key (Narrow mode)] Change the function of
+                    the ``Left'' and ``Right'' buttons when the screen is in
+                    narrow mode (i.e. one screen per page).
+                    \begin{description}
+                        \item[Previous/Next Page] Scroll up or down one full screen.
+                        \item[Top/Bottom Page] Move to the top or bottom page.
+                    \end{description}
+                \end{description}
+        \end{description}
+    \item[Indent Spaces] Set the number of spaces to indent the text when line
+      mode is set to \setting{Reflow Lines}. Available options are \setting{0}
+      to \setting{5} spaces. If you select \setting{0}, a blank line is
+      displayed as an indent.
+    \end{description}
+
+\item[Show Playback Menu] Display the playback menu to allow control of the
+currently playing music without leaving the plugin.
+
+\item[Select Bookmark] Select a saved bookmark. In the screenshot below, the
+``*'' denotes the current page.
+
+\screenshot{plugins/images/ss-text_viewer-sel_bk_menu}{The select bookmark menu}{img:text_viewer-sel_bk}
+
+\item[Global Settings] Set the default settings for the text viewer.
+The setting items are the same as \setting{Viewer Options}. The global
+settings are stored in
+\fname{.rockbox/rocks/viewers/viewer.dat}.
+
+\item[Quit] Exits the plugin. The text viewer automatically
+stores its settings, the current position and bookmarks in
+\fname{.rockbox/rocks/viewers/viewer\_file.dat}.
+\end{description}
+
+\subsubsection{Bookmarks}
+    To add a bookmark, press 
+    \opt{PLAYER_PAD}{\ButtonOn}\opt{RECORDER_PAD}{\ButtonFTwo}%
+    \opt{ONDIO_PAD}{\ButtonMenu+\ButtonOff}%
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonOn+\ButtonSelect}%
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD}{\ButtonSelect}%
+    \opt{IRIVER_H10_PAD}{\ButtonFF}\opt{IAUDIO_X5_PAD}{\ButtonRec}%
+    \opt{SANSA_E200_PAD,SANSA_C200_PAD,SANSA_CLIP_PAD}{\ButtonDown+\ButtonSelect}%
+    \opt{COWON_D2_PAD}{\ButtonMenu+\ButtonPlus}%
+    \opt{SANSA_FUZE_PAD}{\ButtonUp+\ButtonSelect}%
+    \opt{IAUDIO_M3_PAD}{\ButtonRCPlay+\ButtonRCMode}.
+    The bookmark will be displayed as shown below. To delete the bookmark
+    press the same button again.
+
+\screenshot{plugins/images/ss-text_viewer-bookmark}{A bookmark}{img:text_viewer-bookmark}
+

@@ -1,0 +1,93 @@
+% $Id$ %
+\subsection{MPEG Player}
+The Mpeg Player is a video player plugin capable of playing back MPEG-1 and 
+MPEG-2 video streams with MPEG audio multiplexed into \fname{.mpg} files.
+
+To play a video file, you just select it in the Rockbox \setting{File Browser}.
+If your file does not have the \fname{.mpg} extension but is encoded in the
+supported format, you will need to use the \setting{Open With...} context menu
+option and choose \setting{mpegplayer}.
+
+\begin{btnmap}
+    \opt{GIGABEAT_S_PAD}{\ButtonSelect{} or \ButtonPlay}
+    \opt{GIGABEAT_PAD}{\ButtonSelect{} or \ButtonA}
+    \nopt{GIGABEAT_S_PAD,GIGABEAT_PAD}{\ActionWpsPlay}
+       \opt{HAVEREMOTEKEYMAP}{& } 
+    & Pause / Resume\\
+    \ActionWpsStop
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Stop\\
+    \nopt{GIGABEAT_S_PAD,GIGABEAT_PAD}{\ActionWpsVolUp{} / \ActionWpsVolDown}
+    \opt{GIGABEAT_S_PAD,GIGABEAT_PAD}{\ButtonLeft{} or  \ButtonVolDown{} /
+        \ButtonRight{} or \ButtonVolUp}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Adjust volume up / down\\
+    \nopt{GIGABEAT_S_PAD,GIGABEAT_PAD}{\ActionWpsSkipPrev{} / \ActionWpsSkipNext}
+    \opt{GIGABEAT_S_PAD,GIGABEAT_PAD}{\ButtonUp{} / \ButtonDown}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Rewind / Fast Forward\\
+    \opt{IRIVER_H100_PAD,IRIVER_H300_PAD}{\ButtonMode}
+    \opt{IPOD_4G_PAD,IPOD_3G_PAD,GIGABEAT_PAD,GIGABEAT_S_PAD,MROBE100_PAD,PBELL_VIBE500_PAD}
+        {\ButtonMenu}
+    \opt{IAUDIO_X5_PAD}{\ButtonRec}
+    \opt{IRIVER_H10_PAD}{\ButtonRew}
+    \opt{SANSA_E200_PAD,SANSA_FUZE_PAD,SANSA_C200_PAD}{\ButtonSelect}
+       \opt{HAVEREMOTEKEYMAP}{& }
+    & Open the MPEG Player menu\\
+\end{btnmap}
+
+When a video file is selected, the start Menu will be displayed, unless it is 
+disabled via the option ``start menu'' (see below). In the latter case the video 
+will start playing immediately - unless a resume point is found, in which case 
+the resume menu is presented.
+
+Start Menu
+
+\begin{description}
+\item[Play from beginning] Resume information is discarded and the video plays
+    from the start.
+\item[Resume time (min): x.x] Resume video playback at stored resume time x.x
+    (start of the video if no resume time is found).
+\item[Set start time (min)] A preview screen is presented consisting of a
+    thumbnail preview and a progress bar where the user can select a start time
+    by `seeking' through the video. The video playback is started by pressing
+    the select button.
+\item[Quit mpegplayer] Exit the plugin.
+\end{description}
+
+Resume Menu
+
+\begin{description}
+\item[Yes (min): x.x] Resume video playback at stored resume time x.x.
+\item[No] Play video from the beginning.
+\end{description}
+
+Main Menu
+
+\begin{description}
+\item[Display Options] Opens ``Display Options'' submenu -- see below.
+\item[Start Menu] (default: on) Enable/disable the start menu.
+\item[Clear all resumes: x] Discard all x resume points.
+\item[Quit mpegplayer] Exit the plugin.
+\end{description}
+
+Display Options Menu
+
+\begin{description}
+\item[Dithering] (default: off) Prevent banding effects in gradients by blending
+    of colours. (only available on Sansa e200, Sansa c200 and Gigabeat F/X)
+\item[Show FPS] (default: off) This option displays (once a second - if your
+    video is full-screen this means it will get overwritten by the video and
+    appear to flash once per second) the average number of frames decoded per
+    second, the total number of frames skipped (see the Skip Frames option),
+    the current time (in 100~Hz ticks) and the time the current frame is due to
+    be displayed.
+\item[Limit FPS] (default: on) With this option disabled, mpegplayer will
+    display the video as fast as it can. Useful for benchmarking.
+\item[Skip frames] (default: on) This option causes mpegplayer to attempt to
+    maintain realtime playback by skipping the display of frames - but these
+    frames are still decoded. Disabling this option can cause loss of A/V sync. 
+\end{description}
+
+See this page in the Rockbox wiki for information on how to encode your videos
+to the supported format. \wikilink{PluginMpegplayer}

@@ -1,0 +1,27 @@
+% $Id$ %
+\subsection{Disk Tidy}
+  Disk Tidy deletes junk files left behind by Windows, Linux or OS X after a USB
+  connection. Select the OS's files you want to delete in the `Files to Clean'
+  menu and select `Start Cleaning' to begin to process. The settings
+  are stored in \fname{.rockbox/rocks/apps/disktidy.config}, in a plain text
+  file that is user-modifiable to allow more entries to be added.
+
+  \subsubsection{Available Options}
+  \begin{description}
+    \item[All] selects all Linux, OS X, and Windows files.
+    \item[None] deselects all file options.
+    \item[Linux] selects Linux files. Default files are
+      \fname{.dolphinview}, \fname{.d3lphinview}, and \fname{.Trash-*/}.
+    \item[Windows] selects Windows files. Default files are
+      \fname{Thumbs.db}, \fname{RECYCLE.BIN}, \fname{Desktop.ini}, \fname{/Recycled} and
+      \fname{/System Volume Information}.
+    \item[Mac] selects OS X files. Default files are \fname{.\_*}, \fname{.DS\_Store} and
+      \fname{/.Trashes}.
+    \item[Other] selects additional files added in by the user.
+  \end{description}
+  
+  \begin{btnmap}
+      \ActionStdCancel
+        \opt{HAVEREMOTEKEYMAP}{& \ActionRCStdCancel}
+      & Exit / Abort\\
+  \end{btnmap}

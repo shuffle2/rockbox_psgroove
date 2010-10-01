@@ -1,0 +1,63 @@
+\subsection{Battery Benchmark}
+The \setting{Battery Benchmark} plugin enables you to test your battery's
+performance whilst using your \dap\ normally. Results can be submitted 
+to the \wikilink{BatteryRuntime} wiki page.
+
+\subsubsection{How it works}
+Once loaded, \setting{Battery Benchmark} runs in the
+background recording various information about your battery to memory.
+A new point is written to memory every minute.
+Every time the disk is accessed for any reason
+(such as refilling the audio buffer, opening a directory or entering
+USB mode etc.) then the information in memory is written to disk.
+Once the memory becomes full (after many hours), then the data
+are written to disk anyway. This is done so that the data are not biased by
+excessive additional disk accesses. The file is written to the root
+directory of your \dap\ and is called \fname{battery\_bench.txt}.
+The plugin will continue to log info until:
+
+\begin{itemize}
+\item Another plugin is loaded.
+\item The \dap\ is shut down.
+\item The battery is empty.
+\end{itemize}
+
+Benchmarks can be resumed if
+you accidentally load a plugin, or turn off your \dap, so long as the log
+file \fname{battery\_bench.txt} is not deleted. 
+
+\subsubsection{Information explained}
+At the top of the \fname{battery\_bench.txt} file is various
+information on how to use the plugin, followed by the data themselves.
+
+\begin{description}
+\item[Time] This column reports the total time of operation of the \dap. It is 
+not the time that you started the plug-in. If you have your \dap\ on for 5 
+minutes and then start the plugin, it will start measuring from 5 minutes.
+\item[Seconds] The same as \config{Time}, except measured in seconds.
+\item[Level] The percent level of the battery estimated by Rockbox, and not the
+actual battery level. The actual battery level can be seen from the
+\config{Voltage} column
+\item[Time Left] This shows the time remaining until the battery is empty,
+again as estimated by Rockbox.
+\item[Voltage] The battery voltage in mV at the moment the measurement
+was taken.
+\item[C] This stands for Charger. An ``A'' in that column shows if the power
+adapter was attached to the unit at the time of the measurement.
+\item[U] USB powered. Only for targets that support this. A ``U'' will indicate
+if the unit was using the USB port for power at the time of the measurement. 
+\end{description}
+
+\subsubsection{Usage}
+The log file can be used to tell you how long the battery lasted (with some
+limitations, see below), but it is most useful for graphing discharge curves
+in order to improve Rockbox's estimation of battery level and time remaining.
+The battery log (\fname{battery\_bench.txt}) is in CSV format
+(comma separated variables) and thus can be easily imported into a spreadsheet
+or similar program.
+
+\subsubsection{Limitations}
+As \setting{Battery Benchmark} needs to write the data held in memory to
+disk in order to save them, it is possible that should Rockbox shut down
+due to low battery then there will not be enough power remaining to write the
+data to disk. Therefore all measurements since the previous save will be lost.

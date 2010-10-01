@@ -1,0 +1,30 @@
+% $Id$ %
+\def\UseOption{gigabeats}
+\edef\UseOption{\UseOption,HAVE_RB_BL_ON_DISK}
+\edef\UseOption{\UseOption,GIGABEAT_S_PAD}
+\edef\UseOption{\UseOption,HAVE_BACKLIGHT}
+\edef\UseOption{\UseOption,HAVE_DISK_STORAGE}
+\edef\UseOption{\UseOption,HAVE_CAR_ADAPTER_MODE}
+\edef\UseOption{\UseOption,gigabeat}
+\edef\UseOption{\UseOption,GIGABEAT_RC_PAD}
+\edef\UseOption{\UseOption,HAVEREMOTEKEYMAP}
+
+\newcommand{\playerman}{Toshiba}
+\newcommand{\playertype}{Gigabeat S Series}
+\newcommand{\playerlongtype}{\playertype}
+\newcommand{\dapdisplaywidth}{240}
+\newcommand{\dapdisplayheight}{320}
+\newcommand{\dapdisplaydepth}{16}
+\newcommand{\specimg}{gigabeats}
+%Used to name the player, e.g. ...to the \dap
+\newcommand{\dap}{player}
+%For use when referring to the player. E.g. the \daps\ capacity ...
+\newcommand{\daps}{player's}
+\newcommand{\firmwarefilename}{\fname{rockbox.gigabeat}}
+\newcommand{\firmwareextension}{\fname{gigabeat}}
+\newcommand{\screenshotsize}{6cm}
+\newcommand{\disk}{hard disk}
+
+% link external keymap file
+\input{platform/keymap-gigabeats.tex}
+\input{platform/remote-keymap-gigabeat.tex}

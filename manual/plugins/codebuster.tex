@@ -1,0 +1,29 @@
+% $Id$
+\subsection{Codebuster}
+\screenshot{plugins/images/ss-codebuster}{Codebuster}{img:codebuster}
+
+Codebuster is a clone of the classic mastermind game. The computer selects a
+random combination of coloured pegs and the aim is to guess the correct combination
+in the smallest number of moves. After each attempt to guess the combination the
+results are displayed in the form of red and white pegs.  A red peg signifies
+a correct peg in the correct position, and a white peg signifies a correct
+peg in the wrong position.
+
+  \begin{btnmap}
+    \PluginCancel
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCCancel}
+        & Show menu \\
+
+    \PluginSelect
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCSelect}
+        & Check suggestion and move to next line \\
+
+    \PluginLeft{} / \PluginRight
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCLeft{} / \PluginRCRight}
+        & Select a peg \\
+
+    \nopt{scrollwheel}{\PluginUp{} / \PluginDown}
+    \opt{scrollwheel}{\PluginScrollFwd{} / \PluginScrollBack}
+       \opt{HAVEREMOTEKEYMAP}{& \PluginRCUp{} / \PluginRCDown}
+        & Change current peg \\
+  \end{btnmap}

@@ -1,0 +1,104 @@
+% $Id$ %
+\chapter{Introduction}
+\section{Welcome}
+This is the manual for Rockbox. Rockbox is an open source firmware replacement
+for a growing number of digital audio players. Rockbox aims to be considerably
+more functional and efficient than your device's stock firmware while remaining
+easy to use and customisable. Rockbox is written by users, for users. Not only
+is it free to use, it is also released under the GNU General Public License
+(GPL), which means that it will always remain free both to use and to change.
+
+Rockbox has been in development since 2001, and receives new features, tweaks
+and fixes each day to provide you with the best possible experience on your
+digital audio player. A major goal of Rockbox is to be simple and easy to use,
+yet remain very customisable and configurable. We believe that you should never
+need to go through a series of menus for an action you perform frequently. We
+also believe that you should be able to configure almost anything about Rockbox
+you could want, pertaining to functionality. Another top priority of Rockbox is
+audio playback quality -- Rockbox, for most models, includes a wider range of
+sound settings than the device's original firmware. A lot of work has been put
+into making Rockbox sound the best it can, and improvements are constantly being
+made. All models have access to a large number of plugins, including many games,
+applications, and graphical ``demos''. You can load different configurations
+quickly for different purposes (e.g. a large font for in your car, different
+sound settings for at home). Rockbox features a very wide range of languages, and
+all supported models also have the ability to talk to you -- menus can be voiced
+and filenames spelled out or spoken.
+
+\section{Getting more help}
+This manual is intended to be a comprehensive introduction to the Rockbox
+firmware. There is, however, more help available. The Rockbox website at
+\url{http://www.rockbox.org/} contains very extensive documentation and guides
+written by members of the Rockbox community and this should be your first port
+of call when looking for further help.
+
+If you cannot find the information you are searching for on the Rockbox
+website there are a number of support channels you should have a look at.
+You can try the Rockbox forums located at \url{http://forums.rockbox.org/}.
+The mailing lists are another option, and can be found at
+\url{http://www.rockbox.org/mail/}. From that page you can subscribe to the
+lists and browse the archives. To search the list archives simply use
+the search field that is located on the left side of the website.
+Furthermore,  you can ask on IRC. The main channel for Rockbox is
+\texttt{\#rockbox} on \url{irc://irc.freenode.net}. Many helpful developers
+and users are usually around. Just join and ask your question (don't ask to
+ask!) -- if someone knows the answer you'll
+usually get an answer pretty quickly. More information including IRC logs
+can be found at \url{http://www.rockbox.org/irc/}. We also have a web client
+so that you can join the Rockbox IRC channel without needing
+to install additional software onto your computer.
+
+If you think you have found a bug please make sure it actually is a bug and is
+still present in the most recent version of Rockbox. You should try to
+confirm that by using the above mentioned support channels first. After that
+you can submit that issue to our tracker. Refer to \reference{sec:feedback}
+for details on how to use the tracker.
+
+
+\section{Naming conventions and marks}
+We have some conventions (especially for naming) that are intended to be
+consistent throughout this manual.
+
+Manufacturer and product names are formatted in accordance with the standard
+rules of English grammar, e.g. ``\playerman{} playback is currently
+unsupported''. Manufacturer and model names are proper nouns, and
+thus are written beginning with a capital letter.
+
+% write a bit more about names etc. here.
+\ifpdfoutput{
+This manual has some parts that are marked with icons on the margin to help
+you finding important parts or parts you could skip. The following icons
+are used:
+\\
+\note{This indicates a note. A note starts always with the text ``Note''.
+  In order to make finding notes easier each one is accompanied by
+  an icon in the margin as here. Notes are used to mark useful information
+  that may help you to get the most out of Rockbox.
+\\
+}
+\warn{This is a warning. In contrast to notes mentioned above, a warning
+  should be taken more seriously. Whereas ignoring notes will not cause any
+  serious damage, ignoring warnings \emph{could} cause serious damage to 
+  your \dap{}. You really should read the warnings, especially if you are
+  new to Rockbox.
+\\
+}
+\blind{This icon marks a section that is intended especially for the blind
+  and visually impaired. As they cannot
+  read the manual in the same way sighted people do we have added some
+  additional descriptions. If you are not blind or visually impaired you
+  can probably completely skip these blocks. To make this easier, there is an
+  icon shown in the margin on the right.
+\\
+}
+}{}% end ifpdfoutput
+
+Links to the wiki are abbreviated by the name of the wiki page. Those names
+are still linked so you can simply follow them like any other link in this
+manual. If you want to access a wiki page manually go to
+\wikiicon{} \href{\wikibaseurl}{\wikibaseurl}
+and type the page name in the ``Go'' box at the top of the page.
+\ifpdfoutput{Links to wiki pages are also indicated by the symbol \wikiicon{}
+in front of the page name.}{}
+
+\input{getting_started/installation.tex}

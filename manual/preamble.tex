@@ -1,0 +1,405 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%             __________               __   ___.
+%   Open      \______   \ ____   ____ |  | _\_ |__   _______  ___
+%   Source     |       _//  _ \_/ ___\|  |/ /| __ \ /  _ \  \/  /
+%   Jukebox    |    |   (  <_> )  \___|    < | \_\ (  <_> > <  <
+%   Firmware   |____|_  /\____/ \___  >__|_ \|___  /\____/__/\_ \
+%                     \/            \/     \/    \/            \/
+%                                   - M A N U A L -
+%
+% $Id$
+%
+% Copyright (C) 2006 The Rockbox Manual Team
+%
+% All files in this archive are subject to the GNU Free Documentation License
+% See the file COPYING-MANUAL in the source tree docs/ directory for full license
+% agreement.
+%
+% Contributors are listed in the file docs/CREDITS-MANUAL
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,11pt]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% This manual used to use Palatino as font. This caused issues with small caps
+% (textsc), so do not use that font as default one anymore.
+
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\usepackage{float}
+\floatstyle{ruled}
+
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\usepackage{optional}
+
+\usepackage[table]{xcolor}
+
+\input{platform/\platform.tex}
+\input{features.tex}
+
+\newcommand{\playername}{\playerman\ \playerlongtype}
+
+\hypersetup{% add some values to the pdf properties
+  colorlinks = true,
+  pdfstartview = FitV,
+  linkcolor = blue,
+  citecolor = blue,
+  urlcolor = blue,
+  pdftitle = {Rockbox user manual},
+  pdfauthor = {The Rockbox Team},
+  pdfsubject = {Rockbox user manual for \playername}
+}
+
+\newcommand{\fname}[1]{\texttt{#1}}
+\newcommand{\tabeltc}[1]{{\centering #1 \par}}
+\newcommand{\tabelth}[1]{{\centering \textbf{\textit{#1}} \par}}
+
+\newcommand{\fixme}[1]{\textbf{\textcolor{red}{#1}}}
+
+% Colors used to typeset table headers and alternating table rows
+\colorlet{tblhdrbgcolor}{blue!30} % Background color for headers
+\colorlet{tbloddrowbgcolor}{blue!10} % Background color for odd rows (headers not included)
+\colorlet{tblevenrowbgcolor}{white} % Background color for even rows (headers not included)
+
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{makeidx}
+\usepackage{fancyvrb}
+\usepackage{color}
+\ifpdfoutput{\usepackage{booktabs}}%
+  {\newcommand{%
+    \toprule}{}\newcommand{\midrule}{\hline}\newcommand{\bottomrule}{}%
+  }
+\usepackage{longtable}
+\usepackage{url}
+\urlstyle{sf}
+\usepackage{marvosym}
+\usepackage{rotating}
+
+% pdf output: try pdf first, then png and jpg as file format
+% html output: try png first, then jpg. Ignore pdf files
+% this only applies if no file extension is given!
+\ifpdfoutput{\DeclareGraphicsExtensions{.pdf,.png,.jpg}}%
+    {\DeclareGraphicsExtensions{.png,.jpg}}
+
+% fancy header style adjustments
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{{\nouppercase{\textsc{\leftmark}}}}
+\fancyhead[R]{\iffloatpage{}{\thepage}}
+\fancyfoot[L]{\textsc{The Rockbox manual}}
+\fancyfoot[R]{\textsc{\playerman{} \playertype}}
+\fancypagestyle{plain}{}
+
+\renewcommand{\headrulewidth}{\iffloatpage{0pt}{0.4pt}}
+\renewcommand{\footrulewidth}{\iffloatpage{0pt}{0.4pt}}
+\setlength{\headheight}{18.5pt}
+\newcounter{example}[chapter]
+
+\ifpdfoutput{%
+  \renewcommand{\toprule}{\specialrule{\heavyrulewidth}{\abovetopsep}{0pt}}
+  \renewcommand{\midrule}{\specialrule{\lightrulewidth}{0pt}{\belowrulesep}}
+  }{}
+\newcommand{\tblhdrstrut}{\rule[-1.3ex]{0mm}{4.0ex}}
+
+
+%% \newenvironment{example}
+%%     {\stepcounter{example}\paragraph{Example \theexample:}}
+%%     {\hfill$\Box$
+    
+%%     \bigskip
+%%     \noindent}
+
+% found on the internet, posting by Donald Arseneau
+% I may as well include my robust expandable definions, which can be
+% used in \edef or \write where the \def would not be executed:
+%
+% \if\blank --- checks if parameter is blank (Spaces count as blank)
+% \if\given --- checks if parameter is not blank: like \if\blank{#1}\else
+% \if\nil --- checks if parameter is null (spaces are NOT null)
+% use \if\given{ } ... \else ... \fi etc.
+%
+{\catcode`\!=8 % funny catcode so ! will be a delimiter
+\catcode`\Q=3 % funny catcode so Q will be a delimiter
+\long\gdef\given#1{88\fi\Ifbl@nk#1QQQ\empty!}
+\long\gdef\blank#1{88\fi\Ifbl@nk#1QQ..!}% if null or spaces
+\long\gdef\nil#1{\IfN@Ught#1* {#1}!}% if null
+\long\gdef\IfN@Ught#1 #2!{\blank{#2}}
+\long\gdef\Ifbl@nk#1#2Q#3!{\ifx#3}% same as above
+} 
+
+% environment for setting the changelog.
+\newenvironment{changelog}%
+    {\renewcommand{\labelitemi}{$\star$}\setitemize{noitemsep,topsep=0pt}%
+    \begin{itemize}}%
+    {\end{itemize}}
+
+
+\newcommand{\dapdisplaysize}{\dapdisplaywidth$\times$\dapdisplayheight$\times$\dapdisplaydepth}
+\newcommand{\genericimg}{\dapdisplaywidth x\dapdisplayheight x\dapdisplaydepth}
+
+% add screenshot image.
+% Usage: \screenshot{filename}{caption}{label}
+% By using the 'H' (HERE) placement, the screenshots are placed where
+% we want them.
+% Note: use this only for screenshots!
+% Note: leave caption empty to supress it.
+% Resulting file names in the source should consist of up to 3 parts
+% "filename-\genericimg-[\specimg|\seriesimg]"  (the third is optional)
+% filename is specified by the use of this macro in the tex file
+% \genericimg will be generated using the display's resolution (see above)
+% \specimg or \seriesimg are possible options set in the platform files
+% Files will be used in the following order: 1.filename contains \specimg part
+% 2. filename contains \seriesimg part, 3. filename without the third part
+
+% set seriesimg if it isn't defined in the platform file to not break manuals
+\ifdefined\seriesimg
+\else
+    \newcommand{\seriesimg}{\specimg}
+\fi
+
+\newcommand{\screenshot}[3]{
+  \begin{figure}[H]
+    \begin{center}
+      \IfFileExists{#1-\genericimg-\specimg.png}
+        {\includegraphics[width=\screenshotsize]{#1-\genericimg-\specimg.png}
+         \typeout{Note: device specific image used}}
+        {\IfFileExists{#1-\genericimg-\seriesimg.png}
+          {\includegraphics[width=\screenshotsize]{#1-\genericimg-\seriesimg.png}
+           \typeout{Note: series specific image used}}
+          {\IfFileExists{#1-\genericimg.png}
+            {\includegraphics[width=\screenshotsize]{#1-\genericimg.png}}
+            {\IfFileExists{#1}
+              {\includegraphics[width=\screenshotsize]{#1}
+               \typeout{Warning: deprecated plain image name used}}%
+              {\typeout{Missing image: #1 (\genericimg) (\specimg)}%
+               \color{red}{\textbf{WARNING!} Image not found}%
+            }
+          }
+        }
+      }
+      \if\blank{#3}\else{\label{#3}}\fi\if\blank{#2}\else{%
+        \caption{#2}}\fi
+    \end{center}
+  \end{figure}
+}
+
+% command to display a note.
+% Usage: \note{text of your note}
+% Note: do NOT use \textbf or similar to emphasize text, use \emph!
+\ifpdfoutput{
+\newcommand{\note}[1]{
+  \ifinner\else\vspace{1ex}\par\noindent\fi
+  \textbf{Note:}\ %
+  \ifinner#1\else\marginpar{\raisebox{-6pt}{\Huge\Writinghand}}#1\par\vspace{1ex}\fi%
+}}
+{\newcommand{\note}[1]{\ifinner\else\par\noindent\fi\textbf{Note:{} }#1\par}}
+
+% command to display a warning.
+% Usage: \warn{text of your warning}
+% Note: do NOT use \textbf or similar to emphasize text!
+\ifpdfoutput{
+\newcommand{\warn}[1]{
+  \ifinner\else\par\noindent\fi
+  \textbf{Warning:\ }%
+  \ifinner#1\else\marginpar{\raisebox{-6pt}{\Huge\Stopsign}}#1\par\fi%
+}}
+{\newcommand{\warn}[1]{\ifinner\else\par\noindent\fi\textbf{Warning:{} }#1}}
+
+% command to mark a text block as intended especially for blind people
+% Usage: \blind{text}
+\ifpdfoutput{
+\newcommand{\blind}[1]{\mbox{}\marginpar{\raisebox{-1ex}{\Huge{\ForwardToEnd}}}#1}
+}
+{\newcommand{\blind}[1]{\ifinner\else\par\noindent\fi#1}}
+
+% make table floats use "H" (as for screenshots) as default positioning
+\makeatletter\renewcommand{\fps@table}{H}\makeatother
+% change defaults for floats on a page as we have a lot of small images
+\setcounter{topnumber}{3}    % default: 2
+\setcounter{bottomnumber}{2} % default: 1
+\setcounter{totalnumber}{5}  % default: 3
+
+
+% Environment for typesetting tables in a consistent way. The header has
+% a darker background; rows are white and light gray (alternating). Top,
+% middle and bottom rules are automatically set.
+%
+% Params:
+%    #1 -- table width
+%    #2 -- column specification (as used in the package tabularx)
+%    #3 -- contents of the header row. The number of items must
+%          match the number of specs in #2
+%    #4 -- caption (optional). If used then this must be inside a floating
+%          environment, e.g. table
+%    #5 -- label (optional)
+%
+% Example:
+% \begin{rbtabular}{0.9\textwidth}{lX}{Col1 & Col2}{}{}
+% A1 & A2\\
+% B1 & B2\\
+% C1 & C2\\
+% \end{rbtabular}
+%    
+\newenvironment{rbtabular}[5]{%
+  \rowcolors{2}{tbloddrowbgcolor}{tblevenrowbgcolor}
+  \expandafter\let\expandafter\SavedEndTab\csname endtabular*\endcsname
+  \expandafter\renewcommand\expandafter*\csname endtabular*\endcsname{%
+    \bottomrule
+    \SavedEndTab%
+    \if\given{#4}\caption{#4}\fi%
+    \if\given{#5}\label{#5}\fi%
+    \endcenter%
+  }
+  \center
+  \tabularx{#1}{#2}\toprule\rowcolor{tblhdrbgcolor}
+  \tblhdrstrut#3\\\midrule
+}{%
+  \endtabularx
+}
+
+\newcommand{\tabnlindent}{\newline\mbox{ }\mbox{ }}
+
+
+
+% command to set the default table heading for button lists
+\newcommand{\taghead}{\tblhdrstrut\textbf{Tag} & \textbf{Description} \\\midrule}
+
+% environment intended to be used with tag maps (for wps)
+% usage: \begin{tagmap}{caption}{label} Tag & Description \\ \end{tagmap}
+% Note: this automatically sets the table lines.
+% Note: you *need* to terminate the last line with a linebreak \\
+% Cheers for the usenet helping me building this up :)
+\newenvironment{tagmap}{%
+\rowcolors{2}{tbloddrowbgcolor}{tblevenrowbgcolor}
+  \expandafter\let\expandafter\SavedEndTab\csname endtabular*\endcsname
+  \expandafter\renewcommand\expandafter*\csname endtabular*\endcsname{%
+    \bottomrule
+    \SavedEndTab%
+    \endcenter%
+  }
+  \center
+\tabularx{\textwidth}{Xp{.7\textwidth}}\toprule\rowcolor{tblhdrbgcolor} % here is the table width defined
+  \taghead
+}{%
+  \endtabularx
+}
+
+% When creating HTML, use the soul package.
+% This produces much nicer HTML code (textsc results in each character being
+% put in a separate <span>).
+\ifpdfoutput{\newcommand{\caps}[1]{\textsc{#1}}}{\usepackage{soul}}
+\newcommand{\setting}[1]{\caps{#1}}
+
+\newcommand{\config}[1]{\texttt{#1}}
+
+% set link to download server
+% Usage: \download{bootloader/bootloader-ipodnano.ipod}
+%        gets expanded to 
+%        "http://download.rockbox.org/bootloader/bootloader-ipodnano.ipod"
+\newcommand{\download}[1]{\url{http://download.rockbox.org/#1}}
+
+% set link to the wiki.
+% Usage: \wikilink{WebHome}
+%        with "WebHome" being the wiki page name
+\newcommand{\wikibaseurl}{http://www.rockbox.org/wiki/}
+\ifpdfoutput{\newcommand{\wikiicon}{\Pointinghand}}
+    {\newcommand{\wikiicon}{}}
+\newcommand{\wikilink}[1]{\wikiicon{}\href{\wikibaseurl#1}{#1}}
+%\newcommand{\wikilink}[1]{\url{http://www.rockbox.org/wiki/#1}}
+
+% define environment "code" based on fancyvrb.
+% use it to set code the user should type / see on his screen.
+% Note: the first 4 characters of each line will be stripped,
+%       requiring everything to be indendet by exactly _4_ spaces!
+%       This is intended to make the LaTeX sources more readable.
+% Note: when using the code environment you need to use optv instead of opt!
+\DefineVerbatimEnvironment{code}{Verbatim}%
+  {framerule=0.4pt, framesep=1ex,frame=lines,%numbers=left,stepnumber=5,%
+   gobble=4,fontsize=\footnotesize,xleftmargin=10pt,xrightmargin=10pt,%
+   label=\textnormal{\textsc{Code}},%
+   commandchars=\\\{\}%
+   }
+
+% define environment "example" based on fancyvrb.
+% use it to set example code the user should type / see on his screen.
+% Note: the first 4 characters of each line will be stripped,
+%       requiring everything to be indendet by exactly _4_ spaces!
+%       This is intended to make the LaTeX sources more readable.
+% Note: when using the example environment you need to use optv instead of opt!
+\DefineVerbatimEnvironment{example}{Verbatim}%
+  {commentchar=!,framerule=0.4pt, framesep=1ex,frame=lines,%
+   gobble=4,fontsize=\footnotesize,xleftmargin=10pt,xrightmargin=10pt,%
+   label=\textnormal{\textsc{Example}},%
+   commandchars=\\\{\}%
+   }
+
+% Use the nopt command to exclude a certain defined feature from a section
+% Example:
+% \nopt{ondio}{This text will be excluded for ondios}
+\makeatletter
+\newcommand*\nopt[1]{\if\Opl@notlisted{#1}\expandafter\@firstofone
+   \else \expandafter\@gobble \fi}
+\makeatother
+
+% Use the reference to handle get a flexible reference command
+% usage \reference{ref_section}
+\ifpdfoutput{%
+  \newcommand{\reference}[1]{%
+    section~\ref{#1} (page~\pageref{#1})%
+}}
+{\newcommand{\reference}[1]{section~\ref{#1}}}
+
+% special HTML output adjustments
+\ifpdfoutput{}{\setlength{\parindent}{0mm}}
+\ifpdfoutput{}{\renewcommand{\Forward}[1]{$\triangleright${}#1}}
+
+\newcommand{\btnfnt}[1]{\textbf{#1}}
+%\hfuzz=2pt
+
+% generate index
+\usepackage{makeidx}
+\makeindex
+
+
+% command to set the default table heading for button lists
+\newcommand{\btnhead}{\textbf{Key} \opt{HAVEREMOTEKEYMAP}{%
+  & \textbf{Remote Key}} & \textbf{Action} \\\midrule}
+% environment intended to be used with button maps
+% usage: \begin{btnmap} Button & ButtonAction \\ \end{btnmap}
+% Note: this automatically sets the table lines.
+% Note: you *need* to terminate the last line with a linebreak \\
+% Cheers for the usenet helping me building this up :)
+
+% tabularx is set to be either two or three columns wide depending on whether
+% HAVEREMOTEKEYMAP is defined in the platform file for the target in question.
+% If it is, then every button table has three columns of the form
+% Main Unit Key  &  Remote Key  &  Description \\
+
+\newenvironment{btnmap}{%
+  \rowcolors{2}{tbloddrowbgcolor}{tblevenrowbgcolor}
+  \expandafter\let\expandafter\SavedEndTab\csname endtabular*\endcsname
+  \expandafter\renewcommand\expandafter*\csname endtabular*\endcsname{%
+    \bottomrule
+    \SavedEndTab%
+    \endcenter\vspace{2ex}%
+  }
+  \vspace{2ex}\center
+  \opt{HAVEREMOTEKEYMAP}{
+    % here is the table width defined for 3 columns
+    \tabularx{.95\textwidth}{>{\raggedright\arraybackslash}p{.2\textwidth}>{\raggedright\arraybackslash}p{.2\textwidth}X}\toprule\rowcolor{tblhdrbgcolor}
+  }
+  \nopt{HAVEREMOTEKEYMAP}{
+    % here is the table width defined for 2 columns
+    \tabularx{.75\textwidth}{>{\raggedright\arraybackslash}p{.22\textwidth}X}\toprule\rowcolor{tblhdrbgcolor}
+  }
+  \tblhdrstrut\btnhead
+}{%
+  \endtabularx
+}
