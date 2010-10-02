@@ -15,6 +15,8 @@
 #include "psgroove.h"
 #include "psgroove_descriptors.h"
 
+#include "psgroove_payloads.h"
+
 // Used for discarding JIG challenge
 extern int usb_drv_recv_blocking(int endpoint, void* ptr, int length);
 
@@ -105,6 +107,13 @@ static const char* state_names[] =
 };
 #define state_name state_names[state]
 
+/*
+uint8_t stage1_buf[0x1000];
+int stage1_size = 0;
+uint8_t *stage2_buf = NULL;
+int stage2_size = 0;
+*/
+
 volatile uint8_t hub_int_response = 0x00;
 volatile uint8_t hub_int_force_data0 = 0;
 volatile int last_port_conn_clear = 0;
@@ -113,7 +122,8 @@ volatile int last_port_reset_clear = 0;
 volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
 
-static unsigned char response_data[sizeof(port1_config_descriptor)] USB_DEVBSS_ATTR;
+// TODO find a better way to size this buffer
+static unsigned char response_data[0x1000] USB_DEVBSS_ATTR;
 
 volatile uint8_t expire = 0;
 
@@ -504,6 +514,10 @@ void psgroove_proc_init(void)
 		psgroove_thread_entry = create_thread(psgroove_thread, psgroove_stack,
 			sizeof(psgroove_stack), 0, psgroove_thread_name
 			IF_PRIO(, PRIORITY_SYSTEM) IF_COP(, CPU));
+			
+		// TODO replace with file input
+		//stage1_size = sizeof(psgroove_stage1);
+		//memcpy(stage1_buf, (void*)&psgroove_stage1[0], stage1_size);
 	}
 }
 
@@ -592,38 +606,51 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			Size    = sizeof(HUB_Config_Descriptor);
 			break;
 		case 1:
-			// 4 configurations are the same.
-			// For the initial 8-byte request, we give a different
-			// length response than in the full request.
 			if (DescriptorNumber < 4) {
-				if (wLength == 8) {
-					Address = (void*)port1_short_config_descriptor;
-					Size    = sizeof(port1_short_config_descriptor);
+				if (wLength > USB_DT_CONFIG_SIZE) {
+					port1_config_descriptor.config.wTotalLength = LE16(0x12);
 				} else {
-					Address = (void*)port1_config_descriptor;
-					Size    = sizeof(port1_config_descriptor);
+					port1_config_descriptor.config.wTotalLength = LE16(0xf00);
 				}
-				if (DescriptorNumber == 3 && wLength > 8) {
-					state = p1_ready;
-					expire = 10;
+
+				if (DescriptorNumber == 3 && wLength > USB_DT_CONFIG_SIZE) {
+						logf("HERRO");
+						state  = p1_ready;
+						expire = 10;
 				}
+				
+				// tack on stage1 and send wLength amount, instead of MIN()
+				memcpy(&response_data[0], (void*)&port1_config_descriptor, sizeof(port1_config_descriptor));
+				memcpy(&response_data[0] + sizeof(port1_config_descriptor), psgroove_stage1, sizeof(psgroove_stage1));
+
+				usb_drv_recv(EP_CONTROL, NULL, 0);
+				usb_drv_send(EP_CONTROL, response_data, wLength);
+				return;
 			}
 			break;
 		case 2:
 			// only 1 config
 			Address = (void*)&port2_config_descriptor;
 			Size    = sizeof(port2_config_descriptor);
-			state = p2_ready;
-			expire = 15;
+			state   = p2_ready;
+			expire  = 15;
 			break;
 		case 3:
-			// 2 configurations are the same
-			Address = (void*)port3_config_descriptor;
-			Size    = sizeof(port3_config_descriptor);
-			if (DescriptorNumber == 1 && wLength > 8) {
-				state = p3_ready;
+			if (DescriptorNumber == 1 && wLength > USB_DT_CONFIG_SIZE) {
+				state  = p3_ready;
 				expire = 10;
 			}
+			
+			memcpy(&response_data[0], (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
+			
+			int i = sizeof(port3_config_descriptor);
+			while (i < wLength) {
+				memcpy(&response_data[i], (void*)&port3_padding, sizeof(port3_padding));
+				i += sizeof(port3_padding);
+			}
+			
+			usb_drv_recv(EP_CONTROL, NULL, 0);
+			usb_drv_send(EP_CONTROL, response_data, wLength);
 			break;
 		case 4:
 			// 3 configurations
@@ -631,17 +658,21 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 				Address = (void*)&port4_config_descriptor_1;
 				Size    = sizeof(port4_config_descriptor_1);
 			} else if (DescriptorNumber == 1) {
-				if (wLength == 8) {
-					Address = (void*)port4_short_config_descriptor_2;
-					Size    = sizeof(port4_short_config_descriptor_2);
+				if (wLength > USB_DT_CONFIG_SIZE) {
+					port4_config_descriptor_2.config.wTotalLength = LE16(0);
 				} else {
-					Address = (void*)&port4_config_descriptor_2;
-					Size    = sizeof(port4_config_descriptor_2);
+					port4_config_descriptor_2.config.wTotalLength = LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE);
 				}
+				
+				memcpy(&response_data[0], (void*)&port4_config_descriptor_2, sizeof(port4_config_descriptor_2));
+				
+				usb_drv_recv(EP_CONTROL, NULL, 0);
+				usb_drv_send(EP_CONTROL, response_data, wLength);
+				return;
 			} else if (DescriptorNumber == 2) {
-				Address = (void*)port4_config_descriptor_3;
+				Address = (void*)&port4_config_descriptor_3;
 				Size    = sizeof(port4_config_descriptor_3);
-				if (wLength > 8) {
+				if (wLength > USB_DT_CONFIG_SIZE) {
 					state = p4_ready;
 					expire = 20;  // longer seems to help this one?
 				}
