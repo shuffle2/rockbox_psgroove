@@ -564,8 +564,6 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	void*          Address = NULL;
 	uint16_t       Size    = 0;
 
-	logf("%x %x %x %x", port_cur, DescriptorType, DescriptorNumber, wLength);
-	
 	switch (DescriptorType)
 	{
 	case USB_DT_DEVICE:
