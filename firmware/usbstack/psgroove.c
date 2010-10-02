@@ -564,6 +564,8 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	void*          Address = NULL;
 	uint16_t       Size    = 0;
 
+	logf("%x %x %x %x", port_cur, DescriptorType, DescriptorNumber, wLength);
+	
 	switch (DescriptorType)
 	{
 	case USB_DT_DEVICE:
@@ -614,7 +616,6 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 				}
 
 				if (DescriptorNumber == 3 && wLength > USB_DT_CONFIG_SIZE) {
-						logf("HERRO");
 						state  = p1_ready;
 						expire = 10;
 				}
@@ -638,11 +639,11 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 		case 3:
 			if (DescriptorNumber == 1 && wLength > USB_DT_CONFIG_SIZE) {
 				state  = p3_ready;
-				expire = 10;
+				expire = 20;
 			}
 			
 			memcpy(&response_data[0], (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
-			
+
 			int i = sizeof(port3_config_descriptor);
 			while (i < wLength) {
 				memcpy(&response_data[i], (void*)&port3_padding, sizeof(port3_padding));
@@ -651,6 +652,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			
 			usb_drv_recv(EP_CONTROL, NULL, 0);
 			usb_drv_send(EP_CONTROL, response_data, wLength);
+			return;
 			break;
 		case 4:
 			// 3 configurations
