@@ -345,13 +345,10 @@ static void psgroove_thread(void)
 		queue_wait(&psgroove_queue, &ev);
 
 #if 0 // informative, but sloooww
-		if (second_run)
-		{
-			ticks = current_tick;
-			secs = ticks / HZ;
-			ms = ticks - secs * HZ;
-			logf("%s %s %d.%d", (ev.id > 0) ? event_names[ev.id] : "DISCONNECT", state_name, secs, ms);
-		}
+		ticks = current_tick;
+		secs = ticks / HZ;
+		ms = ticks - secs * HZ;
+		logf("%s %s %d.%d", (ev.id > 0) ? event_names[ev.id] : "DISCONNECT", state_name, secs, ms);
 #endif
 
 		switch (ev.id)

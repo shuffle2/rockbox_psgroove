@@ -4,6 +4,8 @@
 #define LE16(x) (x)
 //#define LE16(in) ((( (in) & 0xFF) << 8) | (( (in) & 0xFF00) >> 8))
 
+//#define MARCAN_STYLE
+
 const struct usb_device_descriptor HUB_Device_Descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
@@ -91,7 +93,9 @@ struct {
 	struct usb_interface_descriptor	interface;
 	struct {
 		uint8_t padding[6];
-		//uint8_t data[2][8]; // not used with psgroove's payload
+		#ifdef MARCAN_STYLE
+		uint8_t data[2][8];
+		#endif
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
 port1_config_descriptor = {
@@ -118,8 +122,10 @@ port1_config_descriptor = {
 	},
 	{
 		.padding			= { 0, 0, 0, 0, 0, 0 },
-		//.data[0]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x20 },
-		//.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x28 }
+		#ifdef MARCAN_STYLE
+		.data[0]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x20 },
+		.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x28 }
+		#endif
 	}
 };
 
@@ -300,7 +306,7 @@ struct {
 		uint8_t bLength;
 		uint8_t bDescriptorType;
 		uint8_t padding[4];
-		uint8_t data[3][8]; // different values for marcan & psgroove
+		uint8_t data[3][8];
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
 const port4_config_descriptor_3 = {
@@ -329,11 +335,60 @@ const port4_config_descriptor_3 = {
 		.bLength			= 0x3e,
 		.bDescriptorType	= 0x21,
 		.padding			= { 0, 0, 0, 0 },
-		.data[0]			= { 0xfa, 0xce, 0xb0, 0x03,	0xaa, 0xbb, 0xcc, 0xdd },
+		#ifdef MARCAN_STYLE
+		.data[0]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
+		.data[1]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
+		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x18 }
+		#else
+		.data[0]			= { 0xfa, 0xce, 0xb0, 0x03, 0xaa, 0xbb, 0xcc, 0xdd },
 		.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x50, 0x00 },
 		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70 }
-		//.data[1]			= { 0, 0, 0, 0,	0, 0, 0, 0 },
-		//.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x18 }
+		#endif
+	}
+};
+
+const struct usb_device_descriptor final_device_descriptor = {
+	.bLength			= USB_DT_DEVICE_SIZE,
+	.bDescriptorType	= USB_DT_DEVICE,
+	.bcdUSB				= LE16(0x0200),
+	.bDeviceClass		= 0x00,
+	.bDeviceSubClass	= 0x00,
+	.bDeviceProtocol	= 0x00,
+	.bMaxPacketSize0	= 0x08,
+	.idVendor			= LE16(0xAAAA),
+	.idProduct			= LE16(0x3713), // marcan, lol...
+	.bcdDevice			= LE16(0x0000),
+	.iManufacturer		= 0x00,
+	.iProduct			= 0x00,
+	.iSerialNumber		= 0x00,
+	.bNumConfigurations	= 0x01
+};
+
+struct {
+	struct usb_config_descriptor	config;
+	struct usb_interface_descriptor	interface;
+} __attribute__ ((packed))
+const final_config_descriptor = {
+	{
+		.bLength			= USB_DT_CONFIG_SIZE,
+		.bDescriptorType	= USB_DT_CONFIG,
+		.wTotalLength		= LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE),
+		.bNumInterfaces		= 1,
+		.bConfigurationValue= 1,
+		.iConfiguration		= 0,
+		.bmAttributes		= USB_CONFIG_ATT_ONE,
+		.bMaxPower			= 1
+	},
+	{
+		.bLength			= USB_DT_INTERFACE_SIZE,
+		.bDescriptorType	= USB_DT_INTERFACE,
+		.bInterfaceNumber	= 0,
+		.bAlternateSetting	= 0,
+		.bNumEndpoints		= 0,
+		.bInterfaceClass	= USB_CLASS_APP_SPEC,
+		.bInterfaceSubClass	= 1,
+		.bInterfaceProtocol	= 2,
+		.iInterface			= 0
 	}
 };
 
