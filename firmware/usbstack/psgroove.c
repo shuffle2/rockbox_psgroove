@@ -586,12 +586,12 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			Size    = sizeof(port4_device_descriptor);
 			break;
 		case 5:
-			Address = (void*)port5_device_descriptor;
+			Address = (void*)&port5_device_descriptor;
 			Size    = sizeof(port5_device_descriptor);
 			break;
 		case 6:
-			Address = (void*)port6_device_descriptor;
-			Size    = sizeof(port6_device_descriptor);
+			Address = (void*)&final_device_descriptor;
+			Size    = sizeof(final_device_descriptor);
 			break;
 		}
 		break;
@@ -677,20 +677,15 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			break;
 		case 5:
 			// 1 config
-			Address = (void*)port5_config_descriptor;
-			struct usb_endpoint_descriptor *p5_ep_desc = 
-				(struct usb_endpoint_descriptor *)(Address
-				+ sizeof(struct usb_config_descriptor)
-				+ sizeof(struct usb_interface_descriptor));
-			p5_ep_desc->bEndpointAddress = ep_out;
-			p5_ep_desc++;
-			p5_ep_desc->bEndpointAddress = ep_in;
+			port5_config_descriptor.endpoint_out.bEndpointAddress = ep_out;
+			port5_config_descriptor.endpoint_in.bEndpointAddress = ep_in;
+			Address = (void*)&port5_config_descriptor;
 			Size    = sizeof(port5_config_descriptor);
 			break;
 		case 6:
 			// 1 config
-			Address = (void*)port6_config_descriptor;
-			Size    = sizeof(port6_config_descriptor);
+			Address = (void*)&final_config_descriptor;
+			Size    = sizeof(final_config_descriptor);
 			break;
 		}
 		break;
