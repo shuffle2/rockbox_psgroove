@@ -489,6 +489,8 @@ static void psgroove_thread(void)
 			break;
 
 		case SYS_USB_DISCONNECTED:
+			cpu_boost(0);
+			timer_unregister();
 			// User has disconnected usb cable while psgroove was running.
 			// No way to recover without hard-rebooting ps3
 			return;
@@ -640,7 +642,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			memcpy(&response_data[0], (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
 
 			int i = sizeof(port3_config_descriptor);
-			while (i < wLength) {
+			while (i < wLength) { // TODO perhaps generate this in psgroove_init instead
 				memcpy(&response_data[i], (void*)&port3_padding, sizeof(port3_padding));
 				i += sizeof(port3_padding);
 			}
