@@ -15,7 +15,7 @@
 #include "psgroove.h"
 #include "psgroove_descriptors.h"
 
-#include "psgroove_payloads.h"
+#include "psgroove_stage1.h"
 
 // Used for discarding JIG challenge
 extern int usb_drv_recv_blocking(int endpoint, void* ptr, int length);
@@ -639,7 +639,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 		case 3:
 			if (DescriptorNumber == 1 && wLength > USB_DT_CONFIG_SIZE) {
 				state  = p3_ready;
-				expire = 20;
+				expire = 10;
 			}
 			
 			memcpy(&response_data[0], (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
