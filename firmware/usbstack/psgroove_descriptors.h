@@ -1,24 +1,26 @@
 #ifndef _PSGROOVE_DESC_
 #define _PSGROOVE_DESC_
 
+#include "cpu.h"
 #include "usb_ch9.h"
 
+#ifdef ROCKBOX_LITTLE_ENDIAN
 #define LE16(x) (x)
+#else
+#define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
+#endif
 
 //#define MARCAN_STYLE
 
-#include "PL3/config.h"
-#define FIRMWARE_3_41
-
 typedef uint8_t u8;
+#include "PL3/config.h"
 #include "PL3/shellcode_egghunt.h"
 #include "PL3/default_payload_3_41.h"
 #include "PL3/default_payload_3_01.h"
 #include "PL3/default_payload_3_15.h"
 #include "PL3/dump_lv2.h"
 
-//#define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
-#define MAGIC_NUMBER		0x50, 0x53, 0x46, 0x72, 0x65, 0x65, 0x64, 0x6d
+#define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
 
 #if defined (FIRMWARE_3_41)
 #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
@@ -145,7 +147,7 @@ static const uint8_t jig_response[64] = {
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
 	RTOC_TABLE,
-	// for now, static egghunt shellcode
+	// TODO use jevin's macro
 	0xe8, 0x83, 0xff, 0xf0, 0xe8, 0x63, 0xff, 0xf8,
 	0xe8, 0xa3, 0x00, 0x18, 0x38, 0x63, 0x10, 0x00,
 	0x7c, 0x04, 0x28, 0x00, 0x40, 0x82, 0xff, 0xf4,
@@ -435,62 +437,10 @@ const port4_config_descriptor_3 = {
 		.data[1]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
 		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x18 }
 		#else
-		//.data[0]			= { 0xfa, 0xce, 0xb0, 0x03, 0xaa, 0xbb, 0xcc, 0xdd },
-		//.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x50, 0x00 },
-		//.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70 }
 		.data[0]			= { MAGIC_NUMBER },
 		.data[1]			= { SHELLCODE_PAGE },
 		.data[2]			= { SHELLCODE_DESTINATION }
 		#endif
-	}
-};
-
-const struct usb_device_descriptor final_device_descriptor = {
-	.bLength			= USB_DT_DEVICE_SIZE,
-	.bDescriptorType	= USB_DT_DEVICE,
-	.bcdUSB				= LE16(0x0200),
-	.bDeviceClass		= 0x00,
-	.bDeviceSubClass	= 0x00,
-	.bDeviceProtocol	= 0x00,
-	.bMaxPacketSize0	= 0x08,
-	.idVendor			= LE16(0xAAAA),
-	#ifdef MARCAN_STYLE
-	.idProduct			= LE16(0x3713), // marcan, lol...
-	#else
-	.idProduct			= LE16(0xdec0),
-	#endif
-	.bcdDevice			= LE16(0x0000),
-	.iManufacturer		= 0x00,
-	.iProduct			= 0x00,
-	.iSerialNumber		= 0x00,
-	.bNumConfigurations	= 0x01
-};
-
-struct {
-	struct usb_config_descriptor	config;
-	struct usb_interface_descriptor	interface;
-} __attribute__ ((packed))
-const final_config_descriptor = {
-	{
-		.bLength			= USB_DT_CONFIG_SIZE,
-		.bDescriptorType	= USB_DT_CONFIG,
-		.wTotalLength		= LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE),
-		.bNumInterfaces		= 1,
-		.bConfigurationValue= 1,
-		.iConfiguration		= 0,
-		.bmAttributes		= USB_CONFIG_ATT_ONE,
-		.bMaxPower			= 1
-	},
-	{
-		.bLength			= USB_DT_INTERFACE_SIZE,
-		.bDescriptorType	= USB_DT_INTERFACE,
-		.bInterfaceNumber	= 0,
-		.bAlternateSetting	= 0,
-		.bNumEndpoints		= 0,
-		.bInterfaceClass	= USB_CLASS_APP_SPEC,
-		.bInterfaceSubClass	= 1,
-		.bInterfaceProtocol	= 2,
-		.iInterface			= 0
 	}
 };
 
@@ -534,8 +484,8 @@ port5_config_descriptor = {
 		.bDescriptorType	= USB_DT_INTERFACE,
 		.bInterfaceNumber	= 0,
 		.bAlternateSetting	= 0,
-		.bNumEndpoints		= 0,
-		.bInterfaceClass	= USB_CLASS_APP_SPEC,
+		.bNumEndpoints		= 2,
+		.bInterfaceClass	= USB_CLASS_VENDOR_SPEC,
 		.bInterfaceSubClass	= 1,
 		.bInterfaceProtocol	= 2,
 		.iInterface			= 0
@@ -544,7 +494,7 @@ port5_config_descriptor = {
 		.bLength			= USB_DT_ENDPOINT_SIZE,
 		.bDescriptorType	= USB_DT_ENDPOINT,
 		.bEndpointAddress	= 0, // filled in at run-time
-		.bmAttributes		= USB_ENDPOINT_XFER_INT,
+		.bmAttributes		= USB_ENDPOINT_XFER_BULK,
 		.wMaxPacketSize		= LE16(8),
 		.bInterval			= 0
 	},
@@ -552,11 +502,60 @@ port5_config_descriptor = {
 		.bLength			= USB_DT_ENDPOINT_SIZE,
 		.bDescriptorType	= USB_DT_ENDPOINT,
 		.bEndpointAddress	= 0, // filled in at run-time
-		.bmAttributes		= USB_ENDPOINT_XFER_INT,
+		.bmAttributes		= USB_ENDPOINT_XFER_BULK,
 		.wMaxPacketSize		= LE16(8),
 		.bInterval			= 0
 	}
 };
 #endif
+
+const struct usb_device_descriptor final_device_descriptor = {
+	.bLength			= USB_DT_DEVICE_SIZE,
+	.bDescriptorType	= USB_DT_DEVICE,
+	.bcdUSB				= LE16(0x0200),
+	.bDeviceClass		= 0x00,
+	.bDeviceSubClass	= 0x00,
+	.bDeviceProtocol	= 0x00,
+	.bMaxPacketSize0	= 0x08,
+	.idVendor			= LE16(0xAAAA),
+	#ifdef MARCAN_STYLE
+	.idProduct			= LE16(0x3713),
+	#else
+	.idProduct			= LE16(0xdec0),
+	#endif
+	.bcdDevice			= LE16(0x0000),
+	.iManufacturer		= 0x00,
+	.iProduct			= 0x00,
+	.iSerialNumber		= 0x00,
+	.bNumConfigurations	= 0x01
+};
+
+struct {
+	struct usb_config_descriptor	config;
+	struct usb_interface_descriptor	interface;
+} __attribute__ ((packed))
+const final_config_descriptor = {
+	{
+		.bLength			= USB_DT_CONFIG_SIZE,
+		.bDescriptorType	= USB_DT_CONFIG,
+		.wTotalLength		= LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE),
+		.bNumInterfaces		= 1,
+		.bConfigurationValue= 1,
+		.iConfiguration		= 0,
+		.bmAttributes		= USB_CONFIG_ATT_ONE,
+		.bMaxPower			= 1
+	},
+	{
+		.bLength			= USB_DT_INTERFACE_SIZE,
+		.bDescriptorType	= USB_DT_INTERFACE,
+		.bInterfaceNumber	= 0,
+		.bAlternateSetting	= 0,
+		.bNumEndpoints		= 0,
+		.bInterfaceClass	= USB_CLASS_APP_SPEC,
+		.bInterfaceSubClass	= 1,
+		.bInterfaceProtocol	= 2,
+		.iInterface			= 0
+	}
+};
 
 #endif

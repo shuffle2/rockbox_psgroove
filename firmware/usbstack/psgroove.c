@@ -114,7 +114,7 @@ volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
 
 // TODO find a better way to size this
-static unsigned char response_data[0x1000] USB_DEVBSS_ATTR;
+static unsigned char response_data[sizeof(port1_config_descriptor) + sizeof(default_payload)] USB_DEVBSS_ATTR;
 
 volatile uint8_t expire = 0;
 
@@ -188,7 +188,7 @@ static inline void Endpoint_Discard_Stream(int ep, uint16_t Length)
 {
 	usb_drv_recv_blocking(ep, response_data, Length);
 
-	logf("%02x%02x%02x%02x%02x%02x%02x%02x",
+	DEBUGF("%02x%02x%02x%02x%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0],
 		*(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2],
@@ -203,7 +203,7 @@ static inline void Endpoint_Write_PStream_LE(int ep, void* Buffer, uint16_t Leng
 {
 	memcpy(&response_data[0], Buffer, Length);
 
-	logf("%02x%02x%02x%02x",
+	DEBUGF("%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0], *(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2], *(uint8_t*)&response_data[3]);
 
@@ -545,8 +545,6 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	void*          Address = NULL;
 	uint16_t       Size    = 0;
 
-	logf("%x %x %x %x", port_cur, DescriptorType, DescriptorNumber, wLength);
-	
 	switch (DescriptorType)
 	{
 	case USB_DT_DEVICE:
@@ -700,14 +698,11 @@ void psgroove_transfer_complete(int ep, int dir, int status, int length)
 	(void)ep, (void)dir, (void)status, (void)length;
 }
 
-void psgroove_log(char *s) { logf(s); }
-
 bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 {
 	(void)dest;
 	
-	if (req->bRequest == USB_REQ_SET_INTERFACE)
-		logf("wewt");
+	DEBUGF("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
 	
 	if (port_cur == 6 && req->bRequest == 0xAA) {
 		usb_drv_recv(EP_CONTROL, NULL, 0);
@@ -721,8 +716,6 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 	{
 		// Just ack the actual event...
 		usb_drv_send(EP_CONTROL, NULL, 0);
-		
-		logf("USB_REQ_SET_INTERFACE");
 
 		// But now we kickoff the JIG :)
 		queue_post(&psgroove_queue, PSGROOVE_TASK_JIG, 0);
