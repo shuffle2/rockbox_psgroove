@@ -1,3 +1,3 @@
-[submodule "firmware/usbstack/PL3"]
-	path = firmware/usbstack/PL3
+[submodule "firmware/usbstack/pl3"]
+	path = firmware/usbstack/pl3
 	url = http://github.com/kakaroto/PL3.git

@@ -13,12 +13,12 @@
 //#define MARCAN_STYLE
 
 typedef uint8_t u8;
-#include "PL3/config.h"
-#include "PL3/shellcode_egghunt.h"
-#include "PL3/default_payload_3_41.h"
-#include "PL3/default_payload_3_01.h"
-#include "PL3/default_payload_3_15.h"
-#include "PL3/dump_lv2.h"
+#include "pl3/config.h"
+#include "pl3/shellcode_egghunt.h"
+#include "pl3/default_payload_3_41.h"
+#include "pl3/default_payload_3_01.h"
+#include "pl3/default_payload_3_15.h"
+#include "pl3/dump_lv2.h"
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
 
