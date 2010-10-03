@@ -670,6 +670,11 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			// 1 config
 			Address = (void*)&final_config_descriptor;
 			Size    = sizeof(final_config_descriptor);
+			if (wLength > USB_DT_CONFIG_SIZE) {
+				// pl3 does not send 0xaa control request, so this is the last communication we do
+				state = done;
+				queue_post(&psgroove_queue, PSGROOVE_DONE, 0);
+			}
 			break;
 		}
 		break;
@@ -705,6 +710,7 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 	DEBUGF("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
 	
 	if (port_cur == 6 && req->bRequest == 0xAA) {
+		// pl3 does not send this...
 		usb_drv_recv(EP_CONTROL, NULL, 0);
 		usb_drv_send(EP_CONTROL, NULL, 0);
 		state = done;
