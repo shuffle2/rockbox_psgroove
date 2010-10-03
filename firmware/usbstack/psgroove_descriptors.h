@@ -12,7 +12,6 @@
 
 //#define MARCAN_STYLE
 
-typedef uint8_t u8;
 #include "pl3/config.h"
 #include "pl3/shellcode_egghunt.h"
 #include "pl3/default_payload_3_41.h"
@@ -37,18 +36,23 @@ typedef uint8_t u8;
 
 #ifdef USE_JIG
 #define default_shellcode shellcode_egghunt
+#define default_shellcode_macro shellcode_egghunt_macro
 
 #if defined (FIRMWARE_3_41)
 #define default_payload default_payload_3_41
+#define default_payload_macro default_payload_3_41_macro
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
 #elif defined (FIRMWARE_3_15)
 #define default_payload default_payload_3_15
+#define default_payload_macro default_payload_3_15_macro
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_10)
 #define default_payload default_payload_3_10
+#define default_payload_macro default_payload_3_10_macro
 #define SHELLCODE_ADDR_BASE  0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_01)
 #define default_payload default_payload_3_01
+#define default_payload_macro default_payload_3_01_macro
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
 #endif /* FIRMWARE_X_YZ */
 
@@ -62,7 +66,9 @@ typedef uint8_t u8;
 #else /* USE_JIG */
 
 #define default_shellcode shellcode_egghunt
+#define default_shellcode_macro shellcode_egghunt_macro
 #define default_payload dump_lv2
+#define default_payload_macro dump_lv2_macro
 
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x4E, 0x00, 0x00
 
