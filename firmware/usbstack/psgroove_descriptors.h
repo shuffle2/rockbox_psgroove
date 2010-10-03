@@ -17,6 +17,7 @@ typedef uint8_t u8;
 #include "pl3/shellcode_egghunt.h"
 #include "pl3/default_payload_3_41.h"
 #include "pl3/default_payload_3_01.h"
+#include "pl3/default_payload_3_10.h"
 #include "pl3/default_payload_3_15.h"
 #include "pl3/dump_lv2.h"
 
@@ -24,7 +25,7 @@ typedef uint8_t u8;
 
 #if defined (FIRMWARE_3_41)
 #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
-#elif defined (FIRMWARE_3_15)
+#elif defined (FIRMWARE_3_15) || defined (FIRMWARE_3_10)
 #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
 #elif defined (FIRMWARE_3_01)
 #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
@@ -43,6 +44,9 @@ typedef uint8_t u8;
 #elif defined (FIRMWARE_3_15)
 #define default_payload default_payload_3_15
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
+#elif defined (FIRMWARE_3_10)
+#define default_payload default_payload_3_10
+#define SHELLCODE_ADDR_BASE  0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
 #elif defined (FIRMWARE_3_01)
 #define default_payload default_payload_3_01
 #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
