@@ -105,13 +105,6 @@ static const char* state_names[] =
 };
 #define state_name state_names[state]
 
-/*
-uint8_t stage1_buf[0x1000];
-int stage1_size = 0;
-uint8_t *stage2_buf = NULL;
-int stage2_size = 0;
-*/
-
 volatile uint8_t hub_int_response = 0x00;
 volatile uint8_t hub_int_force_data0 = 0;
 volatile int last_port_conn_clear = 0;
@@ -121,7 +114,7 @@ volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
 
 // TODO find a better way to size this
-static unsigned char response_data[sizeof(port1_config_descriptor) + sizeof(default_payload)] USB_DEVBSS_ATTR;
+static unsigned char response_data[0x1000] USB_DEVBSS_ATTR;
 
 volatile uint8_t expire = 0;
 
@@ -142,7 +135,7 @@ enum
 	PSGROOVE_DONE,
 };
 
-#if 1
+#if 0
 static const char* event_names[] = {
 	"TASK_HUB",
 	"TASK_JIG",
@@ -195,7 +188,7 @@ static inline void Endpoint_Discard_Stream(int ep, uint16_t Length)
 {
 	usb_drv_recv_blocking(ep, response_data, Length);
 
-	DEBUGF("%02x%02x%02x%02x%02x%02x%02x%02x",
+	logf("%02x%02x%02x%02x%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0],
 		*(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2],
@@ -210,7 +203,7 @@ static inline void Endpoint_Write_PStream_LE(int ep, void* Buffer, uint16_t Leng
 {
 	memcpy(&response_data[0], Buffer, Length);
 
-	DEBUGF("%02x%02x%02x%02x",
+	logf("%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0], *(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2], *(uint8_t*)&response_data[3]);
 
@@ -335,15 +328,13 @@ static void psgroove_thread(void)
 	{
 		queue_wait(&psgroove_queue, &ev);
 
-#if 1 // informative, but sloooww
-		if (state >= p4_ready) {
+#if 0 // informative, but sloooww
 		ticks = current_tick;
 		secs = ticks / HZ;
 		ms = ticks - secs * HZ;
 		logf("%s %s %d.%d",
 			((unsigned)ev.id <= PSGROOVE_DONE) ? event_names[ev.id] : "DISCONNECT",
 			state_name, secs, ms);
-		}
 #endif
 
 		switch (ev.id)
@@ -508,10 +499,6 @@ void psgroove_proc_init(void)
 		psgroove_thread_entry = create_thread(psgroove_thread, psgroove_stack,
 			sizeof(psgroove_stack), 0, psgroove_thread_name
 			IF_PRIO(, PRIORITY_SYSTEM) IF_COP(, CPU));
-			
-		// TODO replace with file input
-		//stage1_size = sizeof(psgroove_stage1);
-		//memcpy(stage1_buf, (void*)&psgroove_stage1[0], stage1_size);
 	}
 }
 
@@ -558,6 +545,8 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	void*          Address = NULL;
 	uint16_t       Size    = 0;
 
+	logf("%x %x %x %x", port_cur, DescriptorType, DescriptorNumber, wLength);
+	
 	switch (DescriptorType)
 	{
 	case USB_DT_DEVICE:
@@ -602,9 +591,9 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 		case 1:
 			if (DescriptorNumber < 4) {
 				if (wLength > USB_DT_CONFIG_SIZE) {
-					port1_config_descriptor.config.wTotalLength = LE16(0x12);
+					port1_config_descriptor.config.wTotalLength = LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE);
 				} else {
-					port1_config_descriptor.config.wTotalLength = LE16(0xf00);
+					port1_config_descriptor.config.wTotalLength = LE16(sizeof(port1_config_descriptor) + sizeof(default_payload));
 				}
 
 				if (DescriptorNumber == 3 && wLength > USB_DT_CONFIG_SIZE) {
@@ -711,12 +700,14 @@ void psgroove_transfer_complete(int ep, int dir, int status, int length)
 	(void)ep, (void)dir, (void)status, (void)length;
 }
 
+void psgroove_log(char *s) { logf(s); }
+
 bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 {
 	(void)dest;
 	
-	if (req->wIndex == 5)
-	logf("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
+	if (req->bRequest == USB_REQ_SET_INTERFACE)
+		logf("wewt");
 	
 	if (port_cur == 6 && req->bRequest == 0xAA) {
 		usb_drv_recv(EP_CONTROL, NULL, 0);
@@ -730,6 +721,8 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 	{
 		// Just ack the actual event...
 		usb_drv_send(EP_CONTROL, NULL, 0);
+		
+		logf("USB_REQ_SET_INTERFACE");
 
 		// But now we kickoff the JIG :)
 		queue_post(&psgroove_queue, PSGROOVE_TASK_JIG, 0);

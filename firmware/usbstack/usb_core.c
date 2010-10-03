@@ -659,7 +659,7 @@ static void request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
         usb_drv_send(EP_CONTROL, response_data, length);
     }
 }
-
+extern void psgroove_log(char*);
 static void request_handler_device(struct usb_ctrlrequest* req)
 {
     int i;
@@ -673,7 +673,7 @@ static void request_handler_device(struct usb_ctrlrequest* req)
                 break;
             }
         case USB_REQ_SET_CONFIGURATION: {
-                logf("usb_core: SET_CONFIG");
+                psgroove_log("usb_core: SET_CONFIG");
                 usb_drv_cancel_all_transfers();
                 if(req->wValue) {
                     usb_state = CONFIGURED;

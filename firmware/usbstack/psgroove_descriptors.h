@@ -125,7 +125,7 @@ HUB_Config_Descriptor = {
 		.bDescriptorType	= USB_DT_ENDPOINT,
 		.bEndpointAddress	= 0, // filled in at run-time
 		.bmAttributes		= USB_ENDPOINT_XFER_INT,
-		.wMaxPacketSize		= LE16(1),
+		.wMaxPacketSize		= LE16(8),
 		.bInterval			= 12
 	}
 };
@@ -545,16 +545,16 @@ port5_config_descriptor = {
 		.bDescriptorType	= USB_DT_ENDPOINT,
 		.bEndpointAddress	= 0, // filled in at run-time
 		.bmAttributes		= USB_ENDPOINT_XFER_INT,
-		.wMaxPacketSize		= LE16(1),
-		.bInterval			= 12
+		.wMaxPacketSize		= LE16(8),
+		.bInterval			= 0
 	},
 	{
 		.bLength			= USB_DT_ENDPOINT_SIZE,
 		.bDescriptorType	= USB_DT_ENDPOINT,
 		.bEndpointAddress	= 0, // filled in at run-time
 		.bmAttributes		= USB_ENDPOINT_XFER_INT,
-		.wMaxPacketSize		= LE16(1),
-		.bInterval			= 12
+		.wMaxPacketSize		= LE16(8),
+		.bInterval			= 0
 	}
 };
 #endif
