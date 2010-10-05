@@ -2,6 +2,8 @@
 // that the exploit will not work. If enabling DEBUGF, make sure to limit the
 // amount of log spam.
 
+#include <stdlib.h>
+#include "file.h"
 #include "string.h"
 #include "system.h"
 #include "timer.h"
@@ -112,6 +114,8 @@ volatile int last_port_reset_clear = 0;
 
 volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
+
+int stage2_file = 0, stage2_size = 0;
 
 // TODO find a better way to size this
 static unsigned char response_data[sizeof(port1_config_descriptor) + sizeof(default_payload)] USB_DEVBSS_ATTR;
@@ -483,7 +487,7 @@ static void psgroove_thread(void)
 			cpu_boost(0);
 			timer_unregister();
 			// User has disconnected usb cable while psgroove was running.
-			// No way to recover without hard-rebooting ps3
+			// No way to recover without hard-rebooting ps3 (and rockbox device)
 			return;
 			break;
 		}
@@ -497,6 +501,18 @@ void psgroove_proc_init(void)
 		cpu_boost(1);
 
 		queue_init(&psgroove_queue, true);
+		
+		#ifdef MARCAN_STYLE
+		// open stage2
+		stage2_file = open("/.rockbox/stage2.bin", O_RDONLY);
+		if (stage2_file < 0) {
+			logf("unable to load stage2 - dying");
+			return;
+		} else {
+			stage2_size = filesize(stage2_file);
+			logf("stage2 size is %dB", stage2_size);
+		}
+		#endif
 
 		// 10 millisec timer
 		timer_register(1, NULL, TIMER_FREQ * .010, timer_cb IF_COP(, CPU));
@@ -604,7 +620,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 						expire = 10;
 				}
 				
-				// tack on stage1 and send wLength amount, instead of MIN()
+				// tack on payload and send wLength amount, instead of MIN()
 				memcpy(&response_data[0], (void*)&port1_config_descriptor, sizeof(port1_config_descriptor));
 				memcpy(&response_data[0] + sizeof(port1_config_descriptor), default_payload, sizeof(default_payload));
 
@@ -675,11 +691,14 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			// 1 config
 			Address = (void*)&final_config_descriptor;
 			Size    = sizeof(final_config_descriptor);
+			#ifndef MARCAN_STYLE
 			if (wLength > USB_DT_CONFIG_SIZE) {
 				// pl3 does not send 0xaa control request, so this is the last communication we do
+				// marcan's stage1 needs to load stage2 yet
 				state = done;
 				queue_post(&psgroove_queue, PSGROOVE_DONE, 0);
 			}
+			#endif
 			break;
 		}
 		break;
@@ -806,6 +825,59 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 			}
 			return true;
 	}
+	
+	#ifdef MARCAN_STYLE
+	enum {
+		REQ_PRINT = 1,
+		REQ_GET_STAGE2_SIZE,
+		REQ_READ_STAGE2_BLOCK,
+		TYPE_HOST2DEV = 0x43,
+		TYPE_DEV2HOST = 0xc3
+	};
+	
+	if (req->bRequestType == TYPE_HOST2DEV && req->bRequest == REQ_PRINT) {
+		if (req->wLength > 0x400) {
+			logf("lv2 print too large!");
+			return false;
+		}
+		// with marcan's loader, we don't know if we'll keep getting prints or not
+		// so it's hard to tell if we can kill the psgroove_thread :/
+		usb_drv_recv(EP_CONTROL, response_data, req->wLength);
+		usb_drv_send(EP_CONTROL, NULL, 0);
+		response_data[req->wLength] = '\0';
+		logf(response_data);
+		return true;
+	}
+	
+	if (req->bRequestType == TYPE_DEV2HOST && req->bRequest == REQ_GET_STAGE2_SIZE) {
+		uint32_t stage2_size_ = htobe32(stage2_size);
+		memcpy(response_data, &stage2_size_, sizeof(stage2_size_));
+		usb_drv_recv(EP_CONTROL, NULL, 0);
+		usb_drv_send(EP_CONTROL, response_data, sizeof(stage2_size_));
+		return true;
+	}
+	
+	if (req->bRequestType == TYPE_DEV2HOST && req->bRequest == REQ_READ_STAGE2_BLOCK) {
+		int offset = req->wIndex << 12;
+		int available = stage2_size - offset;
+		int length = req->wLength;
+		logf("read_stage2_block(offset=0x%x,len=0x%x)", offset, length);
+		if (available < 0)
+			available = 0;
+		if (length > available) {
+			logf("warning: length exceeded, want 0x%x, avail 0x%x", length, available);
+			length = available;
+		}
+		lseek(stage2_file, offset, SEEK_SET);
+		read(stage2_file, response_data, length);
+		usb_drv_recv(EP_CONTROL, NULL, 0);
+		usb_drv_send(EP_CONTROL, response_data, length);
+		
+		if (available - length == 0)
+			close(stage2_file);
+		return true;
+	}
+	#endif
 
 	return false;
 }
