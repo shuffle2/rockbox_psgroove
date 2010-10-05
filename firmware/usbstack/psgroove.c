@@ -115,10 +115,11 @@ volatile int last_port_reset_clear = 0;
 volatile int8_t port_addr[7] = { -1, -1, -1, -1, -1, -1, -1 };
 volatile int8_t port_cur = -1;
 
-int stage2_file = 0, stage2_size = 0;
+int stage1_file = -1, stage1_size = 0,
+	stage2_file = -1, stage2_size = 0;
 
-// TODO find a better way to size this
-static unsigned char response_data[sizeof(port1_config_descriptor) + sizeof(default_payload)] USB_DEVBSS_ATTR;
+// This should be large enough for any payload...stage2 requires at most 0x1000 per transfer
+static unsigned char response_data[0x1000] USB_DEVBSS_ATTR;
 
 volatile uint8_t expire = 0;
 
@@ -131,11 +132,11 @@ static const char psgroove_thread_name[] = "psgroove";
 
 enum
 {
-	PSGROOVE_TASK_HUB,
-	PSGROOVE_TASK_JIG,
-	PSGROOVE_TIMER_EXPIRED,
-	PSGROOVE_CLR_FTR_CONN,
-	PSGROOVE_CLR_FTR_RST,
+	TASK_HUB,
+	TASK_JIG,
+	TIMER_EXPIRED,
+	CLR_FTR_CONN,
+	CLR_FTR_RST,
 	PSGROOVE_DONE,
 };
 
@@ -155,7 +156,7 @@ static void timer_cb(void)
 	if (expire)
 	{
 		if (--expire == 0)
-			queue_post(&psgroove_queue, PSGROOVE_TIMER_EXPIRED, 0);
+			queue_post(&psgroove_queue, TIMER_EXPIRED, 0);
 	}
 }
 
@@ -236,7 +237,7 @@ static void connect_port(int port)
 	hub_int_response = (1 << port);
 	port_status[port - 1] = PORT_FULL;
 	port_change[port - 1] = C_PORT_CONN;
-	queue_post(&psgroove_queue, PSGROOVE_TASK_HUB, 0);
+	queue_post(&psgroove_queue, TASK_HUB, 0);
 }
 
 static void disconnect_port(int port)
@@ -245,7 +246,7 @@ static void disconnect_port(int port)
 	hub_int_response = (1 << port);
 	port_status[port - 1] = PORT_EMPTY;
 	port_change[port - 1] = C_PORT_CONN;
-	queue_post(&psgroove_queue, PSGROOVE_TASK_HUB, 0);
+	queue_post(&psgroove_queue, TASK_HUB, 0);
 }
 
 static void HUB_Task(void)
@@ -306,10 +307,23 @@ static void psgroove_reset(void)
 	hub_int_force_data0 = 0;
 	last_port_conn_clear = 0;
 	last_port_reset_clear = 0;
-	memset((void*)&port_addr[0], -1, sizeof(port_addr));
+	memset((void*)port_addr, -1, sizeof(port_addr));
 	port_cur = -1;
 	expire = 0;
-	ep_in = 0, ep_out = 0;
+	ep_in = ep_out = 0;
+	
+	if (stage1_file >= 0)
+	{
+		close(stage1_file);
+		stage1_file = -1;
+		stage1_size = 0;
+	}
+	if (stage2_file >= 0)
+	{
+		close(stage2_file);
+		stage2_file = -1;
+		stage2_size = 0;
+	}
 
 	queue_clear(&psgroove_queue);
 	psgroove_thread_entry = 0;
@@ -343,15 +357,15 @@ static void psgroove_thread(void)
 
 		switch (ev.id)
 		{
-		case PSGROOVE_TASK_HUB:
+		case TASK_HUB:
 			HUB_Task();
 			break;
 
-		case PSGROOVE_TASK_JIG:
+		case TASK_JIG:
 			JIG_Task();
 			break;
 
-		case PSGROOVE_TIMER_EXPIRED:
+		case TIMER_EXPIRED:
 			switch (state)
 			{
 			case hub_ready:
@@ -424,7 +438,7 @@ static void psgroove_thread(void)
 			}
 			break;
 
-		case PSGROOVE_CLR_FTR_CONN:
+		case CLR_FTR_CONN:
 			if (state == p2_wait_disconnect && last_port_conn_clear == 2)
 			{
 				state = p4_wait_connect;
@@ -454,7 +468,7 @@ static void psgroove_thread(void)
 				DEBUGF("CLR_FTR_CONN %s %d", state_name, last_port_conn_clear);
 			break;
 
-		case PSGROOVE_CLR_FTR_RST:
+		case CLR_FTR_RST:
 			#define HANDLE_CLR_FTR_RST(x)									\
 			if (state == p##x##_wait_reset && last_port_reset_clear == x)	\
 			{																\
@@ -471,11 +485,11 @@ static void psgroove_thread(void)
 				DEBUGF("CLR_FTR_RST %s %d", state_name, last_port_reset_clear);
 			break;
 
-		case PSGROOVE_DONE:			
+		case PSGROOVE_DONE:		
 			ticks = current_tick;
 			secs = ticks / HZ;
 			ms = ticks - secs * HZ;
-			logf("psgroove %s %d.%d", state_name, secs, ms);
+			logf("psgroove done %d.%d", secs, ms);
 
 			cpu_boost(0);
 			timer_unregister();
@@ -502,17 +516,18 @@ void psgroove_proc_init(void)
 
 		queue_init(&psgroove_queue, true);
 		
-		#ifdef MARCAN_STYLE
-		// open stage2
-		stage2_file = open("/.rockbox/stage2.bin", O_RDONLY);
-		if (stage2_file < 0) {
-			logf("unable to load stage2 - dying");
-			return;
-		} else {
-			stage2_size = filesize(stage2_file);
-			logf("stage2 size is %dB", stage2_size);
+		// open bins
+		stage1_file = open("/.rockbox/stage1.bin", O_RDONLY);
+		if (stage1_file >= 0) {
+			stage1_size = filesize(stage1_file);
+			logf("stage1 found! %x", stage1_size);
 		}
-		#endif
+		
+		stage2_file = open("/.rockbox/stage2.bin", O_RDONLY);
+		if (stage2_file >= 0) {
+			stage2_size = filesize(stage2_file);
+			logf("stage2 found! %x", stage2_size);
+		}
 
 		// 10 millisec timer
 		timer_register(1, NULL, TIMER_FREQ * .010, timer_cb IF_COP(, CPU));
@@ -611,6 +626,8 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			if (DescriptorNumber < PORT1_NUM_CONFIGS) {
 				if (wLength > USB_DT_CONFIG_SIZE) {
 					port1_config_descriptor.config.wTotalLength = LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE);
+				} else if (stage1_size) {
+					port1_config_descriptor.config.wTotalLength = LE16(sizeof(port1_config_descriptor) + stage1_size);
 				} else {
 					port1_config_descriptor.config.wTotalLength = LE16(sizeof(port1_config_descriptor) + sizeof(default_payload));
 				}
@@ -621,8 +638,13 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 				}
 				
 				// tack on payload and send wLength amount, instead of MIN()
-				memcpy(&response_data[0], (void*)&port1_config_descriptor, sizeof(port1_config_descriptor));
-				memcpy(&response_data[0] + sizeof(port1_config_descriptor), default_payload, sizeof(default_payload));
+				memcpy(response_data, (void*)&port1_config_descriptor, sizeof(port1_config_descriptor));
+				if (stage1_size) {
+					lseek(stage1_file, 0, SEEK_SET);
+					read(stage1_file, response_data + sizeof(port1_config_descriptor), stage1_size);
+				} else {
+					memcpy(response_data + sizeof(port1_config_descriptor), default_payload, sizeof(default_payload));
+				}
 
 				usb_drv_recv(EP_CONTROL, NULL, 0);
 				usb_drv_send(EP_CONTROL, response_data, wLength);
@@ -642,10 +664,10 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 				expire = 10;
 			}
 			
-			memcpy(&response_data[0], (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
+			memcpy(response_data, (void*)&port3_config_descriptor, sizeof(port3_config_descriptor));
 
 			int i = sizeof(port3_config_descriptor);
-			while (i < wLength) { // TODO perhaps generate this in psgroove_init instead
+			while (i < wLength) {
 				memcpy(&response_data[i], (void*)&port3_padding, sizeof(port3_padding));
 				i += sizeof(port3_padding);
 			}
@@ -666,7 +688,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 					port4_config_descriptor_2.config.wTotalLength = LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE);
 				}
 				
-				memcpy(&response_data[0], (void*)&port4_config_descriptor_2, sizeof(port4_config_descriptor_2));
+				memcpy(response_data, (void*)&port4_config_descriptor_2, sizeof(port4_config_descriptor_2));
 				
 				usb_drv_recv(EP_CONTROL, NULL, 0);
 				usb_drv_send(EP_CONTROL, response_data, wLength);
@@ -691,14 +713,11 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			// 1 config
 			Address = (void*)&final_config_descriptor;
 			Size    = sizeof(final_config_descriptor);
-			#ifndef MARCAN_STYLE
-			if (wLength > USB_DT_CONFIG_SIZE) {
-				// pl3 does not send 0xaa control request, so this is the last communication we do
+			if (wLength > USB_DT_CONFIG_SIZE && stage2_size == 0) {
+				// this is the last communication we do with pl3
 				// marcan's stage1 needs to load stage2 yet
-				state = done;
 				queue_post(&psgroove_queue, PSGROOVE_DONE, 0);
 			}
-			#endif
 			break;
 		}
 		break;
@@ -713,7 +732,7 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 	}
 
 	Size = MIN(wLength, Size);
-	memcpy(&response_data[0], Address, Size);
+	memcpy(response_data, Address, Size);
 
 	usb_drv_recv(EP_CONTROL, NULL, 0);
 	usb_drv_send(EP_CONTROL, response_data, Size);
@@ -732,15 +751,6 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 	(void)dest;
 	
 	DEBUGF("%d %s %02x %02x %04x %04x", port_cur, state_name, req->bRequest, req->bRequestType, req->wValue, req->wIndex);
-	
-	if (port_cur == 6 && req->bRequest == 0xAA) {
-		// pl3 does not send this...
-		usb_drv_recv(EP_CONTROL, NULL, 0);
-		usb_drv_send(EP_CONTROL, NULL, 0);
-		state = done;
-		queue_post(&psgroove_queue, PSGROOVE_DONE, 0);
-		return true;
-	}
 
 	if (port_cur == 5 && req->bRequest == USB_REQ_SET_INTERFACE)
 	{
@@ -748,7 +758,7 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 		usb_drv_send(EP_CONTROL, NULL, 0);
 
 		// But now we kickoff the JIG :)
-		queue_post(&psgroove_queue, PSGROOVE_TASK_JIG, 0);
+		queue_post(&psgroove_queue, TASK_JIG, 0);
 		return true;
 	}
 
@@ -795,7 +805,7 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 			case 0x0004: // PORT_RESET
 				hub_int_response = (1 << p);
 				port_change[p - 1] |= C_PORT_RESET;
-				queue_post(&psgroove_queue, PSGROOVE_TASK_HUB, 0);
+				queue_post(&psgroove_queue, TASK_HUB, 0);
 				break;
 			}
 			return true;
@@ -815,18 +825,18 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 			case 0x0010: // C_PORT_CONNECTION
 				port_change[p - 1] &= ~C_PORT_CONN;
 				last_port_conn_clear = p;
-				queue_post(&psgroove_queue, PSGROOVE_CLR_FTR_CONN, 0);
+				queue_post(&psgroove_queue, CLR_FTR_CONN, 0);
 				break;
 			case 0x0014: // C_PORT_RESET
 				port_change[p - 1] &= ~C_PORT_RESET;
 				last_port_reset_clear = p;
-				queue_post(&psgroove_queue, PSGROOVE_CLR_FTR_RST, 0);
+				queue_post(&psgroove_queue, CLR_FTR_RST, 0);
 				break;
 			}
 			return true;
 	}
 	
-	#ifdef MARCAN_STYLE
+	// The rest is asbestos-specific-------------------------------------------
 	enum {
 		REQ_PRINT = 1,
 		REQ_GET_STAGE2_SIZE,
@@ -836,12 +846,10 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 	};
 	
 	if (req->bRequestType == TYPE_HOST2DEV && req->bRequest == REQ_PRINT) {
-		if (req->wLength > 0x400) {
+		if (req->wLength > sizeof(response_data)) {
 			logf("lv2 print too large!");
 			return false;
 		}
-		// with marcan's loader, we don't know if we'll keep getting prints or not
-		// so it's hard to tell if we can kill the psgroove_thread :/
 		usb_drv_recv(EP_CONTROL, response_data, req->wLength);
 		usb_drv_send(EP_CONTROL, NULL, 0);
 		response_data[req->wLength] = '\0';
@@ -861,6 +869,7 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 		int offset = req->wIndex << 12;
 		int available = stage2_size - offset;
 		int length = req->wLength;
+		
 		logf("read_stage2_block(offset=0x%x,len=0x%x)", offset, length);
 		if (available < 0)
 			available = 0;
@@ -868,16 +877,21 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 			logf("warning: length exceeded, want 0x%x, avail 0x%x", length, available);
 			length = available;
 		}
+		
 		lseek(stage2_file, offset, SEEK_SET);
 		read(stage2_file, response_data, length);
 		usb_drv_recv(EP_CONTROL, NULL, 0);
 		usb_drv_send(EP_CONTROL, response_data, length);
 		
 		if (available - length == 0)
+		{
 			close(stage2_file);
+			stage2_file = -1;
+			stage2_size = 0;
+			queue_post(&psgroove_queue, PSGROOVE_DONE, 0);
+		}
 		return true;
 	}
-	#endif
 
 	return false;
 }

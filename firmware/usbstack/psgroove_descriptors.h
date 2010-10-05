@@ -79,14 +79,6 @@
 #endif /* USE_JIG */
 
 
-//#define MARCAN_STYLE
-#ifdef MARCAN_STYLE
-#include "pl3/marcan_stage1.h"
-#undef default_payload
-#define default_payload marcan_stage1
-#endif
-
-
 const struct usb_device_descriptor HUB_Device_Descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
@@ -511,11 +503,7 @@ const struct usb_device_descriptor final_device_descriptor = {
 	.bDeviceProtocol	= 0x00,
 	.bMaxPacketSize0	= 0x08,
 	.idVendor			= LE16(0xAAAA),
-	#ifdef MARCAN_STYLE
-	.idProduct			= LE16(0x3713),
-	#else
-	.idProduct			= LE16(0xdec0),
-	#endif
+	.idProduct			= LE16(0x3713), // pl3 no longer cares about this value
 	.bcdDevice			= LE16(0x0000),
 	.iManufacturer		= 0x00,
 	.iProduct			= 0x00,
