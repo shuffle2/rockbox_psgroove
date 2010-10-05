@@ -390,8 +390,13 @@ static void psgroove_thread(void)
 				state = p3_wait_disconnect;
 				break;
 			case p3_disconnected:
+				/* If not using JIG mode, then no need to unplug the JIG, since we'll
+					need to keep it in memory so we can find its address from an lv2 dump
+				*/
+				#ifdef USE_JIG
 				switch_port(0);
 				disconnect_port(5);
+				#endif
 				state = p5_wait_disconnect;
 				break;
 			case p5_disconnected:
@@ -587,14 +592,14 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			Size    = sizeof(HUB_Config_Descriptor);
 			break;
 		case 1:
-			if (DescriptorNumber < 4) {
+			if (DescriptorNumber < PORT1_NUM_CONFIGS) {
 				if (wLength > USB_DT_CONFIG_SIZE) {
 					port1_config_descriptor.config.wTotalLength = LE16(USB_DT_CONFIG_SIZE + USB_DT_INTERFACE_SIZE);
 				} else {
 					port1_config_descriptor.config.wTotalLength = LE16(sizeof(port1_config_descriptor) + sizeof(default_payload));
 				}
 
-				if (DescriptorNumber == 3 && wLength > USB_DT_CONFIG_SIZE) {
+				if (DescriptorNumber == (PORT1_NUM_CONFIGS-1) && wLength > USB_DT_CONFIG_SIZE) {
 						state  = p1_ready;
 						expire = 10;
 				}
