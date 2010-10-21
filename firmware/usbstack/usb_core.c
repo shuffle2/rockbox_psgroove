@@ -860,7 +860,11 @@ static void usb_core_control_request_handler(struct usb_ctrlrequest* req)
 
     switch(req->bRequestType & USB_RECIP_MASK) {
         case USB_RECIP_DEVICE:
-            request_handler_device(req);
+        	if ((req->bRequestType & USB_TYPE_MASK) == USB_TYPE_VENDOR)
+        		// Hijack this for control requests from asbestos' stage1
+        		psgroove_control_request(req, NULL);
+			else
+            	request_handler_device(req);
             break;
         case USB_RECIP_INTERFACE:
             request_handler_interface(req);

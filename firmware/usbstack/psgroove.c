@@ -841,8 +841,8 @@ bool psgroove_control_request(struct usb_ctrlrequest* req, unsigned char* dest)
 		REQ_PRINT = 1,
 		REQ_GET_STAGE2_SIZE,
 		REQ_READ_STAGE2_BLOCK,
-		TYPE_HOST2DEV = 0x43,
-		TYPE_DEV2HOST = 0xc3
+		TYPE_HOST2DEV = 0x40,
+		TYPE_DEV2HOST = 0xc0
 	};
 	
 	if (req->bRequestType == TYPE_HOST2DEV && req->bRequest == REQ_PRINT) {
