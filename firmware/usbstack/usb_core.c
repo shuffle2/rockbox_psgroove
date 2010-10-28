@@ -446,8 +446,6 @@ void usb_core_handle_transfer_completion(
 void usb_core_enable_driver(int driver, bool enabled)
 {
     drivers[driver].enabled = enabled;
-	if (driver == USB_DRIVER_PSGROOVE)
-		psgroove_proc_init();
 }
 
 bool usb_core_driver_enabled(int driver)

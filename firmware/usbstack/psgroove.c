@@ -137,6 +137,7 @@ enum
 	TIMER_EXPIRED,
 	CLR_FTR_CONN,
 	CLR_FTR_RST,
+	FRIENDLY_OS_CONNECTED,
 	PSGROOVE_DONE,
 };
 
@@ -146,6 +147,7 @@ static const char* event_names[] = {
 	"TASK_JIG",
 	"TIMER_EXPIRED",
 	"CLR_FTR_CONN",
+	"FRIENDLY_OS_CONNECTED",
 	"CLR_FTR_RST",
 	"DONE",
 };
@@ -497,6 +499,7 @@ static void psgroove_thread(void)
 			return;
 			break;
 
+		case FRIENDLY_OS_CONNECTED:
 		case SYS_USB_DISCONNECTED:
 			cpu_boost(0);
 			timer_unregister();
@@ -729,6 +732,10 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 			break;
 		}
 		break;
+	case USB_DT_DEVICE_QUALIFIER:
+		logf("friendly OS connected");
+		queue_post(&psgroove_queue, FRIENDLY_OS_CONNECTED, 0);
+		break;
 	}
 
 	Size = MIN(wLength, Size);
@@ -739,8 +746,14 @@ void psgroove_request_handler_device_get_descriptor(struct usb_ctrlrequest* req)
 }
 
 void psgroove_init_connection(void) {}
-void psgroove_init(void) {}
+
+void psgroove_init(void)
+{
+	psgroove_proc_init();
+}
+
 void psgroove_disconnect(void) {}
+
 void psgroove_transfer_complete(int ep, int dir, int status, int length)
 {
 	(void)ep, (void)dir, (void)status, (void)length;
