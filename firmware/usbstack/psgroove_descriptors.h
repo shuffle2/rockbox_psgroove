@@ -6,10 +6,13 @@
 
 #include "pl3/config.h"
 #include "pl3/shellcode_egghunt.h"
-#include "pl3/default_payload_3_41.h"
+#include "pl3/default_payload_2_76.h"
 #include "pl3/default_payload_3_01.h"
 #include "pl3/default_payload_3_10.h"
 #include "pl3/default_payload_3_15.h"
+#include "pl3/default_payload_3_21.h"
+#include "pl3/default_payload_3_40.h"
+#include "pl3/default_payload_3_41.h"
 #include "pl3/dump_lv2.h"
 
 #ifdef ROCKBOX_LITTLE_ENDIAN
@@ -20,12 +23,17 @@
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
 
-#if defined (FIRMWARE_3_41)
-#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
+#if defined (FIRMWARE_3_41) || defined (FIRMWARE_3_40)
+      #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
 #elif defined (FIRMWARE_3_15) || defined (FIRMWARE_3_10)
-#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
+      #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
 #elif defined (FIRMWARE_3_01)
-#define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
+      #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
+#elif defined (FIRMWARE_2_76)
+      #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x31, 0x3E, 0x70
+#elif defined (FIRMWARE_3_21)
+      #define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x90
+
 #else
 #error You must specify the target firmware. \
    define a supported FIRMWARE_X_YZ in config.h and recompile.
@@ -35,22 +43,35 @@
 #define default_shellcode shellcode_egghunt
 #define default_shellcode_macro shellcode_egghunt_macro
 
-#if defined (FIRMWARE_3_41)
-#define default_payload default_payload_3_41
-#define default_payload_macro default_payload_3_41_macro
-#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
-#elif defined (FIRMWARE_3_15)
-#define default_payload default_payload_3_15
-#define default_payload_macro default_payload_3_15_macro
-#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
-#elif defined (FIRMWARE_3_10)
-#define default_payload default_payload_3_10
-#define default_payload_macro default_payload_3_10_macro
-#define SHELLCODE_ADDR_BASE  0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
-#elif defined (FIRMWARE_3_01)
-#define default_payload default_payload_3_01
-#define default_payload_macro default_payload_3_01_macro
-#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
+       #if defined (FIRMWARE_3_41)
+             #define default_payload default_payload_3_41
+             #define default_payload_macro default_payload_3_41_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
+       #elif defined (FIRMWARE_3_15)
+             #define default_payload default_payload_3_15
+             #define default_payload_macro default_payload_3_15_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
+       #elif defined (FIRMWARE_3_10)
+             #define default_payload default_payload_3_10
+             #define default_payload_macro default_payload_3_10_macro
+             #define SHELLCODE_ADDR_BASE  0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
+       #elif defined (FIRMWARE_3_01)
+             #define default_payload default_payload_3_01
+             #define default_payload_macro default_payload_3_01_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
+       #elif defined (FIRMWARE_3_40)
+             #define default_payload default_payload_3_40
+             #define default_payload_macro default_payload_3_40_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
+       #elif defined (FIRMWARE_2_76)
+             #define default_payload default_payload_2_76
+             #define default_payload_macro default_payload_2_76_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0x1B, 0xC8
+       #elif defined (FIRMWARE_3_21)
+             #define default_payload default_payload_3_21
+             #define default_payload_macro default_payload_3_21_macro
+             #define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
+
 #endif /* FIRMWARE_X_YZ */
 
 #define SHELLCODE_PAGE		0x80, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
