@@ -4,8 +4,9 @@
 #include "cpu.h"
 #include "usb_ch9.h"
 
-#include "pl3/config.h"
+#include "config.h"
 #include "pl3/shellcode_egghunt.h"
+
 #include "pl3/default_payload_2_76.h"
 #include "pl3/default_payload_3_01.h"
 #include "pl3/default_payload_3_10.h"
@@ -15,100 +16,19 @@
 #include "pl3/default_payload_3_40.h"
 #include "pl3/default_payload_3_41.h"
 #include "pl3/dump_lv2.h"
+#include "psgrooveFWSelection.h"
 
 #ifdef ROCKBOX_LITTLE_ENDIAN
-#define LE16(x) (x)
+       #define LE16(x) (x)
 #else
-#define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
+     #define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
 #endif
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
 
-#if defined (FIRMWARE_3_41) || defined (FIRMWARE_3_40)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xe7, 0x20
-#elif defined (FIRMWARE_3_15) || defined (FIRMWARE_3_10)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
-#elif defined (FIRMWARE_3_01)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
-#elif defined (FIRMWARE_2_76)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x31, 0x3E, 0x70
-#elif defined (FIRMWARE_3_21)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x90
-#elif defined (FIRMWARE_3_30)
-#       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xdb, 0xc0
 
 
-#else
-#error You must specify the target firmware. \
-   define a supported FIRMWARE_X_YZ in config.h and recompile.
-#endif /* FIRMWARE_X_YZ */
-
-#ifdef USE_JIG
-#define default_shellcode shellcode_egghunt
-#define default_shellcode_macro shellcode_egghunt_macro
-
-#if defined (FIRMWARE_3_41)
-#       define default_payload default_payload_3_41
-#       define default_payload_macro default_payload_3_41_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
-#elif defined (FIRMWARE_3_15)
-#       define default_payload default_payload_3_15
-#       define default_payload_macro default_payload_3_15_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
-#elif defined (FIRMWARE_3_10)
-#       define default_payload default_payload_3_10
-#       define default_payload_macro default_payload_3_10_macro
-#       define SHELLCODE_ADDR_BASE  0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
-#elif defined (FIRMWARE_3_01)
-#       define default_payload default_payload_3_01
-#       define default_payload_macro default_payload_3_01_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0xFB, 0xC8
-#elif defined (FIRMWARE_3_40)
-#       define default_payload default_payload_3_40
-#       define default_payload_macro default_payload_3_40_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
-#elif defined (FIRMWARE_2_76)
-#       define default_payload default_payload_2_76
-#       define default_payload_macro default_payload_2_76_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3B, 0x1B, 0xC8
-#elif defined (FIRMWARE_3_21)
-#       define default_payload default_payload_3_21
-#       define default_payload_macro default_payload_3_21_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x30
-#elif defined (FIRMWARE_3_30)
-#       define default_payload default_payload_3_30
-#       define default_payload_macro default_payload_3_30_macro
-#       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
-
-#endif /* FIRMWARE_X_YZ */
-
-#	define SHELLCODE_PAGE		0x80, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
-#	define SHELLCODE_DESTINATION	SHELLCODE_ADDR_BASE
-#	define SHELLCODE_PTR 		SHELLCODE_ADDR_BASE + 0x08
-#	define SHELLCODE_ADDRESS	SHELLCODE_ADDR_BASE + 0x18
-
-#define PORT1_NUM_CONFIGS	4
-
-#else /* USE_JIG */
-
-#define default_shellcode shellcode_egghunt
-#define default_shellcode_macro shellcode_egghunt_macro
-#define default_payload dump_lv2
-#define default_payload_macro dump_lv2_macro
-
-#define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x4E, 0x00, 0x00
-
-#define SHELLCODE_PAGE		SHELLCODE_ADDR_BASE
-#define SHELLCODE_DESTINATION	SHELLCODE_ADDR_BASE + 0x20
-#define SHELLCODE_PTR 		SHELLCODE_ADDR_BASE + 0x28
-#define SHELLCODE_ADDRESS	SHELLCODE_ADDR_BASE + 0x38
-
-#define PORT1_NUM_CONFIGS	100
-
-#endif /* USE_JIG */
-
-
-const struct usb_device_descriptor HUB_Device_Descriptor = {
+struct usb_device_descriptor HUB_Device_Descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -162,7 +82,7 @@ HUB_Config_Descriptor = {
 	}
 };
 
-const uint8_t HUB_Hub_Descriptor[] = {
+uint8_t HUB_Hub_Descriptor[] = {
 	0x09,		// size
 	0x29,		// type: hub
 	0x06,		// num ports
@@ -173,7 +93,7 @@ const uint8_t HUB_Hub_Descriptor[] = {
 	0xff		// pwrctrlmask
 };
 
-static const uint8_t jig_response[64] = {
+uint8_t jig_response[64] = {
 	#ifdef USE_JIG
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
@@ -186,7 +106,7 @@ static const uint8_t jig_response[64] = {
 	#endif
 };
 
-const struct usb_device_descriptor port1_device_descriptor = {
+struct usb_device_descriptor port1_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -248,7 +168,7 @@ port1_config_descriptor = {
 	}
 };
 
-const struct usb_device_descriptor port2_device_descriptor = {
+struct usb_device_descriptor port2_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -275,7 +195,7 @@ struct {
 		uint8_t unkData2;
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
-const port2_config_descriptor = {
+port2_config_descriptor = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
@@ -305,7 +225,7 @@ const port2_config_descriptor = {
 	}
 };
 
-const struct usb_device_descriptor port3_device_descriptor = {
+struct usb_device_descriptor port3_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -322,7 +242,7 @@ const struct usb_device_descriptor port3_device_descriptor = {
 	.bNumConfigurations	= 0x02
 };
 
-const struct usb_config_descriptor port3_config_descriptor = {
+struct usb_config_descriptor port3_config_descriptor = {
 	.bLength			= USB_DT_CONFIG_SIZE,
 	.bDescriptorType	= USB_DT_CONFIG,
 	.wTotalLength		= LE16(0xa4d),
@@ -333,7 +253,7 @@ const struct usb_config_descriptor port3_config_descriptor = {
 	.bMaxPower			= 1
 };
 
-const struct usb_interface_descriptor port3_padding = {
+struct usb_interface_descriptor port3_padding = {
 	.bLength			= USB_DT_INTERFACE_SIZE,
 	.bDescriptorType	= USB_DT_INTERFACE,
 	.bInterfaceNumber	= 0,
@@ -345,7 +265,7 @@ const struct usb_interface_descriptor port3_padding = {
 	.iInterface			= 0
 };
 
-const struct usb_device_descriptor port4_device_descriptor = {
+struct usb_device_descriptor port4_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -366,7 +286,7 @@ struct {
 	struct usb_config_descriptor	config;
 	struct usb_interface_descriptor	interface;
 } __attribute__ ((packed))
-const port4_config_descriptor_1 = {
+port4_config_descriptor_1 = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
@@ -428,7 +348,7 @@ struct {
 		uint8_t data[3][8];
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
-const port4_config_descriptor_3 = {
+port4_config_descriptor_3 = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
@@ -460,7 +380,7 @@ const port4_config_descriptor_3 = {
 	}
 };
 
-const struct usb_device_descriptor port5_device_descriptor = {
+struct usb_device_descriptor port5_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -523,7 +443,7 @@ port5_config_descriptor = {
 	}
 };
 
-const struct usb_device_descriptor final_device_descriptor = {
+struct usb_device_descriptor final_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -534,7 +454,7 @@ const struct usb_device_descriptor final_device_descriptor = {
 	.idVendor			= LE16(0xAAAA),
 	.idProduct			= LE16(0x3713), // pl3 no longer cares about this value
 	.bcdDevice			= LE16(0x0000),
-	.iManufacturer		= 0x00,
+	.iManufacturer		= 0x0,
 	.iProduct			= 0x00,
 	.iSerialNumber		= 0x00,
 	.bNumConfigurations	= 0x01
@@ -544,7 +464,7 @@ struct {
 	struct usb_config_descriptor	config;
 	struct usb_interface_descriptor	interface;
 } __attribute__ ((packed))
-const final_config_descriptor = {
+final_config_descriptor = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
