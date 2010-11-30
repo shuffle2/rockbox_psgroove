@@ -19,9 +19,9 @@
 #include "psgrooveFWSelection.h"
 
 #ifdef ROCKBOX_LITTLE_ENDIAN
-       #define LE16(x) (x)
+#     define LE16(x) (x)
 #else
-     #define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
+#     define LE16(x) ((( (x) & 0xFF) << 8) | (( (x) & 0xFF00) >> 8))
 #endif
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
@@ -93,7 +93,7 @@ const uint8_t HUB_Hub_Descriptor[] = {
 	0xff		// pwrctrlmask
 };
 
-const uint8_t jig_response[64] = {
+static const uint8_t jig_response[64] = {
 	#ifdef USE_JIG
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
@@ -195,7 +195,7 @@ struct {
 		uint8_t unkData2;
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
-port2_config_descriptor = {
+const port2_config_descriptor = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
