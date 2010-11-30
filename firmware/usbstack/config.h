@@ -26,9 +26,9 @@
 //#define FIRMWARE_3_41
 
 /* 2. Define your Target payload reg/NUS/Dev/etc -= ONLY USE ONE! =- */
-#define Payload_Regular //if you don't know what the others are-- this is what you want!
+//#define Payload_Regular //if you don't know what the others are-- this is what you want!
 //#define Payload_NUS
-//#define Payload_Dev
+#define Payload_Dev
 //#define Payload_Dump_ELFS
 //#define Payload_Trace_ALL_SC
 //#define Payload_Trace_HVC

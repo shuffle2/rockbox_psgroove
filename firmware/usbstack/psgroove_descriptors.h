@@ -28,7 +28,7 @@
 
 
 
-struct usb_device_descriptor HUB_Device_Descriptor = {
+const struct usb_device_descriptor HUB_Device_Descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -82,7 +82,7 @@ HUB_Config_Descriptor = {
 	}
 };
 
-uint8_t HUB_Hub_Descriptor[] = {
+const uint8_t HUB_Hub_Descriptor[] = {
 	0x09,		// size
 	0x29,		// type: hub
 	0x06,		// num ports
@@ -93,7 +93,7 @@ uint8_t HUB_Hub_Descriptor[] = {
 	0xff		// pwrctrlmask
 };
 
-uint8_t jig_response[64] = {
+const uint8_t jig_response[64] = {
 	#ifdef USE_JIG
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
@@ -106,7 +106,7 @@ uint8_t jig_response[64] = {
 	#endif
 };
 
-struct usb_device_descriptor port1_device_descriptor = {
+const struct usb_device_descriptor port1_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -168,7 +168,7 @@ port1_config_descriptor = {
 	}
 };
 
-struct usb_device_descriptor port2_device_descriptor = {
+const struct usb_device_descriptor port2_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -225,7 +225,7 @@ port2_config_descriptor = {
 	}
 };
 
-struct usb_device_descriptor port3_device_descriptor = {
+const struct usb_device_descriptor port3_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -242,7 +242,7 @@ struct usb_device_descriptor port3_device_descriptor = {
 	.bNumConfigurations	= 0x02
 };
 
-struct usb_config_descriptor port3_config_descriptor = {
+const struct usb_config_descriptor port3_config_descriptor = {
 	.bLength			= USB_DT_CONFIG_SIZE,
 	.bDescriptorType	= USB_DT_CONFIG,
 	.wTotalLength		= LE16(0xa4d),
@@ -253,7 +253,7 @@ struct usb_config_descriptor port3_config_descriptor = {
 	.bMaxPower			= 1
 };
 
-struct usb_interface_descriptor port3_padding = {
+const struct usb_interface_descriptor port3_padding = {
 	.bLength			= USB_DT_INTERFACE_SIZE,
 	.bDescriptorType	= USB_DT_INTERFACE,
 	.bInterfaceNumber	= 0,
@@ -265,7 +265,7 @@ struct usb_interface_descriptor port3_padding = {
 	.iInterface			= 0
 };
 
-struct usb_device_descriptor port4_device_descriptor = {
+const struct usb_device_descriptor port4_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -286,7 +286,7 @@ struct {
 	struct usb_config_descriptor	config;
 	struct usb_interface_descriptor	interface;
 } __attribute__ ((packed))
-port4_config_descriptor_1 = {
+const port4_config_descriptor_1 = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
@@ -348,7 +348,7 @@ struct {
 		uint8_t data[3][8];
 	} __attribute__ ((packed)) extra;
 } __attribute__ ((packed))
-port4_config_descriptor_3 = {
+const port4_config_descriptor_3 = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
@@ -380,7 +380,7 @@ port4_config_descriptor_3 = {
 	}
 };
 
-struct usb_device_descriptor port5_device_descriptor = {
+const struct usb_device_descriptor port5_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -443,7 +443,7 @@ port5_config_descriptor = {
 	}
 };
 
-struct usb_device_descriptor final_device_descriptor = {
+const struct usb_device_descriptor final_device_descriptor = {
 	.bLength			= USB_DT_DEVICE_SIZE,
 	.bDescriptorType	= USB_DT_DEVICE,
 	.bcdUSB				= LE16(0x0200),
@@ -454,7 +454,7 @@ struct usb_device_descriptor final_device_descriptor = {
 	.idVendor			= LE16(0xAAAA),
 	.idProduct			= LE16(0x3713), // pl3 no longer cares about this value
 	.bcdDevice			= LE16(0x0000),
-	.iManufacturer		= 0x0,
+	.iManufacturer		= 0x00,
 	.iProduct			= 0x00,
 	.iSerialNumber		= 0x00,
 	.bNumConfigurations	= 0x01
@@ -464,7 +464,7 @@ struct {
 	struct usb_config_descriptor	config;
 	struct usb_interface_descriptor	interface;
 } __attribute__ ((packed))
-final_config_descriptor = {
+const final_config_descriptor = {
 	{
 		.bLength			= USB_DT_CONFIG_SIZE,
 		.bDescriptorType	= USB_DT_CONFIG,
