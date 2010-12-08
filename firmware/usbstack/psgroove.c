@@ -13,6 +13,7 @@
 
 #define LOGF_ENABLE
 #include "logf.h"
+//#define PSGROOVE_LOG
 
 #include "psgroove.h"
 #include "psgroove_descriptors.h"
@@ -141,7 +142,7 @@ enum
 	PSGROOVE_DONE,
 };
 
-#if 0
+#ifdef PSGROOVE_LOG
 static const char* event_names[] = {
 	"TASK_HUB",
 	"TASK_JIG",
@@ -195,7 +196,7 @@ static inline void Endpoint_Read_Stream(int ep, uint16_t Length)
 {
 	usb_drv_recv_blocking(ep, response_data, Length);
 
-	logf("%02x%02x%02x%02x%02x%02x%02x%02x",
+	logf(">%02x%02x%02x%02x%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0],
 		*(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2],
@@ -210,9 +211,15 @@ static inline void Endpoint_Write_PStream_LE(int ep, void* Buffer, uint16_t Leng
 {
 	memcpy(&response_data[0], Buffer, Length);
 
-	DEBUGF("%02x%02x%02x%02x",
-		*(uint8_t*)&response_data[0], *(uint8_t*)&response_data[1],
-		*(uint8_t*)&response_data[2], *(uint8_t*)&response_data[3]);
+	logf("<%02x%02x%02x%02x%02x%02x%02x%02x",
+		*(uint8_t*)&response_data[0],
+		*(uint8_t*)&response_data[1],
+		*(uint8_t*)&response_data[2],
+		*(uint8_t*)&response_data[3],
+		*(uint8_t*)&response_data[4],
+		*(uint8_t*)&response_data[5],
+		*(uint8_t*)&response_data[6],
+		*(uint8_t*)&response_data[7]);
 
 	usb_drv_send(ep, response_data, Length);
 }
@@ -382,14 +389,9 @@ static void psgroove_thread(void)
 	(void)state_names; // hey compiler - shutup.
 	struct queue_event ev;
 
-	switch_port(0);
-	#ifndef JIG_AUTH
 	state = init;
-	#else
-	state = p5_wait_enumerate;
-	connect_port(5);
-	#endif
-
+	switch_port(0);
+	
 	long int ticks = current_tick;
 	int secs = ticks / HZ;
 	int ms = ticks - secs * HZ;
@@ -399,7 +401,7 @@ static void psgroove_thread(void)
 	{
 		queue_wait(&psgroove_queue, &ev);
 
-#if 0 // informative, but sloooww
+#ifdef PSGROOVE_LOG // informative, but sloooww
 		ticks = current_tick;
 		secs = ticks / HZ;
 		ms = ticks - secs * HZ;

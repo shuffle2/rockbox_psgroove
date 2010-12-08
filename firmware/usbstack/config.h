@@ -15,7 +15,7 @@
 #define USE_JIG
 
 /* Will only do jig authentication, not usb exploit */
-#define JIG_AUTH
+//#define JIG_AUTH
 //#define HAVE_MASTER_KEY
 
 /* The firmware version supported gets defined in the Makefile */
