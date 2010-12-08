@@ -17,7 +17,7 @@
 #include "psgroove.h"
 #include "psgroove_descriptors.h"
 
-// Used for discarding JIG challenge
+// Used for JIG challenge
 extern int usb_drv_recv_blocking(int endpoint, void* ptr, int length);
 
 // PP502x-only regs...
@@ -191,11 +191,11 @@ static inline void send_hub_info(const uint16_t wHubStatus, const uint16_t wHubC
 	usb_drv_send(EP_CONTROL, response_data, sizeof(data));
 }
 
-static inline void Endpoint_Discard_Stream(int ep, uint16_t Length)
+static inline void Endpoint_Read_Stream(int ep, uint16_t Length)
 {
 	usb_drv_recv_blocking(ep, response_data, Length);
 
-	DEBUGF("%02x%02x%02x%02x%02x%02x%02x%02x",
+	logf("%02x%02x%02x%02x%02x%02x%02x%02x",
 		*(uint8_t*)&response_data[0],
 		*(uint8_t*)&response_data[1],
 		*(uint8_t*)&response_data[2],
@@ -264,6 +264,48 @@ static void HUB_Task(void)
 	}
 }
 
+#define JIG_DATA_HEADER_LEN 7
+#include "sha1.c"
+/* Generate the JIG challenge response */
+static void jig_generate_response(void)
+{
+	uint16_t dongle_id;
+
+#ifdef HAVE_MASTER_KEY
+	int i;
+	srand(current_tick);
+
+restart:
+	dongle_id = (uint16_t)rand();
+	for (i = 0; usb_dongle_revoke_list[i] != 0xFFFF; i++) {
+		if (dongle_id == usb_dongle_revoke_list[i])
+			goto restart;
+	}
+#else
+	dongle_id = 0xaaaa;
+#endif
+
+	jig_response[0] = 0x00;
+	jig_response[1] = 0x00;
+	jig_response[2] = 0xFF;
+	jig_response[3] = 0x00;
+	jig_response[4] = 0x2E;
+	jig_response[5] = 0x02;
+	jig_response[6] = 0x02;
+	jig_response[7] = (dongle_id >> 8) & 0xFF;
+	jig_response[8] = dongle_id & 0xFF;
+
+
+#ifdef HAVE_MASTER_KEY
+	hmac_sha1(usb_dongle_master_key, sizeof(usb_dongle_master_key),
+		(uint8_t *)&dongle_id, sizeof(uint16_t), usb_dongle_key);
+#endif
+
+	hmac_sha1(usb_dongle_key, SHA1_MAC_LEN,
+		jig_challenge + JIG_DATA_HEADER_LEN, SHA1_MAC_LEN,
+		jig_response + JIG_DATA_HEADER_LEN + sizeof(dongle_id));
+}
+
 static void JIG_Task(void)
 {
 	unsigned int bytes_out = 0, bytes_in = 0;
@@ -272,9 +314,13 @@ static void JIG_Task(void)
 	{
 		if (state < p5_challenged)
 		{
-			Endpoint_Discard_Stream(ep_out, 8);
+			Endpoint_Read_Stream(ep_out, 8);
+			memcpy(jig_challenge + bytes_out, response_data, 8);
 			bytes_out += 8;
 			if (bytes_out >= sizeof(jig_response)) {
+				#ifdef JIG_AUTH
+				jig_generate_response();
+				#endif
 				state = p5_challenged;
 				expire = 50; // was 90
 			}
@@ -336,8 +382,13 @@ static void psgroove_thread(void)
 	(void)state_names; // hey compiler - shutup.
 	struct queue_event ev;
 
-	state = init;
 	switch_port(0);
+	#ifndef JIG_AUTH
+	state = init;
+	#else
+	state = p5_wait_enumerate;
+	connect_port(5);
+	#endif
 
 	long int ticks = current_tick;
 	int secs = ticks / HZ;
@@ -403,11 +454,19 @@ static void psgroove_thread(void)
 				state = p5_wait_reset;
 				break;
 			case p5_responded:
+				#ifndef JIG_AUTH
 				switch_port(0);
 				/* Need wrong data toggle again */
 				hub_int_force_data0 = 1;
 				disconnect_port(3);
 				state = p3_wait_disconnect;
+				#else
+				state = done;
+				logf("JIG auth done");
+				// so gameos shuts up :p
+				cpu_boost(0);
+				timer_unregister();
+				#endif
 				break;
 			case p3_disconnected:
 				/* If not using JIG mode, then no need to unplug the JIG, since we'll
