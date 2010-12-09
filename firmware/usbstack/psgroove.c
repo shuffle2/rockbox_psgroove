@@ -465,14 +465,15 @@ static void psgroove_thread(void)
 				#else
 				state = done;
 				logf("JIG auth done");
-				// so gameos shuts up :p
+				// ps3 powers off
 				cpu_boost(0);
 				timer_unregister();
+				psgroove_reset();
 				#endif
 				break;
 			case p3_disconnected:
 				/* If not using JIG mode, then no need to unplug the JIG, since we'll
-					need to keep it in memory so we can find its address from an lv2 dump
+					need to keep it in memory so we can find its address from a lv2 dump
 				*/
 				#ifdef USE_JIG
 				switch_port(0);
