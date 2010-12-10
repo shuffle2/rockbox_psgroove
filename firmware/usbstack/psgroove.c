@@ -148,8 +148,8 @@ static const char* event_names[] = {
 	"TASK_JIG",
 	"TIMER_EXPIRED",
 	"CLR_FTR_CONN",
-	"FRIENDLY_OS_CONNECTED",
 	"CLR_FTR_RST",
+	"FRIENDLY_OS_CONNECTED",
 	"DONE",
 };
 #endif
@@ -405,9 +405,9 @@ static void psgroove_thread(void)
 		ticks = current_tick;
 		secs = ticks / HZ;
 		ms = ticks - secs * HZ;
-		logf("%s %s %d.%d",
+		logf("%s %s %lx %d.%d",
 			((unsigned)ev.id <= PSGROOVE_DONE) ? event_names[ev.id] : "DISCONNECT",
-			state_name, secs, ms);
+			state_name, ev.id, secs, ms);
 #endif
 
 		switch (ev.id)
