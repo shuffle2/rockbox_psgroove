@@ -389,9 +389,14 @@ static void psgroove_thread(void)
 	(void)state_names; // hey compiler - shutup.
 	struct queue_event ev;
 
+#ifndef JIG_AUTH
 	state = init;
 	switch_port(0);
-	
+#else
+	switch_port(5);
+	state = p5_wait_reset;
+#endif
+
 	long int ticks = current_tick;
 	int secs = ticks / HZ;
 	int ms = ticks - secs * HZ;
