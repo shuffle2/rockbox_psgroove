@@ -16,6 +16,7 @@
 #include "pl3/default_payload_3_30.h"
 #include "pl3/default_payload_3_40.h"
 #include "pl3/default_payload_3_41.h"
+#include "pl3/default_payload_3_41_kiosk.h"
 #include "pl3/dump_lv2.h"
 #include "psgrooveFWSelection.h"
 
