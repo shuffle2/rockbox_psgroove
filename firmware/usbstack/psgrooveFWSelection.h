@@ -347,7 +347,7 @@ PSGroove header to configure payload selections
 #       define default_payload payload_trace_syscalls_3_41
 #       define default_payload_macro payload_trace_syscalls_3_41_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xee, 0x70
-#   if defined (FIRMWARE_3_41_KIOSK)
+#   elif defined (FIRMWARE_3_41_KIOSK)
 #       include "pl3/payload_trace_syscalls_3_41_kiosk.h"
 #       define default_payload payload_trace_syscalls_3_41_kiosk
 #       define default_payload_macro payload_trace_syscalls_3_41_kiosk_macro
