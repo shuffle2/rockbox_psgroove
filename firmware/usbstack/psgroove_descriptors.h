@@ -7,15 +7,14 @@
 #include "config.h"
 #include "pl3/shellcode_egghunt.h"
 
+#include "pl3/default_payload_2_70.h"
 #include "pl3/default_payload_2_76.h"
 #include "pl3/default_payload_3_01.h"
 #include "pl3/default_payload_3_10.h"
 #include "pl3/default_payload_3_15.h"
-/* shuffle2: I don't have these??
 #include "pl3/default_payload_3_21.h"
 #include "pl3/default_payload_3_30.h"
 #include "pl3/default_payload_3_40.h"
-*/
 #include "pl3/default_payload_3_41.h"
 #include "pl3/dump_lv2.h"
 #include "psgrooveFWSelection.h"

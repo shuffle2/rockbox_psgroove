@@ -8,6 +8,8 @@ PSGroove header to configure payload selections
 #       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x33, 0xda, 0x10
 #elif defined (FIRMWARE_3_01)
 #       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x32, 0x06, 0x40
+#elif defined (FIRMWARE_2_70)
+#		define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x31, 0x3e, 0x70
 #elif defined (FIRMWARE_2_76)
 #       define RTOC_TABLE		0x80, 0x00, 0x00, 0x00, 0x00, 0x31, 0x3E, 0x70
 #elif defined (FIRMWARE_3_21)
@@ -60,6 +62,10 @@ PSGroove header to configure payload selections
 #       define default_payload default_payload_3_30
 #       define default_payload_macro default_payload_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#		define default_payload default_payload_2_70
+#		define default_payload_macro default_payload_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 // End Regular Payload
 //begin Dev Payload... as of the current PL3 this has more than just peek and poke. If you don't know what... you want Regular.
@@ -104,6 +110,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_dev_3_30
 #       define default_payload_macro payload_dev_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_dev_2_70.h"
+#       define default_payload payload_dev_2_70
+#       define default_payload_macro payload_dev_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Dev Payload
 //begin Payload_Trace_ALL_SC Payload... If you don't know what this is... you want Regular.
@@ -148,6 +159,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_trace_all_sc_calls_3_30
 #       define default_payload_macro payload_trace_all_sc_calls_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_trace_all_sc_calls_2_70.h"
+#       define default_payload payload_trace_all_sc_calls_2_70
+#       define default_payload_macro payload_trace_all_sc_calls_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Payload_Trace_ALL_SC Payload
 //begin NUS Payload... If you don't know what this is... you want Regular.
@@ -192,6 +208,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_no_unauth_syscall_3_30
 #       define default_payload_macro payload_no_unauth_syscall_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_no_unauth_syscall_2_70.h"
+#       define default_payload payload_no_unauth_syscall_2_70
+#       define default_payload_macro payload_no_unauth_syscall_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end NUS Payload
 //begin Payload_Dump_ELFS Payload... If you don't know what this is... you want Regular.
@@ -236,6 +257,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_dump_elfs_3_30
 #       define default_payload_macro payload_dump_elfs_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_dump_elfs_2_70.h"
+#       define default_payload payload_dump_elfs_2_70
+#       define default_payload_macro payload_dump_elfs_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Payload_Dump_ELFS Payload
 //begin Payload_Trace_HVC Payload... If you don't know what this is... you want Regular.
@@ -280,6 +306,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_trace_hypercalls_3_30
 #       define default_payload_macro payload_trace_hypercalls_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_trace_hypercalls_2_70.h"
+#       define default_payload payload_trace_hypercalls_2_70
+#       define default_payload_macro payload_trace_hypercalls_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Payload_Trace_HVC Payload
 //begin Payload_Trace_SC Payload... If you don't know what this is... you want Regular.
@@ -324,6 +355,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_trace_syscalls_3_30
 #       define default_payload_macro payload_trace_syscalls_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_trace_syscalls_2_70.h"
+#       define default_payload payload_trace_syscalls_2_70
+#       define default_payload_macro payload_trace_syscalls_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Payload_Trace_SC Payload
 //begin Payload_Trace_VUART Payload... If you don't know what this is... you want Regular.
@@ -368,6 +404,11 @@ PSGroove header to configure payload selections
 #       define default_payload payload_trace_vuart_3_30
 #       define default_payload_macro payload_trace_vuart_3_30_macro
 #       define SHELLCODE_ADDR_BASE	0x80, 0x00, 0x00, 0x00, 0x00, 0x3d, 0xde, 0x70
+#	elif defined (FIRMWARE_2_70)
+#       include "pl3/payload_trace_vuart_2_70.h"
+#       define default_payload payload_trace_vuart_2_70
+#       define default_payload_macro payload_trace_vuart_2_70_macro
+#		define SHELLCODE_ADDR_BASE 	0x80, 0x00, 0x00, 0x00, 0x00, 0x3b, 0x1b, 0xc8
 #   endif
 //end Payload_Trace_VUART Payload
 //add future playloads here
