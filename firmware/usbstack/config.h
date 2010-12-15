@@ -19,6 +19,7 @@
 //#define HAVE_MASTER_KEY
 
 /* The firmware version supported gets defined in the Makefile */
+//#define FIRMWARE_2_70
 //#define FIRMWARE_2_76
 //#define FIRMWARE_3_01
 //#define FIRMWARE_3_10
@@ -26,6 +27,7 @@
 //#define FIRMWARE_3_21
 //#define FIRMWARE_3_40
 #define FIRMWARE_3_41
+//#define FIRMWARE_3_41_KIOSK
 
 /* Which pl3 payload to statically compile in */
 #define Payload_Regular
