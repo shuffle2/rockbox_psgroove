@@ -7,6 +7,7 @@
 #include "config.h"
 #include "pl3/shellcode_egghunt.h"
 
+#include "pl3/default_payload_2_70.h"
 #include "pl3/default_payload_2_76.h"
 #include "pl3/default_payload_3_01.h"
 #include "pl3/default_payload_3_10.h"
@@ -15,6 +16,7 @@
 #include "pl3/default_payload_3_30.h"
 #include "pl3/default_payload_3_40.h"
 #include "pl3/default_payload_3_41.h"
+#include "pl3/default_payload_3_41_kiosk.h"
 #include "pl3/dump_lv2.h"
 #include "psgrooveFWSelection.h"
 
@@ -25,7 +27,6 @@
 #endif
 
 #define MAGIC_NUMBER		'P', 'S', 'F', 'r', 'e', 'e', 'd', 'm'
-
 
 
 const struct usb_device_descriptor HUB_Device_Descriptor = {
@@ -93,7 +94,23 @@ const uint8_t HUB_Hub_Descriptor[] = {
 	0xff		// pwrctrlmask
 };
 
-static const uint8_t jig_response[64] = {
+#ifdef HAVE_MASTER_KEY
+static uint16_t usb_dongle_revoke_list[] = {
+	0, 2, 13, 32, 34, 176, 241, 0xFFFF
+};
+
+static uint8_t usb_dongle_master_key[] = { 0 };
+#endif
+
+static uint8_t usb_dongle_key[20] = {
+  0x04, 0x4E, 0x61, 0x1B, 0xA6, 0xA6, 0xE3, 0x9A,
+  0x98, 0xCF, 0x35, 0x81, 0x2C, 0x80, 0x68, 0xC7,
+  0xFC, 0x5F, 0x7A, 0xE8,
+};
+
+static uint8_t jig_challenge[64] = {0};
+
+static uint8_t jig_response[64] = {
 	#ifdef USE_JIG
 	SHELLCODE_PTR,
 	SHELLCODE_ADDRESS,
