@@ -7,8 +7,11 @@
 #include "config.h"
 #include "pl3/shellcode_egghunt.h"
 
+#include "pl3/default_payload_2_53.h"
+#include "pl3/default_payload_2_60.h"
 #include "pl3/default_payload_2_70.h"
 #include "pl3/default_payload_2_76.h"
+//#include "pl3/default_payload_2_85.h" //need addrs
 #include "pl3/default_payload_3_01.h"
 #include "pl3/default_payload_3_10.h"
 #include "pl3/default_payload_3_15.h"
