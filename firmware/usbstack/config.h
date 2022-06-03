@@ -19,6 +19,8 @@
 //#define HAVE_MASTER_KEY
 
 /* The firmware version supported gets defined in the Makefile */
+//#define FIRMWARE_2_53
+//#define FIRMWARE_2_60
 //#define FIRMWARE_2_70
 //#define FIRMWARE_2_76
 //#define FIRMWARE_3_01
